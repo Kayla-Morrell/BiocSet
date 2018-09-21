@@ -2,7 +2,7 @@
 #'
 #' @param ... named character() vectors of gene sets. Each character vector is
 #'     a gene set. The name of the character vector is the name of the gene set.
-#' 
+#'
 #' @return An S3 'GeneSetS3' object.
 #' @export
 #'
@@ -17,4 +17,22 @@ GeneSetS3 <- function(...) {
     )
     class(sets) <- "GeneSetS3"
     sets
+}
+
+#' Print method for the S3 class gene set representation
+#'
+#' @param ... An S3 'GeneSetS3' object
+#'
+#' @return A list of descriptive characteristics of the object
+#' @export
+#'
+#' @examples
+#' GeneSetS3(set1 = letters, set2= LETTERS)
+print.GeneSetS3 <- function(x) {
+    cat(
+        "S3 calls: ", class(x), "\n",
+        "names(): ", paste(names(x), collapse=" "), "\n",
+        "lengths(): ", paste(lengths(x), collapse=" "), "\n",
+        sep=""
+    )
 }
