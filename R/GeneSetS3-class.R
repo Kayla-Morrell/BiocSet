@@ -1,9 +1,13 @@
 #' Gene set representation as an S3 class
+#' @rdname GeneSetS3
 #'
-#' @param ... named character() vectors of gene sets. Each character vector is
-#'     a gene set. The name of the character vector is the name of the gene set.
+#' @param ... For `GeneSetS3()`, named character() vectors of gene sets. Each
+#'     character #vector is a gene set. The name of the character vector is the
+#'     name of the gene set.
 #'
-#' @return An S3 'GeneSetS3' object.
+#'
+#' @return For `GeneSetS3()`, an S3 'GeneSetS3' object.
+#' @importFrom methods is
 #' @export
 #'
 #' @examples
@@ -19,16 +23,12 @@ GeneSetS3 <- function(...) {
     sets
 }
 
-#' Print method for the S3 class gene set representation
+#' @rdname GeneSetS3
 #'
 #' @param x An S3 'GeneSetS3' object
-#' @param ... additional paramaters for the print function
 #'
-#' @return A list of descriptive characteristics of the object
 #' @export
 #'
-#' @examples
-#' GeneSetS3(set1 = letters, set2= LETTERS)
 print.GeneSetS3 = function(x,...) {
     cat(
         "S3 calls: ", class(x), "\n",

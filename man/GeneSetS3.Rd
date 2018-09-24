@@ -2,16 +2,22 @@
 % Please edit documentation in R/GeneSetS3-class.R
 \name{GeneSetS3}
 \alias{GeneSetS3}
+\alias{print.GeneSetS3}
 \title{Gene set representation as an S3 class}
 \usage{
 GeneSetS3(...)
+
+\method{print}{GeneSetS3}(x, ...)
 }
 \arguments{
-\item{...}{named character() vectors of gene sets. Each character vector is
-a gene set. The name of the character vector is the name of the gene set.}
+\item{...}{For `GeneSetS3()`, named character() vectors of gene sets. Each
+character #vector is a gene set. The name of the character vector is the
+name of the gene set.}
+
+\item{x}{An S3 'GeneSetS3' object}
 }
 \value{
-An S3 'GeneSetS3' object.
+For `GeneSetS3()`, an S3 'GeneSetS3' object.
 }
 \description{
 Gene set representation as an S3 class
