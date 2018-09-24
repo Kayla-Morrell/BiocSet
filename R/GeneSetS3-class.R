@@ -21,14 +21,15 @@ GeneSetS3 <- function(...) {
 
 #' Print method for the S3 class gene set representation
 #'
-#' @param ... An S3 'GeneSetS3' object
+#' @param x An S3 'GeneSetS3' object
+#' @param ... additional paramaters for the print function
 #'
 #' @return A list of descriptive characteristics of the object
 #' @export
 #'
 #' @examples
 #' GeneSetS3(set1 = letters, set2= LETTERS)
-print.GeneSetS3 <- function(x) {
+print.GeneSetS3 = function(x,...) {
     cat(
         "S3 calls: ", class(x), "\n",
         "names(): ", paste(names(x), collapse=" "), "\n",

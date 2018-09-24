@@ -4,10 +4,12 @@
 \alias{print.GeneSetS3}
 \title{Print method for the S3 class gene set representation}
 \usage{
-\method{print}{GeneSetS3}(x)
+\method{print}{GeneSetS3}(x, ...)
 }
 \arguments{
-\item{...}{An S3 'GeneSetS3' object}
+\item{x}{An S3 'GeneSetS3' object}
+
+\item{...}{additional paramaters for the print function}
 }
 \value{
 A list of descriptive characteristics of the object
