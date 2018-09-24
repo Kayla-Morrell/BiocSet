@@ -1,12 +1,12 @@
 Package: GeneSet
-Title: What the Package Does (one line, title case)
+Title: Representing Gene Sets for Different Class Types
 Version: 0.0.1
 Authors@R:
     person(
-        "First", "Last", email = "first.last@example.com", 
+        "Kayla", "Morrell", email = "kayla.morrell@roswellpark.org", 
         role = c("aut", "cre")
     )
-Description: What the package does (one paragraph).
+Description: GeneSet displays gene sets in different S3 and S4 class types.
 Depends: R (>= 3.4.0)
 License: Artistic-2.0
 Encoding: UTF-8
