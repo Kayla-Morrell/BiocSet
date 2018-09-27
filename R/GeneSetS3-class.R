@@ -37,3 +37,19 @@ print.GeneSetS3 = function(x,...) {
         sep=""
     )
 }
+
+#' @rdname GeneSetS3
+#'
+#' @param i A numeric or character vector, indicy specifying elements to
+#'    extract or replace
+#' @param j A numeric or character vector, indicy specifying elements to
+#'    extract or replace
+#' @param drop logical, if TRUE the result is coerced to lowest possible
+#'    dimension. Only works for extraction, not replacement
+#'
+#' @export
+#'
+`[.GeneSetS3` <- function(x, i, j, ..., drop = TRUE){
+    result <- NextMethod()
+    do.call("GeneSetS3",result)
+}

@@ -3,11 +3,14 @@
 \name{GeneSetS3}
 \alias{GeneSetS3}
 \alias{print.GeneSetS3}
+\alias{[.GeneSetS3}
 \title{Gene set representation as an S3 class}
 \usage{
 GeneSetS3(...)
 
 \method{print}{GeneSetS3}(x, ...)
+
+\method{[}{GeneSetS3}(x, i, j, ..., drop = TRUE)
 }
 \arguments{
 \item{...}{For `GeneSetS3()`, named character() vectors of gene sets. Each
@@ -15,6 +18,15 @@ character #vector is a gene set. The name of the character vector is the
 name of the gene set.}
 
 \item{x}{An S3 'GeneSetS3' object}
+
+\item{i}{A numeric or character vector, indicy specifying elements to
+extract or replace}
+
+\item{j}{A numeric or character vector, indicy specifying elements to
+extract or replace}
+
+\item{drop}{logical, if TRUE the result is coerced to lowest possible
+dimension. Only works for extraction, not replacement}
 }
 \value{
 For `GeneSetS3()`, an S3 'GeneSetS3' object.
