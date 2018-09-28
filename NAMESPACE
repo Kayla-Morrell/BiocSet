@@ -3,4 +3,6 @@
 S3method("[",GeneSetS3)
 S3method(print,GeneSetS3)
 export(GeneSetS3)
+export(GeneSetS3_tbl)
 importFrom(methods,is)
+importFrom(tibble,tibble)

@@ -53,3 +53,25 @@ print.GeneSetS3 = function(x,...) {
     result <- NextMethod()
     do.call("GeneSetS3",result)
 }
+
+#' @rdname GeneSetS3
+#'
+#' @return For `GeneSetS3_tbl()`, an S3 'GeneSetS3' object in a tibble
+#'    representation.
+#' @importFrom tibble tibble
+#'
+#' @export
+#'
+GeneSetS3_tbl <- function(...) {
+    args <- list(...)
+    tbl <- tibble(
+        gene = unlist(args, use.names=FALSE),
+        set = rep(names(args), lengths(args))
+    )
+    class(tbl) <- c("GeneSetS3_tbl",class(tbl))
+    tbl
+}
+
+
+
+

@@ -6,11 +6,14 @@ Authors@R:
         "Kayla", "Morrell", email = "kayla.morrell@roswellpark.org", 
         role = c("aut", "cre")
     )
-Description: GeneSet displays gene sets in different S3 and S4 class types.
+Description: GeneSet displays gene sets in different S3 and S4 class types. For
+    the S3 class, there is 'class'-like representation and a tibble-like
+    representation. For the S4 class, there is a data.frame-like representation,
+    a list-like representation, and an extended S3 tibble-like representation.
 Depends: R (>= 3.4.0)
 License: Artistic-2.0
 Encoding: UTF-8
 LazyData: true
-Imports: methods
+Imports: methods, tibble
 Suggests: testthat
 RoxygenNote: 6.1.0
