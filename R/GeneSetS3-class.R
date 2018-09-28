@@ -31,7 +31,7 @@ GeneSetS3 <- function(...) {
 #'
 print.GeneSetS3 = function(x,...) {
     cat(
-        "S3 calls: ", class(x), "\n",
+        "S3 class: ", class(x), "\n",
         "names(): ", paste(names(x), collapse=" "), "\n",
         "lengths(): ", paste(lengths(x), collapse=" "), "\n",
         sep=""
@@ -72,6 +72,37 @@ GeneSetS3_tbl <- function(...) {
     tbl
 }
 
+#' @rdname GeneSetS3
+#'
+#' @export
+#'
+names.GeneSetS3_tbl <- function(x) {
+    unique(x$set)
+}
 
+#' @rdname GeneSetS3
+#'
+#' @param use.names Logical indicating if the result should inherit the names
+#'   from x.
+#'
+#' @export
+#'
+lengths.GeneSetS3_tbl <- function(x, use.names=TRUE) {
+    lengths <- as.vector(table(x$set))
+    if(use.names)
+        names(lengths) <- names(x)
+    lengths
+}
 
-
+#' @rdname GeneSetS3
+#'
+#' @export
+#'
+print.GeneSetS3_tbl <- function(x,...) {
+    cat(
+        "S3 class: ", class(x)[1], "\n",
+        "names(): ", paste(names(x), collapse=" "), "\n",
+        "lengths(): ", paste(lengths(x), collapse=" "), "\n",
+        sep=""
+    )
+}
