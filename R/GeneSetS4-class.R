@@ -5,6 +5,7 @@
 #' @slot set factor() of gene sets
 #'
 #' @importFrom methods new
+#' @export
 #'
 .GeneSetDf <- setClass(
     "GeneSetDf",
