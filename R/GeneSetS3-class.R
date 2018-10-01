@@ -2,7 +2,7 @@
 #' @rdname GeneSetS3
 #'
 #' @param ... For `GeneSetS3()`, named character() vectors of gene sets. Each
-#'     character #vector is a gene set. The name of the character vector is the
+#'     character vector is a gene set. The name of the character vector is the
 #'     name of the gene set.
 #'
 #'
