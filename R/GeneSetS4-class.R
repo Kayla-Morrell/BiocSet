@@ -1,14 +1,10 @@
 #' Gene set representation as an S4 class
 #' @rdname GeneSetS4
 #'
-#' @param
+#' @slot gene charcter() vector of genes
+#' @slot set factor() of gene sets
 #'
-#'
-#' @return
-#' @export
-#'
-#' @examples
-#'
+#' @importFrom methods new
 #'
 .GeneSetDf <- setClass(
     "GeneSetDf",

@@ -26,7 +26,7 @@ lengths.GeneSetS3_tbl(x, use.names = TRUE)
 }
 \arguments{
 \item{...}{For `GeneSetS3()`, named character() vectors of gene sets. Each
-character #vector is a gene set. The name of the character vector is the
+character vector is a gene set. The name of the character vector is the
 name of the gene set.}
 
 \item{x}{An S3 'GeneSetS3' object}
