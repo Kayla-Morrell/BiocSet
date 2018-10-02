@@ -4,10 +4,6 @@
 \alias{GeneSetS3}
 \alias{print.GeneSetS3}
 \alias{[.GeneSetS3}
-\alias{GeneSetS3_tbl}
-\alias{names.GeneSetS3_tbl}
-\alias{lengths.GeneSetS3_tbl}
-\alias{print.GeneSetS3_tbl}
 \title{Gene set representation as an S3 class}
 \usage{
 GeneSetS3(...)
@@ -15,14 +11,6 @@ GeneSetS3(...)
 \method{print}{GeneSetS3}(x, ...)
 
 \method{[}{GeneSetS3}(x, i, j, ..., drop = TRUE)
-
-GeneSetS3_tbl(...)
-
-\method{names}{GeneSetS3_tbl}(x)
-
-lengths.GeneSetS3_tbl(x, use.names = TRUE)
-
-\method{print}{GeneSetS3_tbl}(x, ...)
 }
 \arguments{
 \item{...}{For `GeneSetS3()`, named character() vectors of gene sets. Each
@@ -39,15 +27,9 @@ extract or replace}
 
 \item{drop}{logical, if TRUE the result is coerced to lowest possible
 dimension. Only works for extraction, not replacement}
-
-\item{use.names}{Logical indicating if the result should inherit the names
-from x.}
 }
 \value{
 For `GeneSetS3()`, an S3 'GeneSetS3' object.
-
-For `GeneSetS3_tbl()`, an S3 'GeneSetS3' object in a tibble
-   representation.
 }
 \description{
 Gene set representation as an S3 class
