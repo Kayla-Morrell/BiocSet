@@ -5,10 +5,9 @@
 #' @slot set factor() of gene sets
 #'
 #' @importFrom methods new
+#' @importFrom methods slot
+#' @importFrom methods show
 #' @export
-#'
-#' @example
-#'
 .GeneSetDf <- setClass(
     "GeneSetDf",
     slots = c(
@@ -19,7 +18,7 @@
 
 #' @rdname GeneSetS4
 #'
-#' @param x generic being set
+#' @param x gene set
 #'
 #' @export
 .GeneSetDf_gene <- function(x)
@@ -28,8 +27,18 @@
 #' @rdname GeneSetS4
 #'
 #' @export
-.GeneSetDf_gene <- function(x)
+.GeneSetDf_set <- function(x)
     slot(x,"set")
+
+#' @rdname GeneSetS4
+#'
+#' @export
+setGeneric("gene", function(x) standardGeneric("gene"))
+
+#' @rdname GeneSetS4
+#'
+#' @export
+setGeneric("set", function(x) standardGeneric("set"))
 
 #' @rdname GeneSetS4
 #'
@@ -51,7 +60,7 @@ setMethod("set", "GeneSetDf", .GeneSetDf_set)
 #'
 #' @param use.names logical, should result inherit the names from x
 #'
-#' @expot
+#' @export
 .GeneSetDf_lengths <- function(x, use.names=TRUE) {
     lengths <- as.vector(table(set(x)))
     if(use.names)
@@ -76,6 +85,8 @@ setMethod("lengths", "GeneSetDf", .GeneSetDf_lengths)
 
 #' @rdname GeneSetS4
 #'
+#' @param object gene set being represented
+#'
 #' @export
 .GeneSetDf_validity <- function(object) {
     msg <- NULL
@@ -86,7 +97,16 @@ setMethod("lengths", "GeneSetDf", .GeneSetDf_lengths)
     if(is.null(msg)) TRUE else msg
 }
 
+setValidity("GeneSetDf", .GeneSetDf_validity)
+
 #' @rdname GeneSetS4
 #'
 #' @export
-setValidity("GeneSetDf", .GeneSetDf_validity)
+setMethod("show", "GeneSetDf", function(object){
+    cat(
+        "class: ", class(object), "\n",
+        "names(): ", paste(names(object), collapse = " "), "\n",
+        "lengths(): ", paste(lengths(object), collapse = " "), "\n",
+        sep = ""
+    )
+})

@@ -4,7 +4,54 @@
 \name{GeneSetDf-class}
 \alias{GeneSetDf-class}
 \alias{.GeneSetDf}
+\alias{.GeneSetDf_gene}
+\alias{.GeneSetDf_set}
+\alias{gene}
+\alias{set}
+\alias{gene,GeneSetDf-method}
+\alias{set,GeneSetDf-method}
+\alias{.GeneSetDf_names}
+\alias{.GeneSetDf_lengths}
+\alias{names,GeneSetDf-method}
+\alias{lengths}
+\alias{lengths,GeneSetDf-method}
+\alias{.GeneSetDf_validity}
+\alias{show,GeneSetDf-method}
 \title{Gene set representation as an S4 class}
+\usage{
+.GeneSetDf_gene(x)
+
+.GeneSetDf_set(x)
+
+gene(x)
+
+set(x)
+
+\S4method{gene}{GeneSetDf}(x)
+
+\S4method{set}{GeneSetDf}(x)
+
+.GeneSetDf_names(x)
+
+.GeneSetDf_lengths(x, use.names = TRUE)
+
+\S4method{names}{GeneSetDf}(x)
+
+lengths(x, use.names = TRUE)
+
+\S4method{lengths}{GeneSetDf}(x, use.names = TRUE)
+
+.GeneSetDf_validity(object)
+
+\S4method{show}{GeneSetDf}(object)
+}
+\arguments{
+\item{x}{gene set}
+
+\item{use.names}{logical, should result inherit the names from x}
+
+\item{object}{gene set being represented}
+}
 \description{
 Gene set representation as an S4 class
 }
