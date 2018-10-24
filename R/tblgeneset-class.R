@@ -16,15 +16,26 @@
 
 tbl_geneset <- function(...) {
     args <- list(...)
+
+    ## check for proper input
     stopifnot(
 	all(vapply(args, is, logical(1), "character")),
 	length(args) == 0 || !is.null(names(args)),
 	all(nzchar(names(args)))
     )
+
+    ## create tibble
     tbl <- tibble(
     	gene = as.factor(unlist(args, use.names=FALSE)),
 	set = as.factor(rep(names(args), lengths(args))) 
     )
+
+    ## want unique genes in sets
+    tbl <- tbl %>% distinct(gene,set)
+
+    ## set the class
     class(tbl) <- c("tbl_geneset",class(tbl))
+
+    ## return the gene set as a tibble
     tbl
 }
