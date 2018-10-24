@@ -15,5 +15,16 @@
 #' tbl_geneset(set1 = letters, set2 = LETTERS)
 
 tbl_geneset <- function(...) {
-
+    args <- list(...)
+    stopifnot(
+	all(vapply(args, is, logical(1), "character")),
+	length(args) == 0 || !is.null(names(args)),
+	all(nzchar(names(args)))
+    )
+    tbl <- tibble(
+    	gene = as.factor(unlist(args, use.names=FALSE)),
+	set = as.factor(rep(names(args), lengths(args))) 
+    )
+    class(tbl) <- c("tbl_geneset",class(tbl))
+    tbl
 }
