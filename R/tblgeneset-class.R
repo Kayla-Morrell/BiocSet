@@ -50,6 +50,17 @@ tbl_geneset <- function(...) {
 #' @export
 format.trunc_mat_tbl_geneset <- function(x,...) {
     class <- sub("trunc_mat_", "", class(x)[1])
-    names(x$summary) = paste("A", class)
+    names(x$summary) <- paste("A", class)
     NextMethod()
+}
+
+#' @rdname geneset
+#'
+#' @param .data The tibble used in filter
+#'
+#' @export
+filter.tbl_geneset <- function(.data, ...) {
+    tbl <-  NextMethod()
+    class(tbl) <- c("tbl_geneset", class(tbl))
+    tbl
 }
