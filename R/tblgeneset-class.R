@@ -1,17 +1,19 @@
 #' Gene set representation as an S3 class tibble
 #' @rdname geneset
 #'
-#' @param ... For `tbl_geneset()`, named character() vectors of gene sets. Each
-#'    character vector is a gene set. The name of the character vector is the
-#'    name of the gene set.
+#' @param ... For `tbl_geneset()`, named character() vectors of gene
+#'     sets. Each character vector is a gene set. The name of the
+#'     character vector is the name of the gene set.
 #'
-#' @return For `tbl_geneset()`, an S3 'geneset' object in a tibble representation.
+#' @return For `tbl_geneset()`, an S3 'geneset' object in a tibble
+#'     representation.
 #'
 #' @importFrom tibble tibble
+#' @importFrom dplyr distinct '%>%'
 #'
 #' @export
 #'
-#' @ examples
+#' @examples
 #' tbl_geneset(set1 = letters, set2 = LETTERS)
 
 tbl_geneset <- function(...) {
@@ -38,4 +40,16 @@ tbl_geneset <- function(...) {
 
     ## return the gene set as a tibble
     tbl
+}
+
+#' @rdname geneset
+#'
+#' @param x An object of class trunc_mat_tbl_geneset, used during
+#'     printing of tbl_geneset
+#' 
+#' @export
+format.trunc_mat_tbl_geneset <- function(x,...) {
+    class <- sub("trunc_mat_", "", class(x)[1])
+    names(x$summary) = paste("A", class)
+    NextMethod()
 }
