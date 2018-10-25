@@ -8,8 +8,9 @@
 #' @return For `tbl_geneset()`, an S3 'geneset' object in a tibble
 #'     representation.
 #'
+#' @importFrom methods is
 #' @importFrom tibble tibble
-#' @importFrom dplyr distinct '%>%'
+#' @importFrom dplyr distinct '%>%' filter
 #'
 #' @export
 #'
@@ -60,7 +61,7 @@ format.trunc_mat_tbl_geneset <- function(x,...) {
 #'
 #' @export
 filter.tbl_geneset <- function(.data, ...) {
-    tbl <-  NextMethod()
+    tbl <-  NextMethod("filter")
     class(tbl) <- c("tbl_geneset", class(tbl))
     tbl
 }

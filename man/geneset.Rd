@@ -3,11 +3,14 @@
 \name{tbl_geneset}
 \alias{tbl_geneset}
 \alias{format.trunc_mat_tbl_geneset}
+\alias{filter.tbl_geneset}
 \title{Gene set representation as an S3 class tibble}
 \usage{
 tbl_geneset(...)
 
 \method{format}{trunc_mat_tbl_geneset}(x, ...)
+
+\method{filter}{tbl_geneset}(.data, ...)
 }
 \arguments{
 \item{...}{For `tbl_geneset()`, named character() vectors of gene
@@ -16,6 +19,8 @@ character vector is the name of the gene set.}
 
 \item{x}{An object of class trunc_mat_tbl_geneset, used during
 printing of tbl_geneset}
+
+\item{.data}{The tibble used in filter}
 }
 \value{
 For `tbl_geneset()`, an S3 'geneset' object in a tibble
