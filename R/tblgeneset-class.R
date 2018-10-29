@@ -66,8 +66,8 @@ filter.tbl_geneset <- function(.data, ...) {
 #' @export
 select.tbl_geneset <- function(.data, ...) {
     tbl <- NextMethod()
-    if (names(tbl) == "gene" || names(tbl) == "set")
-        class(tbl) <- c("tbl_geneset", class(tbl))
+    if (!all(c("gene", "set") %in% names(tbl)))
+        class(tbl) <- setdiff(class(tbl),"tbl_geneset")
     tbl
 }
 
