@@ -4,6 +4,11 @@
 \alias{tbl_geneset}
 \alias{format.trunc_mat_tbl_geneset}
 \alias{filter.tbl_geneset}
+\alias{select.tbl_geneset}
+\alias{mutate.tbl_geneset}
+\alias{group_by.tbl_geneset}
+\alias{summarise.tbl_geneset}
+\alias{arrange.tbl_geneset}
 \title{Gene set representation as an S3 class tibble}
 \usage{
 tbl_geneset(...)
@@ -11,6 +16,16 @@ tbl_geneset(...)
 \method{format}{trunc_mat_tbl_geneset}(x, ...)
 
 \method{filter}{tbl_geneset}(.data, ...)
+
+\method{select}{tbl_geneset}(.data, ...)
+
+\method{mutate}{tbl_geneset}(.data, ...)
+
+\method{group_by}{tbl_geneset}(.data, ..., add = FALSE)
+
+\method{summarise}{tbl_geneset}(.data, ...)
+
+\method{arrange}{tbl_geneset}(.data, ...)
 }
 \arguments{
 \item{...}{For `tbl_geneset()`, named character() vectors of gene
@@ -21,6 +36,9 @@ character vector is the name of the gene set.}
 printing of tbl_geneset}
 
 \item{.data}{The tibble used in filter}
+
+\item{add}{logical, whether to add to (add = TRUE) or override (add = FALSE)
+the existing groups. The default is add = FALSE.}
 }
 \value{
 For `tbl_geneset()`, an S3 'geneset' object in a tibble

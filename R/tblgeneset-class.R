@@ -10,7 +10,8 @@
 #'
 #' @importFrom methods is
 #' @importFrom tibble tibble
-#' @importFrom dplyr distinct '%>%' filter
+#' @importFrom dplyr distinct '%>%' filter select mutate group_by summarise
+#'     arrange
 #'
 #' @export
 #'
@@ -27,13 +28,13 @@ tbl_geneset <- function(...) {
     )
 
     tbl <- tibble(
-    	gene = as.factor(unlist(args, use.names=FALSE)),
+    	gene = unlist(args, use.names=FALSE),
 	set = as.factor(rep(names(args), lengths(args))) 
     )
 
-    tbl <- tbl %>% distinct(gene,set)
+    tbl <- tbl %>% distinct(gene, set)
 
-    class(tbl) <- c("tbl_geneset",class(tbl))
+    class(tbl) <- c("tbl_geneset", class(tbl))
     tbl
 }
 
@@ -56,6 +57,58 @@ format.trunc_mat_tbl_geneset <- function(x,...) {
 #' @export
 filter.tbl_geneset <- function(.data, ...) {
     tbl <-  NextMethod()
+    class(tbl) <- c("tbl_geneset", class(tbl))
+    tbl
+}
+
+#' @rdname geneset
+#'
+#' @export
+select.tbl_geneset <- function(.data, ...) {
+    tbl <- NextMethod()
+    if (names(tbl) == "gene" || names(tbl) == "set")
+        class(tbl) <- c("tbl_geneset", class(tbl))
+    tbl
+}
+
+#' @rdname geneset
+#'
+#' @export
+mutate.tbl_geneset <- function(.data, ...) {
+    tbl <- NextMethod()
+    if (names(tbl) == "gene" || names(tbl) == "set")
+        class(tbl) <- c("tbl_geneset", class(tbl))
+    tbl
+}
+
+#' @rdname geneset
+#'
+#' @param add logical, whether to add to (add = TRUE) or override (add = FALSE)
+#'     the existing groups. The default is add = FALSE.
+#'
+#' @export
+group_by.tbl_geneset <- function(.data, ..., add = FALSE) {
+    tbl <- NextMethod()
+    if (names(tbl) == "gene" || names(tbl) == "set")
+        class(tbl) <- c("tbl_geneset", class(tbl))
+    tbl
+}
+
+#' @rdname geneset
+#'
+#' @export
+summarise.tbl_geneset <- function(.data, ...) {
+    tbl <- NextMethod()
+    if (names(tbl) == "gene" || names(tbl) == "set")
+        class(tbl) <- c("tbl_geneset", class(tbl))
+    tbl
+}
+
+#' @rdname geneset
+#'
+#' @export
+arrange.tbl_geneset <- function(.data, ...) {
+    tbl <- NextMethod()
     class(tbl) <- c("tbl_geneset", class(tbl))
     tbl
 }
