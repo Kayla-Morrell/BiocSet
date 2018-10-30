@@ -10,8 +10,8 @@
 #'
 #' @importFrom methods is
 #' @importFrom tibble tibble
-#' @importFrom dplyr distinct '%>%' filter select mutate group_by summarise
-#'     arrange
+#' @importFrom dplyr distinct '%>%' filter select mutate group_by ungroup
+#'     summarise arrange
 #'
 #' @export
 #'
@@ -36,6 +36,11 @@ tbl_geneset <- function(...) {
 
     class(tbl) <- c("tbl_geneset", class(tbl))
     tbl
+}
+
+is_tbl_geneset <- function(x) {
+    all(c("gene", "set") %in% names(x))
+    is.character(x$gene) && is.factor(x$set)
 }
 
 #' @rdname geneset
@@ -66,7 +71,7 @@ filter.tbl_geneset <- function(.data, ...) {
 #' @export
 select.tbl_geneset <- function(.data, ...) {
     tbl <- NextMethod()
-    if (!all(c("gene", "set") %in% names(tbl)))
+    if (is_tbl_geneset(tbl) == TRUE)
         class(tbl) <- setdiff(class(tbl),"tbl_geneset")
     tbl
 }
@@ -76,7 +81,7 @@ select.tbl_geneset <- function(.data, ...) {
 #' @export
 mutate.tbl_geneset <- function(.data, ...) {
     tbl <- NextMethod()
-    if (names(tbl) == "gene" || names(tbl) == "set")
+    if (is_tbl_geneset(tbl) == TRUE)
         class(tbl) <- c("tbl_geneset", class(tbl))
     tbl
 }
@@ -89,7 +94,17 @@ mutate.tbl_geneset <- function(.data, ...) {
 #' @export
 group_by.tbl_geneset <- function(.data, ..., add = FALSE) {
     tbl <- NextMethod()
-    if (names(tbl) == "gene" || names(tbl) == "set")
+    if (is_tbl_geneset(tbl) == TRUE)
+        class(tbl) <- c("tbl_geneset", class(tbl))
+    tbl
+}
+
+#' @rdname geneset
+#'
+#' @export
+ungroup.tbl_geneset <- function(x, ...) {
+    tbl <- NextMethod()
+    if (is_tbl_geneset(tbl) == TRUE)
         class(tbl) <- c("tbl_geneset", class(tbl))
     tbl
 }
@@ -99,7 +114,7 @@ group_by.tbl_geneset <- function(.data, ..., add = FALSE) {
 #' @export
 summarise.tbl_geneset <- function(.data, ...) {
     tbl <- NextMethod()
-    if (names(tbl) == "gene" || names(tbl) == "set")
+    if (is_tbl_geneset(tbl) == TRUE)
         class(tbl) <- c("tbl_geneset", class(tbl))
     tbl
 }

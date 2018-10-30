@@ -7,6 +7,7 @@
 \alias{select.tbl_geneset}
 \alias{mutate.tbl_geneset}
 \alias{group_by.tbl_geneset}
+\alias{ungroup.tbl_geneset}
 \alias{summarise.tbl_geneset}
 \alias{arrange.tbl_geneset}
 \title{Gene set representation as an S3 class tibble}
@@ -22,6 +23,8 @@ tbl_geneset(...)
 \method{mutate}{tbl_geneset}(.data, ...)
 
 \method{group_by}{tbl_geneset}(.data, ..., add = FALSE)
+
+\method{ungroup}{tbl_geneset}(x, ...)
 
 \method{summarise}{tbl_geneset}(.data, ...)
 
