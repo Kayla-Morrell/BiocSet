@@ -35,10 +35,17 @@ test_that("'is_tbl_geneset()' works", {
 test_that("'filter.tbl_geneset' works", {
     gs <- tbl_geneset(a = letters, b = LETTERS)
     expect_equivalent(filter(gs), gs)
-    expect_identical(dim(filter(gs, set == "a")), c(26L, 2L))
-    expect_identical(dim(filter(gs, gene == "k")), c(1L, 2L))
-    expect_identical(names(filter(gs, set == "a")), c("gene", "set"))
-    expect_identical(names(filter(gs, gene == "k")), c("gene", "set"))
+    
+    gs1 <- filter(gs, set == "a")
+    expect_true(is_tbl_geneset(gs1))
+    expect_identical(dim(gs1), c(26L, 2L))
+    expect_identical(gs1$gene, letters)
+
+    exp <- "k"
+    gs2 <- filter(gs, gene == exp)
+    expect_true(is_tbl_geneset(gs2))
+    expect_identical(dim(gs2), c(1L, 2L))
+    expect_identical(gs2$gene, exp)
 })
 
 test_that("'select.tbl_geneset()' works", {
@@ -55,8 +62,10 @@ test_that("'mutate.tbl_geneset()' works", {
     gs <- tbl_geneset(a = letters, b = LETTERS)
     expect_identical(dim(mutate(gs, z = 1:52)), c(52L, 3L))
     
-   # expect_error(mutate(gs, z = 1:2),
-   #              "Column `z` must be length 52 (the number of rows) or one, not 2")
+    expect_error(
+        mutate(gs, z = 1:2),
+        "Column `z` must be length 52 \\(the number of rows\\) or one, not 2"
+    )
 })
 
 test_that("'group_by.tbl_geneset()' works", {
