@@ -32,6 +32,7 @@ tbl_geneset <- function(...) {
 	set = factor(
             rep(names(args), lengths(args)),
             levels = sort(names(args))
+
         ) 
     )
 
@@ -75,7 +76,7 @@ filter.tbl_geneset <- function(.data, ...) {
 select.tbl_geneset <- function(.data, ...) {
     tbl <- NextMethod()
     if (!is_tbl_geneset(tbl))
-        class(tbl) <- setdiff(class(tbl),"tbl_geneset")
+        class(tbl) <- setdiff(class(tbl), "tbl_geneset")
     tbl
 }
 
@@ -117,8 +118,8 @@ ungroup.tbl_geneset <- function(x, ...) {
 #' @export
 summarise.tbl_geneset <- function(.data, ...) {
     tbl <- NextMethod()
-    if (is_tbl_geneset(tbl))
-        class(tbl) <- c("tbl_geneset", class(tbl))
+    if (!is_tbl_geneset(tbl))
+        class(tbl) <- setdiff(class(tbl), "tbl_geneset")
     tbl
 }
 

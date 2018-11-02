@@ -50,17 +50,37 @@ test_that("'filter.tbl_geneset' works", {
 
 test_that("'select.tbl_geneset()' works", {
     gs <- tbl_geneset(a = letters, b = LETTERS)
-    expect_identical(dim(select(gs, gene)), c(52L, 1L))
-    expect_identical(dim(select(gs, set)), c(52L, 1L))
+
+    gs1 <- select(gs, c(gene, set))
+    expect_true(is_tbl_geneset(gs1))
     expect_identical(dim(select(gs, c(gene, set))), c(52L, 2L))
-    expect_identical(select(gs, gene), gs["gene"])
-    expect_identical(select(gs, set), gs["set"])
     expect_identical(select(gs, c(gene, set)), gs)
+
+    gs2 <- select(gs, gene)
+    expect_false(is_tbl_geneset(gs2))
+    expect_identical(dim(select(gs, gene)), c(52L, 1L))
+    expect_identical(select(gs, gene), gs["gene"])
+
+    gs3 <- select(gs, set)
+    expect_false(is_tbl_geneset(gs3))
+    expect_identical(dim(select(gs, set)), c(52L, 1L))
+    expect_identical(select(gs, set), gs["set"])
 })
 
 test_that("'mutate.tbl_geneset()' works", {
     gs <- tbl_geneset(a = letters, b = LETTERS)
-    expect_identical(dim(mutate(gs, z = 1:52)), c(52L, 3L))
+
+    gs1 <- mutate(gs, z = 1:52)
+    expect_true(is_tbl_geneset(gs1))
+    expect_identical(dim(gs1), c(52L, 3L))
+
+    gs2 <- mutate(gs, gene = 1:52)
+    expect_false(is_tbl_geneset(gs2))
+    expect_identical(dim(gs2), c(52L, 2L))
+
+    gs3 <- mutate(gs, set = 1:52)
+    expect_false(is_tbl_geneset(gs3))
+    expect_identical(dim(gs3), c(52L, 2L))
     
     expect_error(
         mutate(gs, z = 1:2),
@@ -70,46 +90,70 @@ test_that("'mutate.tbl_geneset()' works", {
 
 test_that("'group_by.tbl_geneset()' works", {
     gs <- tbl_geneset(a = letters, b = LETTERS)
-    expect_identical(names(group_by(gs, gene)), c("gene", "set"))
-    expect_identical(names(group_by(gs, set)), c("gene", "set"))
-    expect_identical(dim(group_by(gs, gene)), c(52L, 2L))
-    expect_identical(dim(group_by(gs, set)), c(52L, 2L))
+
+    gs1 <- group_by(gs, gene, set)
+    expect_true(is_tbl_geneset(gs1))
+    expect_identical(dim(gs1), c(52L, 2L))
+    
+    gs2 <- group_by(gs, gene)
+    expect_true(is_tbl_geneset(gs2))
+    expect_identical(dim(gs2), c(52L, 2L))
+
+    gs3 <- group_by(gs, set)
+    expect_true(is_tbl_geneset(gs3))
+    expect_identical(dim(gs3), c(52L, 2L))
 })
 
 test_that("'ungroup.tbl_geneset()' works", {
     gs <- tbl_geneset(a = letters, b = LETTERS)
-    grps <- gs %>% group_by(gene)
-    expect_identical(ungroup(grps), gs)
-    expect_identical(dim(ungroup(grps)), c(52L, 2L))
-    expect_identical(names(ungroup(grps)), c("gene", "set"))    
+    
+    gs1 <- gs %>% group_by(gene) %>% ungroup
+    expect_true(is_tbl_geneset(gs1))
+    expect_identical(gs1, gs)
+    expect_identical(dim(gs1), c(52L, 2L))   
 })
 
 test_that("'summarise.tbl_geneset()' works", {
     gs <- tbl_geneset(a = letters, b = LETTERS)
-    expect_identical(dim(summarise(gs, n = n())), c(1L, 1L))
-    expect_identical(names(summarise(gs, n = n())), "n")
-    expect_equal(summarise(gs, n = n())$n, 52L)
 
-    grps <- gs %>% group_by(set)
-    expect_identical(dim(summarise(grps, n = n())), c(2L, 2L))
-    expect_identical(names(summarise(grps, n = n())), c("set", "n"))
-    expect_equal(summarise(grps, n = n())$n, c(26L, 26L))
+    gs1 <- summarise(gs, n = n())
+    expect_false(is_tbl_geneset(gs1))
+    expect_identical(dim(gs1), c(1L, 1L))
+    expect_equal(gs1$n, 52L)
 
-    grps2 <- gs %>% group_by(gene)
-    expect_identical(dim(summarise(grps2, n = n())), c(52L, 2L))
-    expect_identical(names(summarise(grps2, n = n())), c("gene", "n"))
-    expect_equal(summarise(grps2, n = n())$n, c(rep(1L, 52)))    
+    gs2 <- gs %>% group_by(gene) %>% summarise(n = n())
+    expect_false(is_tbl_geneset(gs2))
+    expect_identical(dim(gs2), c(52L, 2L))
+    expect_equal(gs2$n, c(rep(1L, 52)))
+
+    gs3 <- gs %>% group_by(set) %>% summarise(n = n())
+    expect_false(is_tbl_geneset(gs3))
+    expect_identical(dim(gs3), c(2L, 2L))
+    expect_equal(gs3$n, c(26L, 26L))
 })
 
 test_that("'arrange.tbl_geneset()' works", {
     gs <- tbl_geneset(a = letters, b = LETTERS)
-    expect_equal(arrange(gs), gs)
-    expect_equal(arrange(gs, gene), gs)
-    expect_equal(arrange(gs, set), gs)
-    expect_equal(arrange(gs, gene)$gene, sort(gs$gene))
-    expect_equal(arrange(gs, set)$set, sort(gs$set))    
-    expect_identical(dim(arrange(gs, set == "a")), c(52L, 2L))
-    expect_identical(dim(arrange(gs, gene == "k")), c(52L, 2L))
-    expect_identical(names(arrange(gs, set == "a")), c("gene", "set"))
-    expect_identical(names(arrange(gs, gene == "k")), c("gene", "set"))
+
+    gs1 <- arrange(gs)
+    expect_true(is_tbl_geneset(gs1))
+    expect_equal(gs1, gs)
+
+    gs2 <- arrange(gs, gene)
+    expect_true(is_tbl_geneset(gs2))
+    expect_equal(gs2, gs)
+    expect_equal(gs2$gene, sort(gs$gene))
+
+    gs3 <- arrange(gs, set)
+    expect_true(is_tbl_geneset(gs3))
+    expect_equal(gs3, gs)
+    expect_equal(gs3$set, sort(gs$set))  
+
+    gs4 <- arrange(gs, gene == "k")
+    expect_true(is_tbl_geneset(gs4))
+    expect_identical(dim(gs4), c(52L, 2L))    
+
+    gs5 <- arrange(gs, set == "a")
+    expect_true(is_tbl_geneset(gs5))
+    expect_identical(dim(gs5), c(52L, 2L))
 })
