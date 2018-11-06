@@ -53,7 +53,7 @@ is_tbl_geneset <- function(x) {
 #'     printing of tbl_geneset
 #' 
 #' @export
-format.trunc_mat_tbl_geneset <- function(x,...) {
+format.trunc_mat_tbl_geneset <- function(x, ...) {
     class <- sub("trunc_mat_", "", class(x)[1])
     names(x$summary) <- paste("A", class)
     NextMethod()
@@ -65,7 +65,7 @@ format.trunc_mat_tbl_geneset <- function(x,...) {
 #'
 #' @export
 filter.tbl_geneset <- function(.data, ...) {
-    tbl <-  NextMethod()
+    tbl <- NextMethod()
     class(tbl) <- c("tbl_geneset", class(tbl))
     tbl
 }
