@@ -31,7 +31,7 @@ tbl_geneset <- function(...) {
     	gene = as.character(unlist(args, use.names=FALSE)),
 	set = factor(
             rep(names(args), lengths(args)),
-            levels = sort(names(args))
+            levels = names(args)
 
         ) 
     )
