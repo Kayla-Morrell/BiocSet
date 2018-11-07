@@ -24,8 +24,23 @@ export.tbl_geneset(tbl, path = tempfile(fileext = ".gmt"))
 \arguments{
 \item{path}{For `import.gmt()`, a file name or URL containing gene sets.}
 
+\item{resource}{For `GMTFile()`, the .gmt file that will be imported in.}
+
+\item{...}{Parameters to pass to the format-specific method}
+
+\item{con}{For `import()`, the file name or URL the gene set is
+loaded from. For `export()`, the file name or URL the gene set
+is to be saved to.}
+
+\item{format}{For `import()`, the format of the output.}
+
+\item{text}{For `import()`, if con is missing this is a character
+vector directly providing the gene set that should be imported.}
+
 \item{tbl}{For `export.tbl_geneset()`, a tbl_geneset that
 should be exported to a gmt file.}
+
+\item{object}{For `export()`, the object to be exported.}
 }
 \description{
 Importing and formating of gene sets as an S3 class tibble

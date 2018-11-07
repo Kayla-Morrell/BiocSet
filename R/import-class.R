@@ -34,6 +34,8 @@ import.gmt <- function(path) {
 .GMTFile = setClass("GMTFile", contains = "RTLFile")
 
 #' @rdname import
+#'
+#' @param resource For `GMTFile()`, the .gmt file that will be imported in. 
 #' 
 #' @export
 GMTFile = function(resource, ...)
@@ -41,6 +43,14 @@ GMTFile = function(resource, ...)
 
 #' @rdname import
 #'
+#' @param con For `import()`, the file name or URL the gene set is
+#'     loaded from. For `export()`, the file name or URL the gene set
+#'     is to be saved to.
+#' @param format For `import()`, the format of the output.
+#' @param text For `import()`, if con is missing this is a character
+#'     vector directly providing the gene set that should be imported.
+#' @param ... Parameters to pass to the format-specific method
+#' 
 #' @export
 setMethod(
     "import", c("GMTFile", "ANY", "ANY"),
@@ -74,6 +84,8 @@ export.tbl_geneset <- function(tbl, path = tempfile(fileext = ".gmt")) {
 setOldClass("tbl_geneset")
 
 #' @rdname import
+#'
+#' @param object For `export()`, the object to be exported.
 #'
 #' @export
 setMethod(
