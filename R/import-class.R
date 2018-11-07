@@ -1,5 +1,20 @@
 #' Importing and formating of gene sets as an S3 class tibble
 #' @rdname import
+#' 
+#' @export
+.GMTFile = setClass("GMTFile", contains = "RTLFile")
+
+#' @rdname import
+#'
+#' @param resource For `GMTFile()`, the .gmt file that will be imported in. 
+#'
+#' @return For `GMTFile()`, an object representing the path to a .gmt file on disk
+#' 
+#' @export
+GMTFile = function(resource, ...)
+    .GMTFile(resource = resource)
+
+#' @rdname import
 #'
 #' @param path For `import.gmt()`, a file name or URL containing gene sets.
 #'
@@ -12,7 +27,7 @@
 #' @examples
 #' gmtFile <- system.file(package = "GeneSet", "extdata",
 #'     "hallmark.gene.symbol.gmt")
-#' import.gmt(gmtFile)
+#' import(gmtFile)
 
 import.gmt <- function(path) {
     sets <- readLines(path)
@@ -28,18 +43,6 @@ import.gmt <- function(path) {
     tbl
 }
  
-#' @rdname import
-#' 
-#' @export
-.GMTFile = setClass("GMTFile", contains = "RTLFile")
-
-#' @rdname import
-#'
-#' @param resource For `GMTFile()`, the .gmt file that will be imported in. 
-#' 
-#' @export
-GMTFile = function(resource, ...)
-    .GMTFile(resource = resource)
 
 #' @rdname import
 #'
@@ -50,6 +53,8 @@ GMTFile = function(resource, ...)
 #' @param text For `import()`, if con is missing this is a character
 #'     vector directly providing the gene set that should be imported.
 #' @param ... Parameters to pass to the format-specific method
+#'
+#' @return For `import()`, tbl_geneset
 #' 
 #' @export
 setMethod(
@@ -87,10 +92,14 @@ setOldClass("tbl_geneset")
 #'
 #' @param object For `export()`, the object to be exported.
 #'
+#' @return For `export()`, a GMTFile object representing the location
+#'     where the gene set was written
+#' 
 #' @export
 setMethod(
     "export", c("tbl_geneset", "GMTFile", "ANY"),
     function(object, con, format, ...)
 {
     export.tbl_geneset(object, resource(con))
+    con
 })
