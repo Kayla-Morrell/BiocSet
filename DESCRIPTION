@@ -15,5 +15,9 @@ License: Artistic-2.0
 Encoding: UTF-8
 LazyData: true
 Imports: methods, tibble, dplyr, rtracklayer, utils
-Suggests: testthat
+Suggests: 
+    testthat,
+    knitr,
+    rmarkdown
 RoxygenNote: 6.1.0
+VignetteBuilder: knitr
