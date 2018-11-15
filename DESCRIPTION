@@ -18,6 +18,7 @@ Imports: methods, tibble, dplyr, rtracklayer, utils
 Suggests: 
     testthat,
     knitr,
-    rmarkdown
+    rmarkdown,
+    BiocStyle
 RoxygenNote: 6.1.0
 VignetteBuilder: knitr

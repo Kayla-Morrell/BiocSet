@@ -1,10 +1,13 @@
 ---
-title: "Vignette Title"
-author: "Vignette Author"
+title: "GeneSet(): Representing Gene Sets in the Tidyverse"
+author: "Kayla Morrell"
 date: "`r Sys.Date()`"
-output: rmarkdown::html_vignette
+output:
+    BiocStyle::html_document:
+	toc: true
+	toc_depth: 2
 vignette: >
-  %\VignetteIndexEntry{Vignette Title}
+  %\VignetteIndexEntry{GeneSet(): Representing Gene Sets in the Tidyverse}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
