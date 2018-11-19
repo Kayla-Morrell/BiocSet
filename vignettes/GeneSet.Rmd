@@ -1,5 +1,5 @@
 ---
-title: "GeneSet: Representing Gene Sets in the Tidyverse"
+title: "GeneSet(): Representing Gene Sets in the Tidyverse"
 author: "Kayla Morrell"
 date: "`r Sys.Date()`"
 output:
@@ -7,37 +7,32 @@ output:
 	toc: true
 	toc_depth: 2
 vignette: >
-  %\VignetteIndexEntry{GeneSet: Representing Gene Sets in the Tidyverse}
+  %\VignetteIndexEntry{GeneSet(): Representing Gene Sets in the Tidyverse}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
 
-# Introduction
-`GeneSet` is a package that represents gene sets in a tibble format with the `tbl_geneset` class. Gene sets are read in and converted into a tibble format. From here, typical `dplyr` operations can be performed on the tibble gene set. 
-
-# Installation
-
-Install the most recent version of Bioconductor:
-
-```{r bioconductor, eval = FALSE}
-if (!requireNamespace("BiocManager", quietly = TRUE))
-   install.packages("BiocManager")
-BiocManager::install("GeneSet")
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
 ```
 
-The development version is also available for install from GitHub:
+Vignettes are long form documentation commonly included in packages. Because they are part of the distribution of the package, they need to be as compact as possible. The `html_vignette` output type provides a custom style sheet (and tweaks some options) to ensure that the resulting html is as small as possible. The `html_vignette` format:
 
-``` {r github, eval = FALSE}
-BiocManager::install("Kayla-Morrell/GeneSet")
-```
+- Never uses retina figures
+- Has a smaller default figure size
+- Uses a custom CSS stylesheet instead of the default Twitter Bootstrap style
 
-Then load `GeneSet`:
+## Vignette Info
 
-``` {r package, results = 'hide', message = FALSE}
-library(GeneSet)
-```
+Note the various macros within the `vignette` section of the metadata block above. These are required in order to instruct R how to build the vignette. Note that you should change the `title` field and the `\VignetteIndexEntry` to match the title of your vignette.
 
-# GeneSet
+## Styles
 
-## Input and Output
-GeneSet
+The `html_vignette` template includes a basic CSS theme. To override this theme you can specify your own CSS in the document metadata as follows:
+
+    output: 
+      rmarkdown::html_vignette:
+        css: mystyles.css
