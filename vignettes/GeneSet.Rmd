@@ -1,0 +1,43 @@
+---
+title: "GeneSet: Representing Gene Sets in the Tidyverse"
+author: "Kayla Morrell"
+date: "`r Sys.Date()`"
+output:
+    BiocStyle::html_document:
+	toc: true
+	toc_depth: 2
+vignette: >
+  %\VignetteIndexEntry{GeneSet: Representing Gene Sets in the Tidyverse}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+# Introduction
+`GeneSet` is a package that represents gene sets in a tibble format with the `tbl_geneset` class. Gene sets are read in and converted into a tibble format. From here, typical `dplyr` operations can be performed on the tibble gene set. 
+
+# Installation
+
+Install the most recent version of Bioconductor:
+
+```{r bioconductor, eval = FALSE}
+if (!requireNamespace("BiocManager", quietly = TRUE))
+   install.packages("BiocManager")
+BiocManager::install("GeneSet")
+```
+
+The development version is also available for install from GitHub:
+
+``` {r github, eval = FALSE}
+BiocManager::install("Kayla-Morrell/GeneSet")
+```
+
+Then load `GeneSet`:
+
+``` {r package, results = 'hide', message = FALSE}
+library(GeneSet)
+```
+
+# GeneSet
+
+## Input and Output
+GeneSet
