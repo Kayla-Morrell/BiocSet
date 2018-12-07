@@ -131,3 +131,8 @@ arrange.tbl_geneset <- function(.data, ...) {
     class(tbl) <- c("tbl_geneset", class(tbl))
     tbl
 }
+
+## src <- src_organism(dbpath = hg38light())
+## go_genes <- inner_join(tbl(src, "id"), tbl(src, "id_go")) %>%
+##     dplyr::select(entrez, ensembl, symbol, go, ontology) %>%
+##     distinct() %>% collect()

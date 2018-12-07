@@ -20,5 +20,5 @@ Suggests:
     knitr,
     rmarkdown,
     BiocStyle
-RoxygenNote: 6.1.0
+RoxygenNote: 6.1.1
 VignetteBuilder: knitr

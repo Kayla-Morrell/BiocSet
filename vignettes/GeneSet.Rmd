@@ -37,3 +37,46 @@ library(GeneSet)
 # GeneSet
 
 ## Input and Output
+
+`GeneSet` can create a `tbl_geneset` using two different input methods. The first is to input named character vectors of gene sets. `tbl_geneset()` returns the vectors as `tbl_geneset` tibble containing two columns, `gene` and `set`.
+
+```{r constructor}
+tbl <- tbl_geneset(set1 = letters, set2 = LETTERS)
+tbl
+```
+
+The second method of creating a `tbl_geneset` would be to read in `.gmt` files. Using `import()` a path to a downloaded `.gmt` file is read in and a `tbl_geneset` is returned. The example below uses a hallmark gene set downloaded from [GSEA][], which is also included with this package. This `tbl_geneset` also includes a `source` column for reference as to where the gene set came from.
+
+[GSEA]: http://software.broadinstitute.org/gsea/index.jsp
+
+```{r gmt}
+gmtFile <- system.file(package = "GeneSet", "extdata", "hallmark.gene.symbol.gmt")
+tbl2 <- import(gmtFile)
+tbl2
+```
+
+<!-- example of export -->
+`export()` allows for a `tbl_geneset` to be exported into a temporary file with the extention `.gmt`.
+
+```{r export, eval=FALSE}
+export(tbl2, path = tempfile(fileext = ".gmt"))
+```
+<!-- Advanced use (construct gmt file) -->
+
+## Implemented functions (or functionality)
+
+<!-- build on example -->
+
+# Case study
+
+<!-- airway package, dataset called airway (DESeq2 package vignette) -->
+
+<!-- mapping ensemble id to GO id or KEGG id, creating gene set for relevant pathways -->
+
+<!-- subsetting airway dataset to contain only genes in relevant pathways -->
+
+# Session info
+
+```{r}
+sessionInfo()
+```
