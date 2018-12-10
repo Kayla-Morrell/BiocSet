@@ -58,14 +58,28 @@ tbl2
 <!-- example of export -->
 `export()` allows for a `tbl_geneset` to be exported into a temporary file with the extention `.gmt`.
 
-```{r export, eval=FALSE}
-export(tbl2, path = tempfile(fileext = ".gmt"))
+```{r export}
+fl <- tempfile(fileext = ".gmt")
+gmt <- export(tbl2, fl)
+gmt
 ```
 <!-- Advanced use (construct gmt file) -->
 
 ## Implemented functions (or functionality)
 
-<!-- build on example -->
+`GeneSet` adopts the use of many `dplyr` functions such as `filter()`, `select()`, `mutate()`, `group_by()`, `ungroup()`, `summarize()`, and `arrange()`.
+
+```{r install, message = FALSE}
+library(dplyr)
+```
+
+```{r examples}
+tbl <- tbl_geneset(set1 = letters, set2 = LETTERS)
+tbl
+tbl %>% filter(gene == "a" | gene == "A")
+tbl %>% mutate(pval = rnorm(dim(tbl)[1]))
+tbl %>% group_by(set) %>% summarise(n = n())
+```
 
 # Case study
 
