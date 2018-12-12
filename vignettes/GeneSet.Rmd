@@ -85,7 +85,26 @@ tbl %>% group_by(set) %>% summarise(n = n())
 
 <!-- airway package, dataset called airway (DESeq2 package vignette) -->
 
+```{r airway}
+library("airway")
+data("airway")
+se <- airway
+```
+
 <!-- mapping ensemble id to GO id or KEGG id, creating gene set for relevant pathways -->
+
+<!--
+```{r mapping}
+library("AnnotationDbi")
+library("org.Hs.eg.db")
+
+assay(se)$symbol <- mapIds(org.Hs.eg.db, keys = rownames(se), column = "SYMBOL", keytype = "ENSEMBL", multiVals = "first")
+
+se$go <- mapIds(org.Hs.eg.db, keys = rownames(se), column = "GO", keytype = "ENSEMBL", multiVals = "first")
+
+se$entrez <- mapIds(org.Hs.eg.db, keys = rownames(se), column = "ENTREZID", keytype = "ENSEMBL", multiVals = "first")
+```
+-->
 
 <!-- subsetting airway dataset to contain only genes in relevant pathways -->
 
