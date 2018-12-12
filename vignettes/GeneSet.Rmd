@@ -85,7 +85,7 @@ tbl %>% group_by(set) %>% summarise(n = n())
 
 <!-- airway package, dataset called airway (DESeq2 package vignette) -->
 
-```{r airway}
+```{r airway, message = FALSE}
 library("airway")
 data("airway")
 se <- airway
@@ -93,18 +93,33 @@ se <- airway
 
 <!-- mapping ensemble id to GO id or KEGG id, creating gene set for relevant pathways -->
 
-<!--
-```{r mapping}
+```{r mapping, message = FALSE}
 library("AnnotationDbi")
 library("org.Hs.eg.db")
 
-assay(se)$symbol <- mapIds(org.Hs.eg.db, keys = rownames(se), column = "SYMBOL", keytype = "ENSEMBL", multiVals = "first")
+rowData(se)$symbol <- mapIds(org.Hs.eg.db, keys = rownames(se), column = "SYMBOL", keytype = "ENSEMBL", multiVals = "first")
 
-se$go <- mapIds(org.Hs.eg.db, keys = rownames(se), column = "GO", keytype = "ENSEMBL", multiVals = "first")
+rowData(se)$go <- mapIds(org.Hs.eg.db, keys = rownames(se), column = "GO", keytype = "ENSEMBL", multiVals = "first")
 
-se$entrez <- mapIds(org.Hs.eg.db, keys = rownames(se), column = "ENTREZID", keytype = "ENSEMBL", multiVals = "first")
+rowData(se)$entrez <- mapIds(org.Hs.eg.db, keys = rownames(se), column = "ENTREZID", keytype = "ENSEMBL", multiVals = "first")
+
+rowData(se)
+
+## KEGG?
 ```
--->
+<!-- Discovering the asthma KEGG pathway -->
+```{r kegg, message = FALSE}
+library(KEGGREST)
+#keggFind("pathway", "asthma")
+#asthma <- keggGet("hsa05310")
+## tibble with subset logical(true, false)
+#asthma[[1]]$GENE
+
+#keggConv("ncbi-geneid", tibble[1])
+
+## numbers are entrez ids, map from entrez to ensembl
+## this is the gene set to subset
+```
 
 <!-- subsetting airway dataset to contain only genes in relevant pathways -->
 
