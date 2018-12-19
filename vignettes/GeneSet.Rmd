@@ -104,24 +104,21 @@ rowData(se)$go <- mapIds(org.Hs.eg.db, keys = rownames(se), column = "GO", keyty
 rowData(se)$entrez <- mapIds(org.Hs.eg.db, keys = rownames(se), column = "ENTREZID", keytype = "ENSEMBL", multiVals = "first")
 
 rowData(se)
-
-## KEGG?
 ```
 <!-- Discovering the asthma KEGG pathway -->
 ```{r kegg, message = FALSE}
 library(KEGGREST)
-#keggFind("pathway", "asthma")
-#asthma <- keggGet("hsa05310")
-## tibble with subset logical(true, false)
-#asthma[[1]]$GENE
+path <- keggFind("pathway", "asthma")
+asthma <- keggGet(paste0("hsa", gsub("[^\\d]+", "", names(path), perl = TRUE)))
+tbl <- tibble(gene = asthma[[1]]$GENE[c(TRUE,FALSE)], set = rep(path[[1]], length(gene)))
+tbl$ensembl <- mapIds(org.Hs.eg.db, keys = tbl$gene, column = "ENSEMBL", keytype = "ENTREZID", multiVals = "first")
 
-#keggConv("ncbi-geneid", tibble[1])
-
-## numbers are entrez ids, map from entrez to ensembl
-## this is the gene set to subset
+tbl
 ```
 
 <!-- subsetting airway dataset to contain only genes in relevant pathways -->
+
+
 
 # Session info
 
