@@ -82,8 +82,9 @@ tbl %>% group_by(set) %>% summarise(n = n())
 ```
 
 # Case study
+Next, we demonstrate the use of `GeneSet` with an experiement dataset `airway` from the package `airway`. This data is from an RNA-Seq experiment on airway smooth muscle (ASM) cell lines.
 
-<!-- airway package, dataset called airway (DESeq2 package vignette) -->
+The first step is to load the library and the necessary data.
 
 ```{r airway, message = FALSE}
 library("airway")
@@ -91,7 +92,7 @@ data("airway")
 se <- airway
 ```
 
-<!-- mapping ensemble id to GO id or KEGG id, creating gene set for relevant pathways -->
+The pacakges `AnnotationDbi` and `org.Hs.eg.db` are used for the mapping of gene symbols, GO ids, and Entrez ids to the already established Ensembl ids in `airway`. These Ensembl ids are the rownames of `airway`.
 
 ```{r mapping, message = FALSE}
 library("AnnotationDbi")
@@ -105,20 +106,29 @@ rowData(se)$entrez <- mapIds(org.Hs.eg.db, keys = rownames(se), column = "ENTREZ
 
 rowData(se)
 ```
-<!-- Discovering the asthma KEGG pathway -->
+
+The library `KEGGREST` is a client interface to the KEGG REST server. KEGG contains pathway maps that represent interaction, reaction and relation networks for various biological processes and diseases. Since we are working with ASM data we thought it would be interesting to look into the pathway for asthma. In the code below, we find the name of the pathway associated with asthma, find the genes in that pathway, and create a tibble that holds the gene name, the pathway name, and the Ensembl id associated with that gene.
+
 ```{r kegg, message = FALSE}
 library(KEGGREST)
 path <- keggFind("pathway", "asthma")
 asthma <- keggGet(paste0("hsa", gsub("[^\\d]+", "", names(path), perl = TRUE)))
-tbl <- tibble(gene = asthma[[1]]$GENE[c(TRUE,FALSE)], set = rep(path[[1]], length(gene)))
-tbl$ensembl <- mapIds(org.Hs.eg.db, keys = tbl$gene, column = "ENSEMBL", keytype = "ENTREZID", multiVals = "first")
+tbl <- tbl_geneset(Asthma = asthma[[1]]$GENE[c(TRUE,FALSE)])
+tbl <- tbl %>% mutate(ensembl = mapIds(org.Hs.eg.db, keys = tbl$gene, column = "ENSEMBL", keytype = "ENTREZID", multiVals = "first"))
 
 tbl
 ```
 
-<!-- subsetting airway dataset to contain only genes in relevant pathways -->
+With this asthma pathway gene set, we can now subset the `airway` data to contain only the genes in this pathway.
 
+```{r subset}
+se <- se[which(rownames(rowData(se)) %in% tbl$ensembl),]
 
+se
+
+rowData(se)
+```
+<!--- Need to think about multiple pathways...--->
 
 # Session info
 
