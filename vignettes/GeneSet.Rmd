@@ -1,3 +1,4 @@
+
 ---
 title: "GeneSet: Representing Gene Sets in the Tidyverse"
 author: "Kayla Morrell"
@@ -11,6 +12,13 @@ vignette: >
     %\VignetteEndcoding{UTF-8}
 ---
 
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(
+    collapse = TRUE,
+    comment = "#>"
+)
+```
+
 # Introduction
 `GeneSet` is a package that represents gene sets in a tibble format with the `tbl_geneset` class. Gene sets are read in and converted into a tibble format. From here, typical `dplyr` operations can be performed on the tibble gene set.
 
@@ -19,7 +27,7 @@ Install the most recent version of Bioconductor:
 
 ```{r bioconductor, eval = FALSE}
 if(!requireNamespace("BiocManager", quietly = TRUE))
-    install.pacakges("BiocManager")
+    install.packages("BiocManager")
 BiocManager::install("GeneSet")
 ```
 
@@ -45,17 +53,17 @@ tbl <- tbl_geneset(set1 = letters, set2 = LETTERS)
 tbl
 ```
 
-The second method of creating a `tbl_geneset` would be to read in `.gmt` files. Using `import()` a path to a downloaded `.gmt` file is read in and a `tbl_geneset` is returned. The example below uses a hallmark gene set downloaded from [GSEA][], which is also included with this package. This `tbl_geneset` also includes a `source` column for reference as to where the gene set came from.
+The second method of creating a `tbl_geneset` would be to read in `.gmt` files. Using `import()`, a path to a downloaded `.gmt` file is read in and a `tbl_geneset` is returned. The example below uses a hallmark gene set downloaded from [GSEA][], which is also included with this package. This `tbl_geneset` includes a `source` column for reference as to where the gene set came from.
 
 [GSEA]: http://software.broadinstitute.org/gsea/index.jsp
 
 ```{r gmt}
-gmtFile <- system.file(package = "GeneSet", "extdata", "hallmark.gene.symbol.gmt")
+gmtFile <- system.file(package = "GeneSet", "extdata",
+	   		       "hallmark.gene.symbol.gmt")
 tbl2 <- import(gmtFile)
 tbl2
 ```
 
-<!-- example of export -->
 `export()` allows for a `tbl_geneset` to be exported into a temporary file with the extention `.gmt`.
 
 ```{r export}
@@ -63,9 +71,8 @@ fl <- tempfile(fileext = ".gmt")
 gmt <- export(tbl2, fl)
 gmt
 ```
-<!-- Advanced use (construct gmt file) -->
 
-## Implemented functions (or functionality)
+## Implemented functions
 
 `GeneSet` adopts the use of many `dplyr` functions such as `filter()`, `select()`, `mutate()`, `group_by()`, `ungroup()`, `summarize()`, and `arrange()`.
 
@@ -98,37 +105,59 @@ The pacakges `AnnotationDbi` and `org.Hs.eg.db` are used for the mapping of gene
 library("AnnotationDbi")
 library("org.Hs.eg.db")
 
-rowData(se)$symbol <- mapIds(org.Hs.eg.db, keys = rownames(se), column = "SYMBOL", keytype = "ENSEMBL", multiVals = "first")
+rowData(se)$symbol <- mapIds(org.Hs.eg.db, keys = rownames(se),
+		      			   column = "SYMBOL", keytype = "ENSEMBL",
+					   multiVals = "first")
 
-rowData(se)$go <- mapIds(org.Hs.eg.db, keys = rownames(se), column = "GO", keytype = "ENSEMBL", multiVals = "first")
+rowData(se)$go <- mapIds(org.Hs.eg.db, keys = rownames(se),
+				       column = "GO", keytype = "ENSEMBL",
+				       multiVals = "first")
 
-rowData(se)$entrez <- mapIds(org.Hs.eg.db, keys = rownames(se), column = "ENTREZID", keytype = "ENSEMBL", multiVals = "first")
+rowData(se)$entrez <- mapIds(org.Hs.eg.db, keys = rownames(se),
+			    		   column = "ENTREZID", keytype = "ENSEMBL",
+					   multiVals = "first")
 
 rowData(se)
 ```
 
-The library `KEGGREST` is a client interface to the KEGG REST server. KEGG contains pathway maps that represent interaction, reaction and relation networks for various biological processes and diseases. Since we are working with ASM data we thought it would be interesting to look into the pathway for asthma. In the code below, we find the name of the pathway associated with asthma, find the genes in that pathway, and create a tibble that holds the gene name, the pathway name, and the Ensembl id associated with that gene.
+The library `KEGGREST` is a client interface to the KEGG REST server. KEGG contains pathway maps that represent interaction, reaction and relation networks for various biological processes and diseases. Below we use `KEGGREST` to develop a `tbl_geneset` that contains the genes for every pathway map in KEGG.
 
 ```{r kegg, message = FALSE}
 library(KEGGREST)
-path <- keggFind("pathway", "asthma")
-asthma <- keggGet(paste0("hsa", gsub("[^\\d]+", "", names(path), perl = TRUE)))
-tbl <- tbl_geneset(Asthma = asthma[[1]]$GENE[c(TRUE,FALSE)])
-tbl <- tbl %>% mutate(ensembl = mapIds(org.Hs.eg.db, keys = tbl$gene, column = "ENSEMBL", keytype = "ENTREZID", multiVals = "first"))
+paths <- keggList("pathway", "hsa")
+codes <- sub("path:", "", names(paths))
+genes <- sapply(codes, function(x) {
+      	 	       	path <- keggGet(x)
+			     path[[1]]$GENE[c(TRUE, FALSE)]
+			})
+genes <- genes[lengths(genes) != 0]
+
+tbl <- do.call(tbl_geneset, genes)
+tbl <- tbl %>% mutate(ensembl = mapIds(org.Hs.eg.db, keys = tbl$gene,
+				    		     column = "ENSEMBL", keytype = "ENTREZID",
+				   		      multivals = "first"))
 
 tbl
 ```
-
-With this asthma pathway gene set, we can now subset the `airway` data to contain only the genes in this pathway.
+Since we are working with ASM data we thought we would subset the `airway` data to contain only the genes in the asthma pathway. Asthma has the pathway id of `hsa05310` and contains 31 genes.
 
 ```{r subset}
-se <- se[which(rownames(rowData(se)) %in% tbl$ensembl),]
+asthma <- tbl %>% filter(set == "hsa05310")
+
+se <- se[rownames(se) %in% asthma$ensembl,]
 
 se
-
 rowData(se)
 ```
-<!--- Need to think about multiple pathways...--->
+
+This filtering can also be done for multiple pathways. 
+
+```{r multiple}
+pathways <- c("hsa05310", "hsa04110", "hsa05224", "hsa04970")
+multipaths <- filter(tbl, set %in% pathways)
+
+multipaths
+```
 
 # Session info
 
