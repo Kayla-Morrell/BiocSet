@@ -46,7 +46,7 @@ library(GeneSet)
 
 ## Input and Output
 
-`GeneSet` can create a `tbl_geneset` using two different input methods. The first is to input named character vectors of gene sets. `tbl_geneset()` returns the vectors as `tbl_geneset` tibble containing two columns, `gene` and `set`.
+`GeneSet` can create a `tbl_geneset` using two different input methods. The first is to input named character vectors of gene sets. `tbl_geneset()` returns the vectors as `tbl_geneset` a tibble containing two columns, `gene` and `set`.
 
 ```{r constructor}
 tbl <- tbl_geneset(set1 = letters, set2 = LETTERS)
@@ -75,7 +75,7 @@ gmt
 
 ## Implemented functions
 
-`GeneSet` adopts the use of many `dplyr` functions such as `filter()`, `select()`, `mutate()`, `group_by()`, `ungroup()`, `summarize()`, and `arrange()`.
+`GeneSet` adopts the use of many `dplyr` functions such as `filter()`, `select()`, `mutate()`, `group_by()`, `ungroup()`, `summarise()`, and `arrange()`.
 
 ```{r install, message = FALSE}
 library(dplyr)
