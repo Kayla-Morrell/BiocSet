@@ -9,6 +9,7 @@ setOldClass("tbl_geneset")
     slots = c(
         gene = "tbl_gene",
         set = "tbl_set",
-        geneset = "tbl_geneset"
+        geneset = "tbl_geneset",
+        active = "character"
     )
 )
