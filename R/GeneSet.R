@@ -50,16 +50,13 @@ setMethod(
     "show", "GeneSet",
     function(object)
     {
-        cat(
-            "class: ", class(object), "\n",
-            "active: ", .active(object), "\n",
-            "\ngene():\n",
-            sep = ""
-        )
+        active <- .active(object)
+        cat("class: ", class(object), "\n", sep = "")
+        cat("\ngene()", if (active == "gene") " <active>", ":\n", sep = "")
         print(.gene(object), n = 3)
-        cat("\nset():\n")
+        cat("\nset()", if (active == "set") " <active>", ":\n", sep = "")
         print(.set(object), n = 3)
-        cat("\ngeneset():\n")
+        cat("\ngeneset()", if (active == "geneset") " <active>", ":\n", sep = "")
         print(.geneset(object), n = 3)
     })
 
