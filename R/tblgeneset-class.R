@@ -1,5 +1,5 @@
 #' Gene set representation as an S3 class tibble
-#' @rdname geneset
+#' @rdname tblgeneset
 #'
 #' @param ... For `tbl_geneset()`, named character() vectors of gene
 #'     sets. Each character vector is a gene set. The name of the
@@ -47,7 +47,7 @@ is_tbl_geneset <- function(x) {
         is.character(x$gene) && is.factor(x$set)
 }
 
-#' @rdname geneset
+#' @rdname tblgeneset
 #'
 #' @param x An object of class trunc_mat_tbl_geneset, used during
 #'     printing of tbl_geneset
@@ -59,7 +59,7 @@ format.trunc_mat_tbl_geneset <- function(x, ...) {
     NextMethod()
 }
 
-#' @rdname geneset
+#' @rdname tblgeneset
 #'
 #' @param .data The tibble used in filter
 #'
@@ -70,7 +70,7 @@ filter.tbl_geneset <- function(.data, ...) {
     tbl
 }
 
-#' @rdname geneset
+#' @rdname tblgeneset
 #'
 #' @export
 select.tbl_geneset <- function(.data, ...) {
@@ -80,7 +80,7 @@ select.tbl_geneset <- function(.data, ...) {
     tbl
 }
 
-#' @rdname geneset
+#' @rdname tblgeneset
 #'
 #' @export
 mutate.tbl_geneset <- function(.data, ...) {
@@ -90,7 +90,7 @@ mutate.tbl_geneset <- function(.data, ...) {
     tbl
 }
 
-#' @rdname geneset
+#' @rdname tblgeneset
 #'
 #' @param add logical, whether to add to (add = TRUE) or override (add = FALSE)
 #'     the existing groups. The default is add = FALSE.
@@ -103,7 +103,7 @@ group_by.tbl_geneset <- function(.data, ..., add = FALSE) {
     tbl
 }
 
-#' @rdname geneset
+#' @rdname tblgeneset
 #'
 #' @export
 ungroup.tbl_geneset <- function(x, ...) {
@@ -113,7 +113,7 @@ ungroup.tbl_geneset <- function(x, ...) {
     tbl
 }
 
-#' @rdname geneset
+#' @rdname tblgeneset
 #'
 #' @export
 summarise.tbl_geneset <- function(.data, ...) {
@@ -123,7 +123,7 @@ summarise.tbl_geneset <- function(.data, ...) {
     tbl
 }
 
-#' @rdname geneset
+#' @rdname tblgeneset
 #'
 #' @export
 arrange.tbl_geneset <- function(.data, ...) {

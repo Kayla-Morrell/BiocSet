@@ -1,5 +1,5 @@
 #' Set representation as an S3 class tibble
-#' @rdname set
+#' @rdname tblset
 #'
 #' @param tbl_geneset An S3 'geneset' tibble.
 #'

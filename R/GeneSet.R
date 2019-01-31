@@ -1,5 +1,6 @@
 #' A gene set representation as a tripple tibble
-#' @rdname GeneSet
+#'
+#' @rdname geneset
 #'
 #' @param ... For `GeneSet()`, named character() vectors of gene
 #'     sets. Each character vector is a gene set. The name of the
@@ -84,7 +85,7 @@ gs_activate <- function(.data, ...)
     UseMethod("gs_activate")
 }
 
-#' @rdname GeneSet
+#' @rdname geneset
 #'
 #' @param .data The 'GeneSet' tibble.
 #' @param what Which of the three tibbles to activate
@@ -130,7 +131,7 @@ setMethod(
         initialize(x, geneset = value)
     })
 
-#' @rdname GeneSet
+#' @rdname geneset
 #'
 #' @export
 #'
@@ -146,7 +147,7 @@ filter.GeneSet <- function(.data, ...)
     .update(.data, tbl)
 }
 
-#' @rdname GeneSet
+#' @rdname geneset
 #'
 #' @export
 #'
@@ -162,7 +163,7 @@ select.GeneSet <- function(.data, ...)
     .update(.data, tbl)
 }
 
-#' @rdname GeneSet
+#' @rdname geneset
 #'
 #' @export
 #'
@@ -178,7 +179,7 @@ mutate.GeneSet <- function(.data, ...)
     .update(.data, tbl)
 }
 
-#' @rdname GeneSet
+#' @rdname geneset
 #'
 #' @export
 #'
@@ -193,7 +194,7 @@ group_by.GeneSet <- function(.data, ..., add = FALSE)
     .update(.data, tbl)
 }
 
-#' @rdname GeneSet
+#' @rdname geneset
 #'
 #' @export
 #'
@@ -208,7 +209,7 @@ ungroup.GeneSet <- function(.data, ...)
     .update(.data, tbl)
 }
 
-#' @rdname GeneSet
+#' @rdname geneset
 #'
 #' @export
 #'
@@ -223,7 +224,7 @@ summarise.GeneSet <- function(.data, ...)
     .update(.data, tbl)
 }
 
-#' @rdname GeneSet
+#' @rdname geneset
 #'
 #' @export
 #'

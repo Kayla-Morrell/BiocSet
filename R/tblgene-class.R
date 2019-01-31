@@ -1,5 +1,5 @@
 #' Gene representation as an S3 class tibble
-#' @rdname gene
+#' @rdname tblgene
 #'
 #' @param tbl_geneset An S3 'geneset' tibble.
 #'
