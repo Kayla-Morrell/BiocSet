@@ -122,10 +122,22 @@ setMethod(
 })
 
 #' @export
-setGeneric("gene", function(x) standardGeneric("gene"))
+setGeneric("gs_gene", function(x) standardGeneric("gs_gene"))
 
 #' @export
-setMethod("gene", "GeneSet", .gene)
+setMethod("gs_gene", "GeneSet", .gene)
+
+#' @export
+setGeneric("gs_set", function(x) standaradGeneric("gs_set"))
+
+#' @export
+setMethod("gs_set", "GeneSet", .set)
+
+#' @export
+setGeneric("gs_geneset", function(x) standardGeneric("gs_geneset"))
+
+#' @export
+setMethod("gs_geneset", "GeneSet", .geneset)
 
 #' @rdname geneset
 #'
