@@ -40,6 +40,12 @@ GeneSet <- function(..., active = c("gene", "set", "geneset"))
     x
 }
 
+.active_value <-
+    function(x)
+{
+    slot(x, .active(x))
+}
+
 setMethod(
     "show", "GeneSet",
     function(object)
@@ -131,8 +137,7 @@ setMethod("gene", "GeneSet", .gene)
 #' gs %>% gs_activate(gene) %>% filter(gene == "a")
 filter.GeneSet <- function(.data, ...)
 {
-    active <- .active(.data)
-    sub <- slot(.data, active)
+    sub <- .active_value(.data)
     tbl <- filter(sub, ...)
     .update(.data, tbl)
 }
@@ -146,8 +151,7 @@ filter.GeneSet <- function(.data, ...)
 #' gs %>% select(gene)
 select.GeneSet <- function(.data, ...)
 {
-    active <- .active(.data)
-    sub <- slot(.data, active)
+    sub <- .active_value(.data)
     tbl <- select(sub, ...)
     class(tbl) <- class(sub)
     .update(.data, tbl)
@@ -162,8 +166,7 @@ select.GeneSet <- function(.data, ...)
 #' gs %>% gs_activate(set) %>% mutate(pval = rnorm(1:2))
 mutate.GeneSet <- function(.data, ...)
 {
-    active <- .active(.data)
-    sub <- slot(.data, active)
+    sub <- .active_value(.data)
     tbl <- mutate(sub, ...)
     class(tbl) <- class(sub)
     .update(.data, tbl)
@@ -178,8 +181,7 @@ mutate.GeneSet <- function(.data, ...)
 #' gs %>% group_by(gene, set)
 group_by.GeneSet <- function(.data, ..., add = FALSE)
 {
-    active <- .active(.data)
-    sub <- slot(.data, active)
+    sub <- .active_value(.data)
     tbl <- group_by(sub, ..., add = FALSE)
     .update(.data, tbl)
 }
@@ -193,8 +195,7 @@ group_by.GeneSet <- function(.data, ..., add = FALSE)
 #' gs %>% group_by(set) %>% summarise(n = n()) %>% ungroup()
 ungroup.GeneSet <- function(.data, ...)
 {
-    active <- .active(.data)
-    sub <- slot(.data, active)
+    sub <- .active_value(.data)
     tbl <- ungroup(sub, ...)
     .update(.data, tbl)
 }
@@ -208,8 +209,7 @@ ungroup.GeneSet <- function(.data, ...)
 #' gs %>% gs_activate(set) %>% summarise(n = n())
 summarise.GeneSet <- function(.data, ...)
 {
-    active <- .active(.data)
-    sub <- slot(.data, active)
+    sub <- .active_value(.data)
     summarise(sub, ...)
 }
 
@@ -222,8 +222,7 @@ summarise.GeneSet <- function(.data, ...)
 #' gs %>% gs_activate(gene) %>% arrange(desc(gene))
 arrange.GeneSet <- function(.data, ...)
 {
-    active <- .active(.data)
-    sub <- slot(.data, active)
+    sub <- .active_value(.data)
     tbl <- arrange(sub, ...)
     class(tbl) <- class(sub)
     .update(.data, tbl)
@@ -232,8 +231,7 @@ arrange.GeneSet <- function(.data, ...)
 
 group_vars.GeneSet <- function(.data)
 {
-    active <- .active(.data)
-    sub <- slot(.data, active)
+    sub <- .active_value(.data)
     group_vars(sub)
 }
 
@@ -246,8 +244,7 @@ tbl_vars.GeneSet <- function(.data)
 
 count.GeneSet <- function(.data, ..., wt = NULL, sort = FALSE)
 {
-    active <- .active(.data)
-    sub <- slot(.data, active)
+    sub <- .active_value(.data)
     groups <- group_vars(sub)
     x <- group_by(sub, ..., add = TRUE)
     x <- tally(x, wt = !!enquo(wt), sort = sort)
