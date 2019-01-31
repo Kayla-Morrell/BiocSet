@@ -21,7 +21,7 @@ GeneSet <- function(..., active = c("gene", "set", "geneset"))
     gene <- tbl_gene(geneset)
     set <- tbl_set(geneset)
 
-    .GeneSet(gene = gene, set = set, geneset = geneset, active = "geneset")
+    .GeneSet(gene = gene, set = set, geneset = geneset, active = active)
 }
 
 .gene <- function(x) x@gene
