@@ -118,15 +118,15 @@ setMethod(
 setMethod(
     ".update", "tbl_geneset",
     function(x, value)
-    {
-        stopifnot(
-            all(value$gene %in% .geneset(x)$gene),
-            all(value$set %in% .geneset(x)$set))
-        gene <- filter(.gene(x), .gene(x)$gene %in% value$gene)
-        set <- filter(.set(x), .set(x)$set %in% value$set)
-        initialize(x, gene = gene, set = set, geneset = value)
-    })
-
+{
+    stopifnot(
+        all(value$gene %in% .geneset(x)$gene),
+        all(value$set %in% .geneset(x)$set)
+    )
+    gene <- filter(.gene(x), .gene(x)$gene %in% value$gene)
+    set <- filter(.set(x), .set(x)$set %in% value$set)
+    initialize(x, gene = gene, set = set, geneset = value)
+})
 
 setGeneric("gene",function(x) standardGeneric("gene"))
 
@@ -144,7 +144,6 @@ filter.GeneSet <- function(.data, ...)
     active <- .active(.data)
     sub <- slot(.data, active)
     tbl <- filter(sub, ...)
-    class(tbl) <- class(sub)
     .update(.data, tbl)
 }
 

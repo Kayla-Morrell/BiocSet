@@ -3,7 +3,7 @@
 S3method(arrange,GeneSet)
 S3method(arrange,tbl_geneset)
 S3method(filter,GeneSet)
-S3method(filter,tbl_geneset)
+S3method(filter,tbl_geneset_base)
 S3method(format,trunc_mat_tbl_geneset)
 S3method(group_by,GeneSet)
 S3method(group_by,tbl_geneset)
