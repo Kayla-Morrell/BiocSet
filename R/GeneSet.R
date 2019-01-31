@@ -14,7 +14,7 @@
 #'
 #' @examples
 #' GeneSet(set1 = letters, set2 = LETTERS)
-GeneSet <- function(..., active = c("gene", "set", "geneset"))
+GeneSet <- function(..., active = c("geneset", "gene", "set"))
 {
     active <- match.arg(active)
     geneset <- tbl_geneset(...)
@@ -228,7 +228,6 @@ arrange.GeneSet <- function(.data, ...)
     .update(.data, tbl)
 }
 
-
 group_vars.GeneSet <- function(.data)
 {
     sub <- .active_value(.data)
@@ -242,15 +241,15 @@ tbl_vars.GeneSet <- function(.data)
     tbl_vars(sub)
 }
 
-count.GeneSet <- function(.data, ..., wt = NULL, sort = FALSE)
-{
-    sub <- .active_value(.data)
-    groups <- group_vars(sub)
-    x <- group_by(sub, ..., add = TRUE)
-    x <- tally(x, wt = !!enquo(wt), sort = sort)
-    x <- group_by(x, !!!syms(groups), add = FALSE)
-    .update(.data, x)
-}
+## count.GeneSet <- function(.data, ..., wt = NULL, sort = FALSE)
+## {
+##     sub <- .active_value(.data)
+##     groups <- group_vars(sub)
+##     x <- group_by(sub, ..., add = TRUE)
+##     x <- tally(x, wt = !!enquo(wt), sort = sort)
+##     x <- group_by(x, !!!syms(groups), add = FALSE)
+##     .update(.data, x)
+## }
 
 ## interface 2
 
