@@ -26,21 +26,7 @@ GeneSet <- function(..., active = c("gene", "set", "geneset"))
 
 .gene <- function(x) x@gene
 
-`.gene<-` <- function(x, value)
-{
-    stopifnot(all(value$gene %in% .gene(x)$gene))
-    geneset <- filter(.geneset(x), .geneset(x)$gene %in% value$gene)
-    initialize(x, gene = value, geneset = geneset)
-}
-
 .set <- function(x) x@set
-
-`.set<-` <- function(x, value)
-{
-    stopifnot(all(value$set %in% .set(x)$set))
-    geneset <- filter(.geneset(x), .geneset(x)$set %in% value$set)
-    initialize(x, set = value, geneset = geneset)
-}
 
 .geneset <- function(x) x@geneset
 
@@ -104,16 +90,20 @@ setGeneric(
 setMethod(
     ".update", "tbl_gene",
     function(x, value)
-    {
-        initialize(x, gene = value)
-    })
+{
+    stopifnot(all(value$gene %in% .gene(x)$gene))
+    geneset <- filter(.geneset(x), .geneset(x)$gene %in% value$gene)
+    initialize(x, gene = value, geneset = geneset)
+})
 
 setMethod(
     ".update", "tbl_set",
     function(x, value)
-    {
-        initialize(x, set = value)
-    })
+{
+    stopifnot(all(value$set %in% .set(x)$set))
+    geneset <- filter(.geneset(x), .geneset(x)$set %in% value$set)
+    initialize(x, set = value, geneset = geneset)
+})
 
 setMethod(
     ".update", "tbl_geneset",
