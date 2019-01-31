@@ -44,15 +44,6 @@ GeneSet <- function(..., active = c("gene", "set", "geneset"))
 
 .geneset <- function(x) x@geneset
 
-`.geneset<-` <- function(x, value)
-{
-    stopifnot(all(value$gene %in% .geneset(x)$gene,
-                  value$set %in% .geneset(x)$set))
-    gene <- filter(.gene(x), .gene(x)$gene %in% value$gene)
-    set <- filter(.set(x), .set(x)$set %in% value$set)
-    initialize(x, gene = gene, set = set, geneset = value)
-}
-
 .active <- function(x) x@active
 
 `.active<-` <- function(x, value)
@@ -128,8 +119,18 @@ setMethod(
     ".update", "tbl_geneset",
     function(x, value)
     {
-        initialize(x, geneset = value)
+        stopifnot(
+            all(value$gene %in% .geneset(x)$gene),
+            all(value$set %in% .geneset(x)$set))
+        gene <- filter(.gene(x), .gene(x)$gene %in% value$gene)
+        set <- filter(.set(x), .set(x)$set %in% value$set)
+        initialize(x, gene = gene, set = set, geneset = value)
     })
+
+
+setGeneric("gene",function(x) standardGeneric("gene"))
+
+setMethod("gene", "GeneSet", .gene)
 
 #' @rdname geneset
 #'
@@ -220,8 +221,7 @@ summarise.GeneSet <- function(.data, ...)
 {
     active <- .active(.data)
     sub <- slot(.data, active)
-    tbl <- summarise(sub, ...)
-    .update(.data, tbl)
+    summarise(sub, ...)
 }
 
 #' @rdname geneset
@@ -245,16 +245,14 @@ group_vars.GeneSet <- function(.data)
 {
     active <- .active(.data)
     sub <- slot(.data, active)
-    groups <- group_vars(sub)
-    groups
+    group_vars(sub)
 }
 
 tbl_vars.GeneSet <- function(.data)
 {
     active <- .active(.data)
     sub <- slot(.data, active)
-    tbl <- tbl_vars(sub)
-    tbl
+    tbl_vars(sub)
 }
 
 count.GeneSet <- function(.data, ..., wt = NULL, sort = FALSE)
