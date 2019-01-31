@@ -12,7 +12,7 @@
 \alias{arrange.GeneSet}
 \title{A gene set representation as a tripple tibble}
 \usage{
-GeneSet(..., active = c("gene", "set", "geneset"))
+GeneSet(..., active = c("geneset", "gene", "set"))
 
 \method{gs_activate}{GeneSet}(.data, what)
 

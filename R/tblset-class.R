@@ -22,6 +22,6 @@ tbl_set <-
     )
     
     tbl <- tibble(set = tbl_geneset$set) %>% distinct()
-    class(tbl) <- c("tbl_set", class(tbl))
+    class(tbl) <- c("tbl_set", "tbl_geneset_base", class(tbl))
     tbl
 }

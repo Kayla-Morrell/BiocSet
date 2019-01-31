@@ -10,7 +10,7 @@
 #'
 #' @importFrom methods is
 #' @importFrom tibble tibble
-#' @importFrom dplyr distinct '%>%' filter select mutate group_by ungroup
+#' @importFrom dplyr distinct '%>%' select mutate group_by ungroup
 #'     summarise arrange
 #'
 #' @export
@@ -38,7 +38,7 @@ tbl_geneset <- function(...) {
 
     tbl <- tbl %>% distinct(gene, set)
 
-    class(tbl) <- c("tbl_geneset", class(tbl))
+    class(tbl) <- c("tbl_geneset", "tbl_geneset_base", class(tbl))
     tbl
 }
 
@@ -57,17 +57,6 @@ format.trunc_mat_tbl_geneset <- function(x, ...) {
     class <- sub("trunc_mat_", "", class(x)[1])
     names(x$summary) <- paste("A", class)
     NextMethod()
-}
-
-#' @rdname tblgeneset
-#'
-#' @param .data The tibble used in filter
-#'
-#' @export
-filter.tbl_geneset <- function(.data, ...) {
-    tbl <- NextMethod()
-    class(tbl) <- c("tbl_geneset", class(tbl))
-    tbl
 }
 
 #' @rdname tblgeneset

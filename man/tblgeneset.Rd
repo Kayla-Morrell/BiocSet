@@ -3,7 +3,6 @@
 \name{tbl_geneset}
 \alias{tbl_geneset}
 \alias{format.trunc_mat_tbl_geneset}
-\alias{filter.tbl_geneset}
 \alias{select.tbl_geneset}
 \alias{mutate.tbl_geneset}
 \alias{group_by.tbl_geneset}
@@ -15,8 +14,6 @@
 tbl_geneset(...)
 
 \method{format}{trunc_mat_tbl_geneset}(x, ...)
-
-\method{filter}{tbl_geneset}(.data, ...)
 
 \method{select}{tbl_geneset}(.data, ...)
 
@@ -37,8 +34,6 @@ character vector is the name of the gene set.}
 
 \item{x}{An object of class trunc_mat_tbl_geneset, used during
 printing of tbl_geneset}
-
-\item{.data}{The tibble used in filter}
 
 \item{add}{logical, whether to add to (add = TRUE) or override (add = FALSE)
 the existing groups. The default is add = FALSE.}

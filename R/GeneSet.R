@@ -14,33 +14,19 @@
 #'
 #' @examples
 #' GeneSet(set1 = letters, set2 = LETTERS)
-GeneSet <- function(..., active = c("gene", "set", "geneset"))
+GeneSet <- function(..., active = c("geneset", "gene", "set"))
 {
     active <- match.arg(active)
     geneset <- tbl_geneset(...)
     gene <- tbl_gene(geneset)
     set <- tbl_set(geneset)
 
-    .GeneSet(gene = gene, set = set, geneset = geneset, active = "geneset")
+    .GeneSet(gene = gene, set = set, geneset = geneset, active = active)
 }
 
 .gene <- function(x) x@gene
 
-`.gene<-` <- function(x, value)
-{
-    stopifnot(all(value$gene %in% .gene(x)$gene))
-    geneset <- filter(.geneset(x), .geneset(x)$gene %in% value$gene)
-    initialize(x, gene = value, geneset = geneset)
-}
-
 .set <- function(x) x@set
-
-`.set<-` <- function(x, value)
-{
-    stopifnot(all(value$set %in% .set(x)$set))
-    geneset <- filter(.geneset(x), .geneset(x)$set %in% value$set)
-    initialize(x, set = value, geneset = geneset)
-}
 
 .geneset <- function(x) x@geneset
 
@@ -54,20 +40,23 @@ GeneSet <- function(..., active = c("gene", "set", "geneset"))
     x
 }
 
+.active_value <-
+    function(x)
+{
+    slot(x, .active(x))
+}
+
 setMethod(
     "show", "GeneSet",
     function(object)
     {
-        cat(
-            "class: ", class(object), "\n",
-            "active: ", .active(object), "\n",
-            "\ngene():\n",
-            sep = ""
-        )
+        active <- .active(object)
+        cat("class: ", class(object), "\n", sep = "")
+        cat("\ngene()", if (active == "gene") " <active>", ":\n", sep = "")
         print(.gene(object), n = 3)
-        cat("\nset():\n")
+        cat("\nset()", if (active == "set") " <active>", ":\n", sep = "")
         print(.set(object), n = 3)
-        cat("\ngeneset():\n")
+        cat("\ngeneset()", if (active == "geneset") " <active>", ":\n", sep = "")
         print(.geneset(object), n = 3)
     })
 
@@ -104,32 +93,38 @@ setGeneric(
 setMethod(
     ".update", "tbl_gene",
     function(x, value)
-    {
-        initialize(x, gene = value)
-    })
+{
+    stopifnot(all(value$gene %in% .gene(x)$gene))
+    geneset <- filter(.geneset(x), .geneset(x)$gene %in% value$gene)
+    initialize(x, gene = value, geneset = geneset)
+})
 
 setMethod(
     ".update", "tbl_set",
     function(x, value)
-    {
-        initialize(x, set = value)
-    })
+{
+    stopifnot(all(value$set %in% .set(x)$set))
+    geneset <- filter(.geneset(x), .geneset(x)$set %in% value$set)
+    initialize(x, set = value, geneset = geneset)
+})
 
 setMethod(
     ".update", "tbl_geneset",
     function(x, value)
-    {
-        stopifnot(
-            all(value$gene %in% .geneset(x)$gene),
-            all(value$set %in% .geneset(x)$set))
-        gene <- filter(.gene(x), .gene(x)$gene %in% value$gene)
-        set <- filter(.set(x), .set(x)$set %in% value$set)
-        initialize(x, gene = gene, set = set, geneset = value)
-    })
+{
+    stopifnot(
+        all(value$gene %in% .geneset(x)$gene),
+        all(value$set %in% .geneset(x)$set)
+    )
+    gene <- filter(.gene(x), .gene(x)$gene %in% value$gene)
+    set <- filter(.set(x), .set(x)$set %in% value$set)
+    initialize(x, gene = gene, set = set, geneset = value)
+})
 
+#' @export
+setGeneric("gene", function(x) standardGeneric("gene"))
 
-setGeneric("gene",function(x) standardGeneric("gene"))
-
+#' @export
 setMethod("gene", "GeneSet", .gene)
 
 #' @rdname geneset
@@ -141,10 +136,8 @@ setMethod("gene", "GeneSet", .gene)
 #' gs %>% gs_activate(gene) %>% filter(gene == "a")
 filter.GeneSet <- function(.data, ...)
 {
-    active <- .active(.data)
-    sub <- slot(.data, active)
+    sub <- .active_value(.data)
     tbl <- filter(sub, ...)
-    class(tbl) <- class(sub)
     .update(.data, tbl)
 }
 
@@ -157,8 +150,7 @@ filter.GeneSet <- function(.data, ...)
 #' gs %>% select(gene)
 select.GeneSet <- function(.data, ...)
 {
-    active <- .active(.data)
-    sub <- slot(.data, active)
+    sub <- .active_value(.data)
     tbl <- select(sub, ...)
     class(tbl) <- class(sub)
     .update(.data, tbl)
@@ -173,8 +165,7 @@ select.GeneSet <- function(.data, ...)
 #' gs %>% gs_activate(set) %>% mutate(pval = rnorm(1:2))
 mutate.GeneSet <- function(.data, ...)
 {
-    active <- .active(.data)
-    sub <- slot(.data, active)
+    sub <- .active_value(.data)
     tbl <- mutate(sub, ...)
     class(tbl) <- class(sub)
     .update(.data, tbl)
@@ -189,8 +180,7 @@ mutate.GeneSet <- function(.data, ...)
 #' gs %>% group_by(gene, set)
 group_by.GeneSet <- function(.data, ..., add = FALSE)
 {
-    active <- .active(.data)
-    sub <- slot(.data, active)
+    sub <- .active_value(.data)
     tbl <- group_by(sub, ..., add = FALSE)
     .update(.data, tbl)
 }
@@ -204,8 +194,7 @@ group_by.GeneSet <- function(.data, ..., add = FALSE)
 #' gs %>% group_by(set) %>% summarise(n = n()) %>% ungroup()
 ungroup.GeneSet <- function(.data, ...)
 {
-    active <- .active(.data)
-    sub <- slot(.data, active)
+    sub <- .active_value(.data)
     tbl <- ungroup(sub, ...)
     .update(.data, tbl)
 }
@@ -219,8 +208,7 @@ ungroup.GeneSet <- function(.data, ...)
 #' gs %>% gs_activate(set) %>% summarise(n = n())
 summarise.GeneSet <- function(.data, ...)
 {
-    active <- .active(.data)
-    sub <- slot(.data, active)
+    sub <- .active_value(.data)
     summarise(sub, ...)
 }
 
@@ -233,21 +221,22 @@ summarise.GeneSet <- function(.data, ...)
 #' gs %>% gs_activate(gene) %>% arrange(desc(gene))
 arrange.GeneSet <- function(.data, ...)
 {
-    active <- .active(.data)
-    sub <- slot(.data, active)
+    sub <- .active_value(.data)
     tbl <- arrange(sub, ...)
     class(tbl) <- class(sub)
     .update(.data, tbl)
 }
 
-
+#' @importFrom dplyr group_vars
+#' @export
 group_vars.GeneSet <- function(.data)
 {
-    active <- .active(.data)
-    sub <- slot(.data, active)
+    sub <- .active_value(.data)
     group_vars(sub)
 }
 
+#' @importFrom dplyr tbl_vars
+#' @export
 tbl_vars.GeneSet <- function(.data)
 {
     active <- .active(.data)
@@ -255,19 +244,7 @@ tbl_vars.GeneSet <- function(.data)
     tbl_vars(sub)
 }
 
-count.GeneSet <- function(.data, ..., wt = NULL, sort = FALSE)
-{
-    active <- .active(.data)
-    sub <- slot(.data, active)
-    groups <- group_vars(sub)
-    x <- group_by(sub, ..., add = TRUE)
-    x <- tally(x, wt = !!enquo(wt), sort = sort)
-    x <- group_by(x, !!!syms(groups), add = FALSE)
-    .update(.data, x)
-}
-
 ## interface 2
-
 
 #setMethod(
 #   "show", "GeneSet",
