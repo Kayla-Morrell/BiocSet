@@ -124,8 +124,10 @@ setMethod(
     initialize(x, gene = gene, set = set, geneset = value)
 })
 
-setGeneric("gene",function(x) standardGeneric("gene"))
+#' @export
+setGeneric("gene", function(x) standardGeneric("gene"))
 
+#' @export
 setMethod("gene", "GeneSet", .gene)
 
 #' @rdname geneset
@@ -228,12 +230,16 @@ arrange.GeneSet <- function(.data, ...)
     .update(.data, tbl)
 }
 
+#' @importFrom dplyr group_vars
+#' @export
 group_vars.GeneSet <- function(.data)
 {
     sub <- .active_value(.data)
     group_vars(sub)
 }
 
+#' @importFrom dplyr tbl_vars
+#' @export
 tbl_vars.GeneSet <- function(.data)
 {
     active <- .active(.data)
@@ -241,18 +247,7 @@ tbl_vars.GeneSet <- function(.data)
     tbl_vars(sub)
 }
 
-## count.GeneSet <- function(.data, ..., wt = NULL, sort = FALSE)
-## {
-##     sub <- .active_value(.data)
-##     groups <- group_vars(sub)
-##     x <- group_by(sub, ..., add = TRUE)
-##     x <- tally(x, wt = !!enquo(wt), sort = sort)
-##     x <- group_by(x, !!!syms(groups), add = FALSE)
-##     .update(.data, x)
-## }
-
 ## interface 2
-
 
 #setMethod(
 #   "show", "GeneSet",

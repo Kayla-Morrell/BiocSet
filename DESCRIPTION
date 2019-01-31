@@ -10,15 +10,15 @@ Description: GeneSet displays gene sets in different S3 and S4 class types. For
     the S3 class, there is 'class'-like representation and a tibble-like
     representation. For the S4 class, there is a data.frame-like representation,
     a list-like representation, and an extended S3 tibble-like representation.
-Depends: R (>= 3.4.0)
-License: Artistic-2.0
-Encoding: UTF-8
-LazyData: true
-Imports: methods, tibble, dplyr, rtracklayer, utils
+Depends: R (>= 3.4.0), dplyr
+Imports: methods, tibble, rtracklayer, utils
 Suggests: 
     testthat,
     knitr,
     rmarkdown,
     BiocStyle
+License: Artistic-2.0
+Encoding: UTF-8
+LazyData: true
 RoxygenNote: 6.1.1
 VignetteBuilder: knitr
