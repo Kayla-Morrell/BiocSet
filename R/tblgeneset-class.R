@@ -38,8 +38,7 @@ tbl_geneset <- function(...) {
 
     tbl <- tbl %>% distinct(gene, set)
 
-    class(tbl) <- c("tbl_geneset", "tbl_geneset_base", class(tbl))
-    tbl
+    subclass_tbl_geneset_base(tbl, "tbl_geneset")
 }
 
 is_tbl_geneset <- function(x) {
@@ -57,66 +56,4 @@ format.trunc_mat_tbl_geneset <- function(x, ...) {
     class <- sub("trunc_mat_", "", class(x)[1])
     names(x$summary) <- paste("A", class)
     NextMethod()
-}
-
-#' @rdname tblgeneset
-#'
-#' @export
-select.tbl_geneset <- function(.data, ...) {
-    tbl <- NextMethod()
-    if (!is_tbl_geneset(tbl))
-        class(tbl) <- setdiff(class(tbl), "tbl_geneset")
-    tbl
-}
-
-#' @rdname tblgeneset
-#'
-#' @export
-mutate.tbl_geneset <- function(.data, ...) {
-    tbl <- NextMethod()
-    if (is_tbl_geneset(tbl))
-        class(tbl) <- c("tbl_geneset", class(tbl))
-    tbl
-}
-
-#' @rdname tblgeneset
-#'
-#' @param add logical, whether to add to (add = TRUE) or override (add = FALSE)
-#'     the existing groups. The default is add = FALSE.
-#'
-#' @export
-group_by.tbl_geneset <- function(.data, ..., add = FALSE) {
-    tbl <- NextMethod()
-    if (is_tbl_geneset(tbl))
-        class(tbl) <- c("tbl_geneset", class(tbl))
-    tbl
-}
-
-#' @rdname tblgeneset
-#'
-#' @export
-ungroup.tbl_geneset <- function(x, ...) {
-    tbl <- NextMethod()
-    if (is_tbl_geneset(tbl))
-        class(tbl) <- c("tbl_geneset", class(tbl))
-    tbl
-}
-
-#' @rdname tblgeneset
-#'
-#' @export
-summarise.tbl_geneset <- function(.data, ...) {
-    tbl <- NextMethod()
-    if (!is_tbl_geneset(tbl))
-        class(tbl) <- setdiff(class(tbl), "tbl_geneset")
-    tbl
-}
-
-#' @rdname tblgeneset
-#'
-#' @export
-arrange.tbl_geneset <- function(.data, ...) {
-    tbl <- NextMethod()
-    class(tbl) <- c("tbl_geneset", class(tbl))
-    tbl
 }

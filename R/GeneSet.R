@@ -164,7 +164,6 @@ select.GeneSet <- function(.data, ...)
 {
     sub <- .active_value(.data)
     tbl <- select(sub, ...)
-    class(tbl) <- class(sub)
     .update(.data, tbl)
 }
 
@@ -179,7 +178,6 @@ mutate.GeneSet <- function(.data, ...)
 {
     sub <- .active_value(.data)
     tbl <- mutate(sub, ...)
-    class(tbl) <- class(sub)
     .update(.data, tbl)
 }
 
@@ -235,7 +233,6 @@ arrange.GeneSet <- function(.data, ...)
 {
     sub <- .active_value(.data)
     tbl <- arrange(sub, ...)
-    class(tbl) <- class(sub)
     .update(.data, tbl)
 }
 
