@@ -61,7 +61,7 @@ group_vars.tbl_geneset_base <-
 {
     class = class(.data)
     class(.data) = setdiff(class, .subclasses)
-    group_vars(tmp)
+    group_vars(.data)
 }
 
 #' @importFrom dplyr tbl_vars
@@ -72,7 +72,7 @@ tbl_vars.tbl_geneset_base <-
 {
     class = class(.data)
     class(.data) = setdiff(class, .subclasses)
-    tbl_vars(tmp)
+    tbl_vars(.data)
 }
 
 #' @importFrom dplyr ungroup

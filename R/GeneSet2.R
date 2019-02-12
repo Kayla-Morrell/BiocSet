@@ -1,27 +1,27 @@
 #' A gene set representation as a tripple tibble
 #'
-#' @rdname geneset
+#' @rdname geneset2
 #'
-#' @param ... For `GeneSet()`, named character() vectors of gene
+#' @param ... For `GeneSet2()`, named character() vectors of gene
 #'     sets. Each character vector is a gene set. The name of the
 #'     character vector is the name of the gene set.
 #' @param active A character to indicate which tibble is active.
 #'
-#' @return For `GeneSet()`, a S4 'GeneSet' object in a tripple
+#' @return For `GeneSet2()`, a S4 'GeneSet' object in a tripple
 #'     tibble representation.
 #'
 #' @export
 #'
 #' @examples
-#' GeneSet(set1 = letters, set2 = LETTERS)
-GeneSet <- function(..., active = c("geneset", "gene", "set"))
+#' GeneSet2(set1 = letters, set2 = LETTERS)
+GeneSet2 <- function(..., active = c("geneset", "gene", "set"))
 {
     active <- match.arg(active)
     geneset <- tbl_geneset(...)
     gene <- tbl_gene(geneset)
     set <- tbl_set(geneset)
 
-    .GeneSet(gene = gene, set = set, geneset = geneset, active = active)
+    .GeneSet2(gene = gene, set = set, geneset = geneset, active = active)
 }
 
 .gene <- function(x) x@gene
@@ -30,59 +30,22 @@ GeneSet <- function(..., active = c("geneset", "gene", "set"))
 
 .geneset <- function(x) x@geneset
 
-.active <- function(x) x@active
-
-`.active<-` <- function(x, value)
-{
-    value <- gsub('"', '', value)
-    stopifnot(value %in% c("gene", "set", "geneset"))
-    x@active <- value
-    x
-}
-
-.active_value <-
-    function(x)
-{
-    slot(x, .active(x))
-}
-
 setMethod(
-    "show", "GeneSet",
-    function(object)
-    {
-        active <- .active(object)
-        cat("class: ", class(object), "\n", sep = "")
-        cat("\ngene()", if (active == "gene") " <active>", ":\n", sep = "")
-        print(.gene(object), n = 3)
-        cat("\nset()", if (active == "set") " <active>", ":\n", sep = "")
-        print(.set(object), n = 3)
-        cat("\ngeneset()", if (active == "geneset") " <active>", ":\n", sep = "")
-        print(.geneset(object), n = 3)
+   "show", "GeneSet2",
+   function(object)
+{
+    ## FIXME: better implementation
+    tbl <- suppressMessages({
+        inner_join(.geneset(object), .gene(object)) %>%
+            inner_join(.set(object))
     })
+    cat("class: ", class(object), "\n")
+    print(tbl)
+})
 
-gs_activate <- function(.data, ...)
-{
-    UseMethod("gs_activate")
-}
 
-#' @rdname geneset
-#'
-#' @param .data The 'GeneSet' tibble.
-#' @param what Which of the three tibbles to activate
-#'
-#' @importFrom rlang quo_text enquo
-#' 
-#' @export
-#'
-#' @examples
-#' gs <- GeneSet(set1 = letters, set2 = LETTERS)
-#' gs_activate(gs, gene)
-gs_activate.GeneSet <- function(.data, what)
-{
-    what <- quo_text(enquo(what))
-    .active(.data) <- what
-    .data
-}
+## implement common verbs, including implied constraints
+##    gs %>% filter(p < 0.05)
 
 setGeneric(
     ".update",
@@ -122,114 +85,113 @@ setMethod(
 })
 
 #' @export
-setGeneric("gs_gene", function(x) standardGeneric("gs_gene"))
+setGeneric("gs_gene2", function(x) standardGeneric("gs_gene2"))
 
 #' @export
-setMethod("gs_gene", "GeneSet", .gene)
+setMethod("gs_gene2", "GeneSet2", .gene)
 
 #' @export
-setGeneric("gs_set", function(x) standaradGeneric("gs_set"))
+setGeneric("gs_set2", function(x) standaradGeneric("gs_set2"))
 
 #' @export
-setMethod("gs_set", "GeneSet", .set)
+setMethod("gs_set2", "GeneSet2", .set)
 
 #' @export
-setGeneric("gs_geneset", function(x) standardGeneric("gs_geneset"))
+setGeneric("gs_geneset2", function(x) standardGeneric("gs_geneset2"))
 
 #' @export
-setMethod("gs_geneset", "GeneSet", .geneset)
+setMethod("gs_geneset2", "GeneSet2", .geneset)
 
-#' @rdname geneset
+#' @rdname geneset2
 #'
 #' @export
 #'
 #' @examples
-#' gs <- GeneSet(set1 = letters, set2 = LETTERS)
+#' gs <- GeneSet2(set1 = letters, set2 = LETTERS)
 #' gs %>% gs_activate(gene) %>% filter(gene == "a")
-filter.GeneSet <- function(.data, ...)
+filter.GeneSet2 <- function(.data, ...)
 {
-    sub <- .active_value(.data)
-    tbl <- filter(sub, ...)
+    tbl <- filter(.data, ...)
     .update(.data, tbl)
 }
 
-#' @rdname geneset
+#' @rdname geneset2
 #'
 #' @export
 #'
 #' @examples
-#' gs <- GeneSet(set1 = letters, set2 = LETTERS)
+#' gs <- GeneSet2(set1 = letters, set2 = LETTERS)
 #' gs %>% select(gene)
-select.GeneSet <- function(.data, ...)
+select.GeneSet2 <- function(.data, ...)
 {
     sub <- .active_value(.data)
     tbl <- select(sub, ...)
     .update(.data, tbl)
 }
 
-#' @rdname geneset
+#' @rdname geneset2
 #'
 #' @export
 #'
 #' @examples
-#' gs <- GeneSet(set1 = letters, set2 = LETTERS)
+#' gs <- GeneSet2(set1 = letters, set2 = LETTERS)
 #' gs %>% gs_activate(set) %>% mutate(pval = rnorm(1:2))
-mutate.GeneSet <- function(.data, ...)
+mutate.GeneSet2 <- function(.data, ...)
 {
     sub <- .active_value(.data)
     tbl <- mutate(sub, ...)
     .update(.data, tbl)
 }
 
-#' @rdname geneset
+#' @rdname geneset2
 #'
 #' @export
 #'
 #' @examples
-#' gs <- GeneSet(set1 = letters, set2 = LETTERS)
+#' gs <- GeneSet2(set1 = letters, set2 = LETTERS)
 #' gs %>% group_by(gene, set)
-group_by.GeneSet <- function(.data, ..., add = FALSE)
+group_by.GeneSet2 <- function(.data, ..., add = FALSE)
 {
     sub <- .active_value(.data)
     tbl <- group_by(sub, ..., add = FALSE)
     .update(.data, tbl)
 }
 
-#' @rdname geneset
+#' @rdname geneset2
 #'
 #' @export
 #'
 #' @examples
-#' gs <- GeneSet(set1 = letters, set2 = LETTERS)
+#' gs <- GeneSet2(set1 = letters, set2 = LETTERS)
 #' gs %>% group_by(set) %>% summarise(n = n()) %>% ungroup()
-ungroup.GeneSet <- function(.data, ...)
+ungroup.GeneSet2 <- function(.data, ...)
 {
     sub <- .active_value(.data)
     tbl <- ungroup(sub, ...)
     .update(.data, tbl)
 }
 
-#' @rdname geneset
+#' @rdname geneset2
 #'
 #' @export
 #'
 #' @examples
-#' gs <- GeneSet(set1 = letters, set2 = LETTERS)
+#' gs <- GeneSet2(set1 = letters, set2 = LETTERS)
 #' gs %>% gs_activate(set) %>% summarise(n = n())
-summarise.GeneSet <- function(.data, ...)
+summarise.GeneSet2 <- function(.data, ...)
 {
     sub <- .active_value(.data)
     summarise(sub, ...)
 }
 
-#' @rdname geneset
+#' @rdname geneset2
 #'
 #' @export
 #'
 #' @examples
-#' gs <- GeneSet(set1 = letters, set2 = LETTERS)
+#' gs <- GeneSet2(set1 = letters, set2 = LETTERS)
 #' gs %>% gs_activate(gene) %>% arrange(desc(gene))
-arrange.GeneSet <- function(.data, ...)
+arrange.GeneSet2 <- function(.data, ...)
 {
     sub <- .active_value(.data)
     tbl <- arrange(sub, ...)
@@ -238,7 +200,7 @@ arrange.GeneSet <- function(.data, ...)
 
 #' @importFrom dplyr group_vars
 #' @export
-group_vars.GeneSet <- function(.data)
+group_vars.GeneSet2 <- function(.data)
 {
     sub <- .active_value(.data)
     group_vars(sub)
@@ -246,7 +208,7 @@ group_vars.GeneSet <- function(.data)
 
 #' @importFrom dplyr tbl_vars
 #' @export
-tbl_vars.GeneSet <- function(.data)
+tbl_vars.GeneSet2 <- function(.data)
 {
     active <- .active(.data)
     sub <- slot(.data, active)
