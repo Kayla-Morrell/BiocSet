@@ -32,22 +32,6 @@ test_that("'is_tbl_geneset()' works", {
     expect_false(is_tbl_geneset(tibble(gene = character())))
 })
 
-test_that("'filter.tbl_geneset' works", {
-    gs <- tbl_geneset(a = letters, b = LETTERS)
-    expect_equivalent(filter(gs), gs)
-    
-    gs1 <- filter(gs, set == "a")
-    expect_true(is_tbl_geneset(gs1))
-    expect_identical(dim(gs1), c(26L, 2L))
-    expect_identical(gs1$gene, letters)
-
-    exp <- "k"
-    gs2 <- filter(gs, gene == exp)
-    expect_true(is_tbl_geneset(gs2))
-    expect_identical(dim(gs2), c(1L, 2L))
-    expect_identical(gs2$gene, exp)
-})
-
 test_that("'select.tbl_geneset()' works", {
     gs <- tbl_geneset(a = letters, b = LETTERS)
 
