@@ -11,8 +11,9 @@ Description: GeneSet displays gene sets in different S3 and S4 class types. For
     representation. For the S4 class, there is a data.frame-like representation,
     a list-like representation, and an extended S3 tibble-like representation.
 Depends: R (>= 3.4.0), dplyr
-Imports: methods, tibble, rtracklayer, utils, rlang
-Suggests: 
+Imports: methods, tibble, utils, rlang
+Suggests:
+    rtracklayer,
     testthat,
     knitr,
     rmarkdown,
