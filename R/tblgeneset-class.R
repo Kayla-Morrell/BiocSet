@@ -33,7 +33,7 @@ tbl_geneset <- function(...) {
             rep(names(args), lengths(args)),
             levels = names(args)
 
-        ) 
+        )
     )
 
     tbl <- tbl %>% distinct(gene, set)
@@ -50,10 +50,18 @@ is_tbl_geneset <- function(x) {
 #'
 #' @param x An object of class trunc_mat_tbl_geneset, used during
 #'     printing of tbl_geneset
-#' 
+#'
 #' @export
 format.trunc_mat_tbl_geneset <- function(x, ...) {
     class <- sub("trunc_mat_", "", class(x)[1])
     names(x$summary) <- paste("A", class)
     NextMethod()
 }
+
+select.tbl_geneset <- function(.data, ...)
+{
+    tbl <- NextMethod("select", .data, gene, set, ...)
+    class(tbl) <- class(.data)
+    tbl
+}
+

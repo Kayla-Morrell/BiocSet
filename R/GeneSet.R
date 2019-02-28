@@ -71,7 +71,7 @@ gs_activate <- function(.data, ...)
 #' @param what Which of the three tibbles to activate
 #'
 #' @importFrom rlang quo_text enquo
-#' 
+#'
 #' @export
 #'
 #' @examples
@@ -176,9 +176,54 @@ select.GeneSet <- function(.data, ...)
 #' gs %>% gs_activate(set) %>% mutate(pval = rnorm(1:2))
 mutate.GeneSet <- function(.data, ...)
 {
+    stopifnot(!any(c("gene", "set") %in% names(list(...))))
+
     sub <- .active_value(.data)
     tbl <- mutate(sub, ...)
     .update(.data, tbl)
+}
+
+mutate_gene <- function(.data, ...) UseMethod("mutate_gene")
+
+mutate_gene.GeneSet <- function(.data, from, to)
+{
+    stopifnot(is.character(from), is.character(to), length(from) == length(to))
+
+    gene <- .gene(.data)
+    idx <- gene$gene %in% from
+    gene$gene[idx] <- unname(setNames(to, from)[gene$gene[idx]])
+
+    gs <- .geneset(.data)
+    idx <- gs$gene %in% from
+    gs$gene[idx] <- unname(setNames(to, from)[gs$gene[idx]])
+
+    initialize(.data, gene = gene, geneset = gs)
+}
+
+mutate_set <- function(.data, ...) UseMethod("mutate_set")
+
+#' @rdname geneset
+#'
+#' @importFrom plyr mapvalues
+#'
+#' @export
+#'
+#' @examples
+#' gs <- GeneSet(a = letters, B = LETTERS)
+#' gs %>% mutate_set("a", "A")
+mutate_set.GeneSet <- function(.data, from, to)
+{
+    stopifnot(is.character(from), is.character(to), length(from) == length(to))
+
+    set <- .set(.data)
+    idx <- set$set %in% from
+    set$set <- mapvalues(set$set, from, to)
+
+    gs <- .geneset(.data)
+    idx <- gs$set %in% from
+    gs$set <- mapvalues(set$set, from, to)
+
+    initialize(.data, set = set, geneset = gs)
 }
 
 #' @rdname geneset

@@ -1,15 +1,15 @@
 #' Importing and formating of gene sets as an S3 class tibble
 #' @rdname import
-#' 
+#'
 #' @export
 .GMTFile = setClass("GMTFile", contains = "RTLFile")
 
 #' @rdname import
 #'
-#' @param resource For `GMTFile()`, the .gmt file that will be imported in. 
+#' @param resource For `GMTFile()`, the .gmt file that will be imported in.
 #'
 #' @return For `GMTFile()`, an object representing the path to a .gmt file on disk
-#' 
+#'
 #' @export
 GMTFile = function(resource, ...)
     .GMTFile(resource = resource)
@@ -38,11 +38,11 @@ import.gmt <- function(path) {
 
     source <- vapply(sets, function(set) set[[2]], character(1))
     source[source=="NA" | !nzchar(source)] <- NA
-    tbl <- do.call(tbl_geneset, genes)
-    tbl$source <- rep(source, lengths(genes))
+    tbl <- do.call(GeneSet, genes)
+    tbl <- tbl %>% mutate(source = rep(source, lengths(genes)))
     tbl
 }
- 
+
 
 #' @rdname import
 #'
@@ -55,27 +55,28 @@ import.gmt <- function(path) {
 #' @param ... Parameters to pass to the format-specific method
 #'
 #' @return For `import()`, tbl_geneset
-#' 
+#'
 #' @export
 setMethod(
     "import", c("GMTFile", "ANY", "ANY"),
     function(con, format, text, ...)
-{        
+{
     import.gmt(resource(con))
 })
 
 #' @rdname import
 #'
-#' @param tbl For `export.tbl_geneset()`, a tbl_geneset that
+#' @param tbl For `export.GeneSet()`, a GeneSet that
 #'     should be exported to a gmt file.
 #'
 #' @export
 
-export.tbl_geneset <- function(tbl, path = tempfile(fileext = ".gmt")) {
-    stopifnot(is_tbl_geneset(tbl))
+export.GeneSet <- function(tbl, path = tempfile(fileext = ".gmt")) {
+    stopifnot(is_tbl_geneset(.geneset(tbl)))
 
-    if(!"source" %in% names(tbl))
-        tbl <- mutate(tbl, source = rep(NA_character_, nrow(tbl)))
+    if(!"source" %in% names(.geneset(tbl)))
+        tbl <- mutate(.geneset(tbl),
+                            source = rep(NA_character_, nrow(.geneset(tbl))))
 
     sets <- group_by(tbl, set) %>%
         summarise(source = unique(source),
@@ -86,20 +87,18 @@ export.tbl_geneset <- function(tbl, path = tempfile(fileext = ".gmt")) {
                 col.names = FALSE, row.names = FALSE, quote = FALSE)
 }
 
-setOldClass("tbl_geneset")
-
 #' @rdname import
 #'
 #' @param object For `export()`, the object to be exported.
 #'
 #' @return For `export()`, a GMTFile object representing the location
 #'     where the gene set was written
-#' 
+#'
 #' @export
 setMethod(
-    "export", c("tbl_geneset", "GMTFile", "ANY"),
+    "export", c("GeneSet", "GMTFile", "ANY"),
     function(object, con, format, ...)
 {
-    export.tbl_geneset(object, resource(con))
+    export.GeneSet(object, resource(con))
     con
 })

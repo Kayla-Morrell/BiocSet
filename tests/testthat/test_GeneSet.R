@@ -108,33 +108,47 @@ test_that("'select.GeneSet()' works", {
     expect_identical(gs1, gs)
 
     gs2 <- gs %>% select(gene)
-    expect_false(is_tbl_geneset(.geneset(gs2)))
-    expect_identical(dim(.geneset(gs2)), c(52L,1L))
-    expect_identical(gs2$gene, .gene(gs)$gene)
+    expect_true(is_tbl_geneset(.geneset(gs2)))
+    expect_identical(dim(.geneset(gs2)), c(52L,2L))
+    expect_identical(.gene(gs2), .gene(gs))
 
     gs3 <- gs %>% select(set)
-    expect_false(is_tbl_geneset(.geneset(gs3)))
-    expect_identical(dim(.geneset(gs3)), c(52L, 1L))
-    expect_identical(gs3$set, .set(gs)$set)
+    expect_true(is_tbl_geneset(.geneset(gs3)))
+    expect_identical(dim(.geneset(gs3)), c(52L, 2L))
+    expect_identical(.set(gs3), .set(gs))
 })
 
-#test_that("'mutate.GeneSet()' works", {
-#    gs <- GeneSet(set1 = letters, set2 = LETTERS)
-#
-#    gs1 <- gs %>% mutate(pval = rnorm(1:52))
-#    expect_true(is_tbl_geneset(.geneset(gs1)))
-#    expect_identical(dim(.geneset(gs1)), c(52L,3L))
-#
-#    gs2 <- gs %>% mutate(gene = 1:52)
-#    expect_false(is_tbl_geneset(.geneset(gs2)))
-#    expect_identical(dim(.geneset(gs2)), c(52L,2L))
-#
-#    gs3 <- g s%>% mutate(set = 1:52)
-#    expect_false(is_tbl_geneset(.geneset(gs3)))
-#    expect_identical(dim(.geneset(gs3)), c(52L,2L))
-#
-#    expect_error(gs %>% mutate(z = 1:2))
-#})
+test_that("'mutate.GeneSet()' works", {
+    gs <- GeneSet(set1 = letters, set2 = LETTERS)
+
+    gs1 <- gs %>% mutate(pval = rnorm(1:52))
+    expect_true(is_tbl_geneset(.geneset(gs1)))
+    expect_identical(dim(.geneset(gs1)), c(52L,3L))
+
+    expect_error(gs %>% mutate(z = 1:2))
+    expect_error(gs %>% mutate(gene = 1:52))
+    expect_error(gs %>% mutate(set = 1:52))
+})
+
+test_that("'mutate_gene.GeneSet()' works", {
+    gs <- GeneSet(set1 = letters, set2 = LETTERS)
+
+    gs1 <- gs %>% mutate_gene(letters, LETTERS)
+    expect_true(is_tbl_geneset(.geneset(gs1)))
+    expect_identical(dim(.geneset(gs1)), c(52L,2L))
+    expect_identical(.geneset(gs1)$gene, .gene(gs1)$gene)
+})
+
+test_that("'mutate_set.GeneSet()' works", {
+    gs <- GeneSet(a = letters, B = LETTERS)
+
+    gs1 <- gs %>% mutate_set("a", "A")
+    expect_true(is_tbl_geneset(.geneset(gs1)))
+    expect_identical(dim(.geneset(gs1)), c(52L,2L))
+    expect_identical(levels(.geneset(gs1)$set), levels(.set(gs1)$set))
+})
+
+
 
 test_that("'group_by.GeneSet()' works", {
     gs <- GeneSet(set1 = letters, set2 = LETTERS)

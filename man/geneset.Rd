@@ -6,6 +6,7 @@
 \alias{filter.GeneSet}
 \alias{select.GeneSet}
 \alias{mutate.GeneSet}
+\alias{mutate_set.GeneSet}
 \alias{group_by.GeneSet}
 \alias{ungroup.GeneSet}
 \alias{summarise.GeneSet}
@@ -21,6 +22,8 @@ GeneSet(..., active = c("geneset", "gene", "set"))
 \method{select}{GeneSet}(.data, ...)
 
 \method{mutate}{GeneSet}(.data, ...)
+
+\method{mutate_set}{GeneSet}(.data, from, to)
 
 \method{group_by}{GeneSet}(.data, ..., add = FALSE)
 
@@ -58,6 +61,8 @@ gs <- GeneSet(set1 = letters, set2 = LETTERS)
 gs \%>\% select(gene)
 gs <- GeneSet(set1 = letters, set2 = LETTERS)
 gs \%>\% gs_activate(set) \%>\% mutate(pval = rnorm(1:2))
+gs <- GeneSet(a = letters, B = LETTERS)
+gs \%>\% mutate_set("a", "A")
 gs <- GeneSet(set1 = letters, set2 = LETTERS)
 gs \%>\% group_by(gene, set)
 gs <- GeneSet(set1 = letters, set2 = LETTERS)

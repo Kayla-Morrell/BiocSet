@@ -7,8 +7,8 @@
 \alias{GMTFile}
 \alias{import.gmt}
 \alias{import,GMTFile,ANY,ANY-method}
-\alias{export.tbl_geneset}
-\alias{export,tbl_geneset,GMTFile,ANY-method}
+\alias{export.GeneSet}
+\alias{export,GeneSet,GMTFile,ANY-method}
 \title{Importing and formating of gene sets as an S3 class tibble}
 \usage{
 GMTFile(resource, ...)
@@ -17,9 +17,9 @@ import.gmt(path)
 
 \S4method{import}{GMTFile,ANY,ANY}(con, format, text, ...)
 
-export.tbl_geneset(tbl, path = tempfile(fileext = ".gmt"))
+export.GeneSet(tbl, path = tempfile(fileext = ".gmt"))
 
-\S4method{export}{tbl_geneset,GMTFile,ANY}(object, con, format, ...)
+\S4method{export}{GeneSet,GMTFile,ANY}(object, con, format, ...)
 }
 \arguments{
 \item{resource}{For `GMTFile()`, the .gmt file that will be imported in.}
@@ -37,7 +37,7 @@ is to be saved to.}
 \item{text}{For `import()`, if con is missing this is a character
 vector directly providing the gene set that should be imported.}
 
-\item{tbl}{For `export.tbl_geneset()`, a tbl_geneset that
+\item{tbl}{For `export.GeneSet()`, a GeneSet that
 should be exported to a gmt file.}
 
 \item{object}{For `export()`, the object to be exported.}
