@@ -57,33 +57,33 @@ group_by.tbl_geneset_base <-
 #'
 #' @export
 group_vars.tbl_geneset_base <-
-    function(.data, ...)
+    function(x)
 {
-    class = class(.data)
-    class(.data) = setdiff(class, .subclasses)
-    group_vars(.data)
+    class = class(x)
+    class(x) = setdiff(class, .subclasses)
+    group_vars(x)
 }
 
 #' @importFrom dplyr tbl_vars
 #'
 #' @export
 tbl_vars.tbl_geneset_base <-
-    function(.data, ...)
+    function(x)
 {
-    class = class(.data)
-    class(.data) = setdiff(class, .subclasses)
-    tbl_vars(.data)
+    class = class(x)
+    class(x) = setdiff(class, .subclasses)
+    tbl_vars(x)
 }
 
 #' @importFrom dplyr ungroup
 #'
 #' @export
 ungroup.tbl_geneset_base <-
-    function(.data, ...)
+    function(x, ...)
 {
-    class <- class(.data)
-    class(.data) <- setdiff(class, .subclasses)
-    tbl <- ungroup(.data, ...)
+    class <- class(x)
+    class(x) <- setdiff(class, .subclasses)
+    tbl <- ungroup(x, ...)
     class(tbl) <- setdiff(class, "grouped_df")
     tbl
 }
@@ -110,4 +110,4 @@ arrange.tbl_geneset_base <-
     tbl <- NextMethod()
     class(tbl) <- class(.data)
     tbl
-} 
+}

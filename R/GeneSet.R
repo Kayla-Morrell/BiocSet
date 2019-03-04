@@ -40,6 +40,7 @@ GeneSet <- function(..., active = c("geneset", "gene", "set"))
     x
 }
 
+#' @importFrom methods slot
 .active_value <-
     function(x)
 {
@@ -60,7 +61,10 @@ setMethod(
         print(.geneset(object), n = 3)
     })
 
-gs_activate <- function(.data, ...)
+#' @rdname geneset
+#'
+#' @export
+gs_activate <- function(.data, what)
 {
     UseMethod("gs_activate")
 }
@@ -71,6 +75,7 @@ gs_activate <- function(.data, ...)
 #' @param what Which of the three tibbles to activate
 #'
 #' @importFrom rlang quo_text enquo
+#' @importFrom methods initialize
 #'
 #' @export
 #'
@@ -121,22 +126,34 @@ setMethod(
     initialize(x, gene = gene, set = set, geneset = value)
 })
 
+#' @rdname geneset
+#'
 #' @export
 setGeneric("gs_gene", function(x) standardGeneric("gs_gene"))
 
-#' @export
+#' @rdname geneset
+#'
+#' @exportMethod gs_gene
 setMethod("gs_gene", "GeneSet", .gene)
 
+#' @rdname geneset
+#'
 #' @export
 setGeneric("gs_set", function(x) standaradGeneric("gs_set"))
 
-#' @export
+#' @rdname geneset
+#'
+#' @exportMethod gs_set
 setMethod("gs_set", "GeneSet", .set)
 
+#' @rdname geneset
+#'
 #' @export
 setGeneric("gs_geneset", function(x) standardGeneric("gs_geneset"))
 
-#' @export
+#' @rdname geneset
+#'
+#' @exportMethod gs_geneset
 setMethod("gs_geneset", "GeneSet", .geneset)
 
 #' @rdname geneset
@@ -183,9 +200,23 @@ mutate.GeneSet <- function(.data, ...)
     .update(.data, tbl)
 }
 
-mutate_gene <- function(.data, ...) UseMethod("mutate_gene")
+#' @rdname geneset
+#'
+#' @export
+map_gene <- function(.data, from, to) UseMethod("map_gene")
 
-mutate_gene.GeneSet <- function(.data, from, to)
+#' @rdname geneset
+#'
+#' @param from a vector of the values to be replaced
+#' @param to a vector of the replacement values
+#'
+#' @importFrom stats setNames
+#'
+#' @export
+#' @examples
+#' gs <- GeneSet(set1 = letters, set2 = LETTERS)
+#' gs %>% map_gene(letters, LETTERS)
+map_gene.GeneSet <- function(.data, from, to)
 {
     stopifnot(is.character(from), is.character(to), length(from) == length(to))
 
@@ -200,7 +231,10 @@ mutate_gene.GeneSet <- function(.data, from, to)
     initialize(.data, gene = gene, geneset = gs)
 }
 
-mutate_set <- function(.data, ...) UseMethod("mutate_set")
+#' @rdname geneset
+#'
+#' @export
+map_set <- function(.data, from, to) UseMethod("map_set")
 
 #' @rdname geneset
 #'
@@ -210,8 +244,8 @@ mutate_set <- function(.data, ...) UseMethod("mutate_set")
 #'
 #' @examples
 #' gs <- GeneSet(a = letters, B = LETTERS)
-#' gs %>% mutate_set("a", "A")
-mutate_set.GeneSet <- function(.data, from, to)
+#' gs %>% map_set("a", "A")
+map_set.GeneSet <- function(.data, from, to)
 {
     stopifnot(is.character(from), is.character(to), length(from) == length(to))
 
@@ -228,6 +262,9 @@ mutate_set.GeneSet <- function(.data, from, to)
 
 #' @rdname geneset
 #'
+#' @param add by default, `group_by()` will override existing groups. To add to
+#' existing groups, add should be TRUE.
+#'
 #' @export
 #'
 #' @examples
@@ -242,16 +279,18 @@ group_by.GeneSet <- function(.data, ..., add = FALSE)
 
 #' @rdname geneset
 #'
+#' @param x a GeneSet
+#'
 #' @export
 #'
 #' @examples
 #' gs <- GeneSet(set1 = letters, set2 = LETTERS)
 #' gs %>% group_by(set) %>% summarise(n = n()) %>% ungroup()
-ungroup.GeneSet <- function(.data, ...)
+ungroup.GeneSet <- function(x, ...)
 {
-    sub <- .active_value(.data)
+    sub <- .active_value(x)
     tbl <- ungroup(sub, ...)
-    .update(.data, tbl)
+    .update(x, tbl)
 }
 
 #' @rdname geneset
@@ -281,19 +320,31 @@ arrange.GeneSet <- function(.data, ...)
     .update(.data, tbl)
 }
 
+#' @rdname geneset
+#'
 #' @importFrom dplyr group_vars
 #' @export
-group_vars.GeneSet <- function(.data)
+#'
+#' @examples
+#' gs <- GeneSet(set1 = letters, set2 = LETTERS)
+#' gs %>% group_by(gene) %>% group_vars()
+group_vars.GeneSet <- function(x)
 {
-    sub <- .active_value(.data)
+    sub <- .active_value(x)
     group_vars(sub)
 }
 
+#' @rdname geneset
+#'
 #' @importFrom dplyr tbl_vars
 #' @export
-tbl_vars.GeneSet <- function(.data)
+#'
+#' @examples
+#' gs <- GeneSet(set1 = letters, set2 = LETTERS)
+#' gs %>% mutate(pval = rnorm(1:52)) %>% tbl_vars()
+tbl_vars.GeneSet <- function(x)
 {
-    active <- .active(.data)
-    sub <- slot(.data, active)
+    active <- .active(x)
+    sub <- slot(x, active)
     tbl_vars(sub)
 }

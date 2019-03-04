@@ -73,15 +73,17 @@ setMethod(
 
 export.GeneSet <- function(tbl, path = tempfile(fileext = ".gmt")) {
     stopifnot(is_tbl_geneset(.geneset(tbl)))
-
-    if(!"source" %in% names(.geneset(tbl)))
-        tbl <- mutate(.geneset(tbl),
-                            source = rep(NA_character_, nrow(.geneset(tbl))))
-
-    sets <- group_by(tbl, set) %>%
-        summarise(source = unique(source),
+    tbl <- .geneset(tbl)
+    if(!"source" %in% names(tbl))
+        tbl <- mutate(tbl, source = rep(NA_character_, nrow(tbl)))
+    ## bug in dplyr
+    if(nrow(tbl)==0L){
+        sets <- tibble(source = character(0), gene = character(0))
+    } else {
+        sets <- group_by(tbl, set) %>%
+            summarise(source = unique(source),
                   gene = paste(gene, collapse = "\t"))
-
+    }
 
     write.table(sets, path, sep = "\t",
                 col.names = FALSE, row.names = FALSE, quote = FALSE)

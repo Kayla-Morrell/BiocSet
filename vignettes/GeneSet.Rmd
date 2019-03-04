@@ -81,7 +81,7 @@ gmt
 library(dplyr)
 ```
 
-```{r examples}
+```{r examples,eval=FALSE}
 tbl <- tbl_geneset(set1 = letters, set2 = LETTERS)
 tbl
 tbl %>% filter(gene == "a" | gene == "A")
