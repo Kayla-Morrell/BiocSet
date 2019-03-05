@@ -20,7 +20,7 @@ knitr::opts_chunk$set(
 ```
 
 # Introduction
-`GeneSet` is a package that represents gene sets in a tibble format with the `tbl_geneset` class. Gene sets are read in and converted into a tibble format. From here, typical `dplyr` operations can be performed on the tibble gene set.
+`GeneSet` is a package that represents gene sets in a tibble format with the `GeneSet` class. Gene sets are read in and converted into a tibble format. From here, typical `dplyr` operations can be performed on the tibble gene set.
 
 # Installation
 Install the most recent version from Bioconductor:
@@ -46,14 +46,14 @@ library(GeneSet)
 
 ## Input and Output
 
-`GeneSet` can create a `tbl_geneset` using two different input methods. The first is to input named character vectors of gene sets. `tbl_geneset()` returns the vectors as `tbl_geneset` a tibble containing two columns, `gene` and `set`.
+`GeneSet` can create a `GeneSet` using two different input methods. The first is to input named character vectors of gene sets. `GeneSet` returns three tibbles, `gene` which contains the genes, `set` which contains the sets and `geneset` which contains genes and sets. 
 
 ```{r constructor}
-tbl <- tbl_geneset(set1 = letters, set2 = LETTERS)
+tbl <- GeneSet(set1 = letters, set2 = LETTERS)
 tbl
 ```
 
-The second method of creating a `tbl_geneset` would be to read in `.gmt` files. Using `import()`, a path to a downloaded `.gmt` file is read in and a `tbl_geneset` is returned. The example below uses a hallmark gene set downloaded from [GSEA][], which is also included with this package. This `tbl_geneset` includes a `source` column for reference as to where the gene set came from.
+The second method of creating a `GeneSet` would be to read in `.gmt` files. Using `import()`, a path to a downloaded `.gmt` file is read in and a `GeneSet` is returned. The example below uses a hallmark gene set downloaded from [GSEA][], which is also included with this package. This `GeneSet` includes a `source` column within the `geneset` tibble for reference as to where the gene set came from.
 
 [GSEA]: http://software.broadinstitute.org/gsea/index.jsp
 
@@ -65,7 +65,7 @@ tbl2 <- import(gmtFile)
 tbl2
 ```
 
-`export()` allows for a `tbl_geneset` to be exported into a temporary file with the extention `.gmt`.
+`export()` allows for a `GeneSet` to be exported into a temporary file with the extention `.gmt`.
 
 ```{r export, tidy = TRUE}
 fl <- tempfile(fileext = ".gmt")
@@ -75,18 +75,24 @@ gmt
 
 ## Implemented functions
 
-`GeneSet` adopts the use of many `dplyr` functions such as `filter()`, `select()`, `mutate()`, `group_by()`, `ungroup()`, `summarise()`, and `arrange()`.
+`GeneSet` adopts the use of many `dplyr` functions such as `filter()`, `select()`, `mutate()`, `group_by()`, `ungroup()`, `summarise()`, `arrange()`, `group_vars()` and `tbl_vars()`.
 
-```{r install, message = FALSE}
-library(dplyr)
-```
-
-```{r examples,eval=FALSE}
-tbl <- tbl_geneset(set1 = letters, set2 = LETTERS)
+```{r examples}
+tbl <- GeneSet(set1 = letters, set2 = LETTERS)
 tbl
 tbl %>% filter(gene == "a" | gene == "A")
-tbl %>% mutate(pval = rnorm(dim(tbl)[1]))
-tbl %>% group_by(set) %>% summarise(n = n())
+tbl %>% mutate(pval = rnorm(1:52))
+tbl %>% group_by(set,gene) %>% group_vars()
+```
+
+Another feature available to `GeneSet` is the ability to activate different tibbles. When a `GeneSet` is created, the tibble `geneset` is automatically activated and all functions will be performed on this tibble. With `gs_activate()` the user is able to pick a different tibble to activate and work on.
+
+```{r activate}
+tbl <- GeneSet(set1 = letters, set2 = LETTERS)
+tbl
+tbl %>% gs_activate(gene) %>% filter(gene == "a" | gene == "A")
+tbl %>% gs_activate(set) %>% mutate(pval = rnorm(1:2))
+tbl %>% gs_activate(gene) %>% summarise(n = n())
 ```
 
 # Case study
@@ -100,7 +106,7 @@ data("airway")
 se <- airway
 ```
 
-The pacakges `AnnotationDbi` and `org.Hs.eg.db` are used for the mapping of gene symbols, GO ids, and Entrez ids to the already established Ensembl ids in `airway`. These Ensembl ids are the rownames of `airway`.
+The packages `AnnotationDbi` and `org.Hs.eg.db` are used for the mapping of gene symbols, GO ids, and Entrez ids to the already established Ensembl ids in `airway`. These Ensembl ids are the rownames of `airway`.
 
 ```{r mapping, message = FALSE}
 library(AnnotationDbi)
@@ -139,17 +145,17 @@ library(KEGGREST)
 library(tibble)
 
 paths <- enframe(keggList("pathway", "hsa"))
-paths$name <- sub("path:", "", paths$name)
+paths$name <- as.factor(sub("path:", "", paths$name))
 paths$value <- gsub(" \\-.*", "", paths$value)
 
-## pull out keggGet paths <- keggGet(codes)
 genes <- sapply(paths$name, function(x) {
                             path <- keggGet(x) # (n = 330) will take some time
                             path[[1]]$GENE[c(TRUE, FALSE)]
                         })
 genes <- genes[lengths(genes) != 0]
 
-tbl <- do.call(tbl_geneset, genes)
+tbl <- do.call(GeneSet, genes)
+paths <- paths[paths$name %in% .geneset(tbl)$set,]
 tbl <- tbl %>% left_join(paths, by = c("set" = "name"))
 tbl <- tbl %>% mutate(ensembl = mapIds(org.Hs.eg.db,
                                         keys = tbl$gene,
