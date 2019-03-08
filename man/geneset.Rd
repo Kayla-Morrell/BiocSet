@@ -7,12 +7,18 @@
 \alias{GeneSet}
 \alias{gs_activate}
 \alias{gs_activate.GeneSet}
+\alias{update_gs_gene}
+\alias{update_gs_set}
+\alias{update_gs_geneset}
 \alias{gs_gene}
 \alias{gs_gene,GeneSet-method}
 \alias{gs_set}
 \alias{gs_set,GeneSet-method}
 \alias{gs_geneset}
 \alias{gs_geneset,GeneSet-method}
+\alias{gs_gene<-}
+\alias{gs_set<-}
+\alias{gs_geneset<-}
 \alias{filter.GeneSet}
 \alias{select.GeneSet}
 \alias{mutate.GeneSet}
@@ -34,6 +40,12 @@ gs_activate(.data, what)
 
 \method{gs_activate}{GeneSet}(.data, what)
 
+update_gs_gene(gs, value)
+
+update_gs_set(gs, value)
+
+update_gs_geneset(gs, value)
+
 gs_gene(x)
 
 \S4method{gs_gene}{GeneSet}(x)
@@ -45,6 +57,12 @@ gs_set(x)
 gs_geneset(x)
 
 \S4method{gs_geneset}{GeneSet}(x)
+
+gs_gene(gs) <- value
+
+gs_set(gs) <- value
+
+gs_geneset(gs) <- value
 
 \method{filter}{GeneSet}(.data, ...)
 

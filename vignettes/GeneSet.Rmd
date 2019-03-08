@@ -135,9 +135,9 @@ rowData(se)
 
 The library `KEGGREST` is a client interface to the KEGG REST server. KEGG contains pathway maps that represent interaction, reaction and relation networks for various biological processes and diseases. Below we use `KEGGREST` to develop a `tbl_geneset` that contains the genes for every pathway map in KEGG.
 
-<---! need to work on the sapply function, currently taking almost 3 minutes to run the keggGet for all 330 pathways. --->
+<!-- need to work on the sapply function, currently taking almost 3 minutes to run the keggGet for all 330 pathways. -->
 
-<---! need to figure out how to change set back to a factor, after left_join --->
+<!-- need to figure out how to change set back to a factor, after left_join -->
 
 
 ```{r kegg, message = FALSE}
@@ -145,7 +145,7 @@ library(KEGGREST)
 library(tibble)
 
 paths <- enframe(keggList("pathway", "hsa"))
-paths$name <- as.factor(sub("path:", "", paths$name))
+paths$name <- sub("path:", "", paths$name)
 paths$value <- gsub(" \\-.*", "", paths$value)
 
 genes <- sapply(paths$name, function(x) {
@@ -155,22 +155,20 @@ genes <- sapply(paths$name, function(x) {
 genes <- genes[lengths(genes) != 0]
 
 tbl <- do.call(GeneSet, genes)
-paths <- paths[paths$name %in% .geneset(tbl)$set,]
-tbl <- tbl %>% left_join(paths, by = c("set" = "name"))
-tbl <- tbl %>% mutate(ensembl = mapIds(org.Hs.eg.db,
-                                        keys = tbl$gene,
+paths <- paths[paths$name %in% gs_geneset(tbl)$set,]
+gs_set(tbl) <- gs_set(tbl) %>% left_join(paths, by = c("set" = "name"))
+tbl <- tbl %>% gs_activate(gene) %>% mutate(ensembl = mapIds(org.Hs.eg.db,
+                                        keys = gs_gene(tbl)$gene,
                                         column = "ENSEMBL",
                                         keytype = "ENTREZID",
                                         multivals = "first"))
-
-tbl
 ```
 Since we are working with ASM data we thought we would subset the `airway` data to contain only the genes in the asthma pathway. This filter can be done on either the KEGG id (which for asthma is "hsa05310") or the pathway name. We demonstrate using the pathway name.
 
 ```{r subset}
-asthma <- tbl %>% filter(value == "Asthma")
+asthma <- tbl %>% gs_activate(set) %>% filter(value == "Asthma")
 
-se <- se[rownames(se) %in% asthma$ensembl,]
+se <- se[rownames(se) %in% gs_gene(asthma)$ensembl,]
 
 se
 rowData(se)
@@ -180,7 +178,7 @@ Filtering can also be done for multiple pathways.
 
 ```{r multiple}
 pathways <- c("hsa05310", "hsa04110", "hsa05224", "hsa04970")
-multipaths <- filter(tbl, set %in% pathways)
+multipaths <- tbl %>% gs_activate(set) %>% filter(set %in% pathways)
 
 multipaths
 ```

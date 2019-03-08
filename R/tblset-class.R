@@ -20,7 +20,7 @@ tbl_set <-
     stopifnot(
         is_tbl_geneset(tbl_geneset)
     )
-    
+
     tbl <- tibble(set = tbl_geneset$set) %>% distinct()
     subclass_tbl_geneset_base(tbl, "tbl_set")
 }

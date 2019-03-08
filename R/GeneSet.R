@@ -129,6 +129,24 @@ setMethod(
 #' @rdname geneset
 #'
 #' @export
+update_gs_gene <- function(gs, value)
+    .update(gs, value)
+
+#' @rdname geneset
+#'
+#' @export
+update_gs_set <- function(gs, value)
+    .update(gs, value)
+
+#' @rdname geneset
+#'
+#' @export
+update_gs_geneset <- function(gs, value)
+    .update(gs, value)
+
+#' @rdname geneset
+#'
+#' @export
 setGeneric("gs_gene", function(x) standardGeneric("gs_gene"))
 
 #' @rdname geneset
@@ -139,7 +157,7 @@ setMethod("gs_gene", "GeneSet", .gene)
 #' @rdname geneset
 #'
 #' @export
-setGeneric("gs_set", function(x) standaradGeneric("gs_set"))
+setGeneric("gs_set", function(x) standardGeneric("gs_set"))
 
 #' @rdname geneset
 #'
@@ -155,6 +173,23 @@ setGeneric("gs_geneset", function(x) standardGeneric("gs_geneset"))
 #'
 #' @exportMethod gs_geneset
 setMethod("gs_geneset", "GeneSet", .geneset)
+
+## gs_set(gs) <- gs_set(gs) %>% left_join(paths, by = c("set" = "name"))
+
+#' @rdname geneset
+#'
+#' @export
+`gs_gene<-` <- update_gs_gene
+
+#' @rdname geneset
+#'
+#' @export
+`gs_set<-` <- update_gs_set
+
+#' @rdname geneset
+#'
+#' @export
+`gs_geneset<-` <- update_gs_geneset
 
 #' @rdname geneset
 #'
@@ -244,7 +279,7 @@ map_set <- function(.data, from, to) UseMethod("map_set")
 #'
 #' @examples
 #' gs <- GeneSet(a = letters, B = LETTERS)
-#' gs %>% map_set("a", "A")
+#' gs %>% map_set("set1", "foo")
 map_set.GeneSet <- function(.data, from, to)
 {
     stopifnot(is.character(from), is.character(to), length(from) == length(to))
@@ -255,7 +290,7 @@ map_set.GeneSet <- function(.data, from, to)
 
     gs <- .geneset(.data)
     idx <- gs$set %in% from
-    gs$set <- mapvalues(set$set, from, to)
+    gs$set <- mapvalues(gs$set, from, to)
 
     initialize(.data, set = set, geneset = gs)
 }
