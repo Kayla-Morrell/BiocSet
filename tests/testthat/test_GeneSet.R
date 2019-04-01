@@ -151,33 +151,6 @@ test_that("'map_set.GeneSet()' works", {
     expect_error(gs %>% mutate(set = 1:52))
 })
 
-test_that("'group_by.GeneSet()' works", {
-    gs <- GeneSet(set1 = letters, set2 = LETTERS)
-
-    gs1 <- gs %>% group_by(gene, set)
-    expect_true(is_tbl_geneset(gs_geneset(gs1)))
-    expect_identical(dim(gs_geneset(gs1)), c(52L,2L))
-
-    gs2 <- gs %>% group_by(gene)
-    expect_true(is_tbl_geneset(gs_geneset(gs2)))
-    expect_identical(dim(gs_geneset(gs2)), c(52L,2L))
-
-    gs3 <- gs %>% group_by(set)
-    expect_true(is_tbl_geneset(gs_geneset(gs3)))
-    expect_identical(dim(gs_geneset(gs3)), c(52L,2L))
-
-    expect_error(gs %>% group_by(Genes))
-})
-
-test_that("'ungroup.GeneSet()' works", {
-    gs <- GeneSet(set1 = letters, set2 = LETTERS)
-
-    gs1 <- gs %>% group_by(gene) %>% ungroup
-    expect_true(is_tbl_geneset(gs_geneset(gs1)))
-    expect_identical(gs1, gs)
-    expect_identical(dim(gs_geneset(gs1)), c(52L,2L))
-})
-
 test_that("'summarise.GeneSet()' works", {
     gs <- GeneSet(set1 = letters, set2 = LETTERS)
 

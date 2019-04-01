@@ -26,9 +26,9 @@
 \alias{map_gene.GeneSet}
 \alias{map_set}
 \alias{map_set.GeneSet}
+\alias{group_by.GeneSet}
 \alias{summarise.GeneSet}
 \alias{arrange.GeneSet}
-\alias{group_vars.GeneSet}
 \alias{tbl_vars.GeneSet}
 \title{A gene set representation as a tripple tibble}
 \usage{
@@ -76,11 +76,11 @@ map_set(.data, from, to)
 
 \method{map_set}{GeneSet}(.data, from, to)
 
+\method{group_by}{GeneSet}(.data, ..., add = FALSE)
+
 \method{summarise}{GeneSet}(.data, ...)
 
 \method{arrange}{GeneSet}(.data, ...)
-
-\method{group_vars}{GeneSet}(x)
 
 \method{tbl_vars}{GeneSet}(x)
 }
@@ -98,6 +98,9 @@ character vector is the name of the gene set.}
 \item{from}{a vector of the values to be replaced}
 
 \item{to}{a vector of the replacement values}
+
+\item{add}{by default, `group_by()` will override existing groups. To add to
+existing groups, add should be TRUE.}
 }
 \value{
 For `GeneSet()`, a S4 'GeneSet' object in a tripple
@@ -133,11 +136,11 @@ gs \%>\% map_gene(letters, LETTERS)
 gs <- GeneSet(a = letters, B = LETTERS)
 gs \%>\% map_set("set1", "foo")
 gs <- GeneSet(set1 = letters, set2 = LETTERS)
+gs \%>\% group_by(gene, set)
+gs <- GeneSet(set1 = letters, set2 = LETTERS)
 gs \%>\% gs_activate(set) \%>\% summarise(n = n())
 gs <- GeneSet(set1 = letters, set2 = LETTERS)
 gs \%>\% gs_activate(gene) \%>\% arrange(desc(gene))
-gs <- GeneSet(set1 = letters, set2 = LETTERS)
-gs \%>\% group_by(gene) \%>\% group_vars()
 gs <- GeneSet(set1 = letters, set2 = LETTERS)
 gs \%>\% mutate(pval = rnorm(1:52)) \%>\% tbl_vars()
 }

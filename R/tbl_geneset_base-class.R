@@ -51,18 +51,18 @@ tbl_vars.tbl_geneset_base <-
     tbl_vars(x)
 }
 
-#' @importFrom dplyr ungroup
-#'
-#' @export
-ungroup.tbl_geneset_base <-
-    function(x, ...)
-{
-    class <- class(x)
-    class(x) <- setdiff(class, .subclasses)
-    tbl <- ungroup(x, ...)
-    class(tbl) <- setdiff(class, "grouped_df")
-    tbl
-}
+## #' @importFrom dplyr ungroup
+## #'
+## #' @export
+## ungroup.tbl_geneset_base <-
+##     function(x, ...)
+## {
+##     class <- class(x)
+##     class(x) <- setdiff(class, .subclasses)
+##     tbl <- ungroup(x, ...)
+##     class(tbl) <- setdiff(class, "grouped_df")
+##     tbl
+## }
 
 #' @importFrom dplyr summarise
 #'

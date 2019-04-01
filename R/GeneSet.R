@@ -356,20 +356,6 @@ arrange.GeneSet <- function(.data, ...)
 
 #' @rdname geneset
 #'
-#' @importFrom dplyr group_vars
-#' @export
-#'
-#' @examples
-#' gs <- GeneSet(set1 = letters, set2 = LETTERS)
-#' gs %>% group_by(gene) %>% group_vars()
-group_vars.GeneSet <- function(x)
-{
-    sub <- .active_value(x)
-    group_vars(sub)
-}
-
-#' @rdname geneset
-#'
 #' @importFrom dplyr tbl_vars
 #' @export
 #'
