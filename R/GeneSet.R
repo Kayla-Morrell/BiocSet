@@ -53,11 +53,11 @@ setMethod(
     {
         active <- .active(object)
         cat("class: ", class(object), "\n", sep = "")
-        cat("\ngene()", if (active == "gene") " <active>", ":\n", sep = "")
+        cat("\ngs_gene()", if (active == "gene") " <active>", ":\n", sep = "")
         print(.gene(object), n = 3)
-        cat("\nset()", if (active == "set") " <active>", ":\n", sep = "")
+        cat("\ngs_set()", if (active == "set") " <active>", ":\n", sep = "")
         print(.set(object), n = 3)
-        cat("\ngeneset()", if (active == "geneset") " <active>", ":\n", sep = "")
+        cat("\ngs_geneset()", if (active == "geneset") " <active>", ":\n", sep = "")
         print(.geneset(object), n = 3)
     })
 
