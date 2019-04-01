@@ -40,30 +40,6 @@ mutate.tbl_geneset_base <-
     tbl
 }
 
-#' @importFrom dplyr group_by
-#'
-#' @export
-group_by.tbl_geneset_base <-
-    function(.data, ..., add = FALSE)
-{
-    tbl <- NextMethod()
-    class = class(.data)
-    idx = class %in% .subclasses
-    class(tbl) <- c(class[idx], "grouped_df", class[!idx])
-    tbl
-}
-
-#' @importFrom dplyr group_vars
-#'
-#' @export
-group_vars.tbl_geneset_base <-
-    function(x)
-{
-    class = class(x)
-    class(x) = setdiff(class, .subclasses)
-    group_vars(x)
-}
-
 #' @importFrom dplyr tbl_vars
 #'
 #' @export

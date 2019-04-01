@@ -308,25 +308,24 @@ map_set.GeneSet <- function(.data, from, to)
 group_by.GeneSet <- function(.data, ..., add = FALSE)
 {
     sub <- .active_value(.data)
-    tbl <- group_by(sub, ..., add = FALSE)
-    .update(.data, tbl)
+    group_by(sub, ..., add = FALSE)
 }
 
-#' @rdname geneset
-#'
-#' @param x a GeneSet
-#'
-#' @export
-#'
-#' @examples
-#' gs <- GeneSet(set1 = letters, set2 = LETTERS)
-#' gs %>% group_by(set) %>% summarise(n = n()) %>% ungroup()
-ungroup.GeneSet <- function(x, ...)
-{
-    sub <- .active_value(x)
-    tbl <- ungroup(sub, ...)
-    .update(x, tbl)
-}
+## #' @rdname geneset
+## #'
+## #' @param x a GeneSet
+## #'
+## #' @export
+## #'
+## #' @examples
+## #' gs <- GeneSet(set1 = letters, set2 = LETTERS)
+## #' gs %>% group_by(set) %>% summarise(n = n()) %>% ungroup()
+## ungroup.GeneSet <- function(x, ...)
+## {
+##     sub <- .active_value(x)
+##     tbl <- ungroup(sub, ...)
+##     .update(x, tbl)
+## }
 
 #' @rdname geneset
 #'

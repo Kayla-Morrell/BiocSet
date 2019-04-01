@@ -96,6 +96,7 @@ tbl %>% gs_activate(gene) %>% summarise(n = n())
 ```
 
 # Case study
+
 Next, we demonstrate the use of `GeneSet` with an experiement dataset `airway` from the package `airway`. This data is from an RNA-Seq experiment on airway smooth muscle (ASM) cell lines.
 
 The first step is to load the library and the necessary data.
@@ -108,29 +109,60 @@ se <- airway
 
 The packages `AnnotationDbi` and `org.Hs.eg.db` are used for the mapping of gene symbols, GO ids, and Entrez ids to the already established Ensembl ids in `airway`. These Ensembl ids are the rownames of `airway`.
 
-```{r mapping, message = FALSE}
-library(AnnotationDbi)
+Represent GO identifiers as a GeneSet
+
+Discover keys and use AnnotationDbi:select to work with org objects.
+```{r}
 library(org.Hs.eg.db)
+go_sets <- 
+    function(org = org.Hs.eg.db)
+{
+    map <- AnnotationDbi::select(
+        org, keys(org, "ENSEMBL"), c("ENSEMBL", "GO"), "ENSEMBL"
+    )
+    do.call(GeneSet, split(map$ENSEMBL, map$GO))
+}
+```
 
-rowData(se)$symbol <- mapIds(org.Hs.eg.db,
-                                keys = rownames(se),
-                                column = "SYMBOL",
-                                keytype = "ENSEMBL",
-                                multiVals = "first")
+```{r}
+go <- go_sets(org.Hs.eg.db)
+```
 
-rowData(se)$go <- mapIds(org.Hs.eg.db,
-                            keys = rownames(se),
-                            column = "GO",
-                            keytype = "ENSEMBL",
-                            multiVals = "first")
+```{r}
+se1 = se[rowSums(assay(se)) != 0,]
+gs_activate(go, gene) %>% filter(gene %in% rownames(se1))
+```
 
-rowData(se)$entrez <- mapIds(org.Hs.eg.db,
-                                keys = rownames(se),
-                                column = "ENTREZID",
-                                keytype = "ENSEMBL",
-                                multiVals = "first")
+How many genes in each set?
 
-rowData(se)
+```{r}
+gs_activate(go, geneset) %>% count(set)
+```
+
+Remove empty sets?
+
+```{r}
+drop <- gs_activate(go, geneset) %>% count(set) %>% filter(n == 0) %>% pull(set)
+gs_activate(go, set) %>% filter(set %in% drop)
+```
+
+Use different identifiers
+
+```{r}
+map <- mapIds(
+    org.Hs.eg.db, keys(org.Hs.eg.db, "ENSEMBL"), "SYMBOL", "ENSEMBL"
+)
+tbl <- tibble::enframe(map, name = "ENSEMBL", value="SYMBOL")
+go %>% map_gene(tbl$ENSEMBL, tbl$SYMBOL)
+
+## gs_map_org(org.Hs.eg.db, "ENSEMBL", "SYMBOL")
+```
+
+Add information about sets, e.g., the set definition
+
+```{r}
+map <- mapIds(GO.db, as.character(gs_set(go)$set), "DEFINITION", "GOID")
+gs_activate(go, "set") %>% mutate(definition = unname(map))
 ```
 
 The library `KEGGREST` is a client interface to the KEGG REST server. KEGG contains pathway maps that represent interaction, reaction and relation networks for various biological processes and diseases. Below we use `KEGGREST` to develop a `tbl_geneset` that contains the genes for every pathway map in KEGG.
@@ -144,24 +176,45 @@ The library `KEGGREST` is a client interface to the KEGG REST server. KEGG conta
 library(KEGGREST)
 library(tibble)
 
-paths <- enframe(keggList("pathway", "hsa"))
-paths$name <- sub("path:", "", paths$name)
-paths$value <- gsub(" \\-.*", "", paths$value)
+kegg_sets <- function(species = "hsa") {
+    paths <- enframe(keggList("pathway", "hsa"))
+    paths <- mutate(
+        name = sub("path:", "", name),
+        value = gsub(" \\-.*", "", value)
+    )
+    genes <- lapply(paths$name, function(x) {
+        path <- keggGet(x) # (n = 330) will take some time
+        path[[1]]$GENE[c(TRUE, FALSE)]
+    })
+    genes <- genes[lengths(genes) != 0]
 
-genes <- sapply(paths$name, function(x) {
-                            path <- keggGet(x) # (n = 330) will take some time
-                            path[[1]]$GENE[c(TRUE, FALSE)]
-                        })
-genes <- genes[lengths(genes) != 0]
+    do.call(GeneSet, genes)
+}
+```
 
-tbl <- do.call(GeneSet, genes)
-paths <- paths[paths$name %in% gs_geneset(tbl)$set,]
+```{r}
+rname <- "kegg_hsa"
+exists <- NROW(bfcquery(query=rname, field="rname")) != 0L
+if (!exists)
+    fl <- bfcnew(rname = rname, ext = ".gmt")
+    export(kegg_sets("hsa"), fl)
+}
+kegg <- import(bfcrpath(rname=rname))
+```
+
+```
+paths <- filter(kegg, name %in% gs_geneset(tbl)$set)
 gs_set(tbl) <- gs_set(tbl) %>% left_join(paths, by = c("set" = "name"))
-tbl <- tbl %>% gs_activate(gene) %>% mutate(ensembl = mapIds(org.Hs.eg.db,
-                                        keys = gs_gene(tbl)$gene,
-                                        column = "ENSEMBL",
-                                        keytype = "ENTREZID",
-                                        multivals = "first"))
+tbl <- gs_activate(tbl, gene) %>% 
+    mutate(
+        ensembl = mapIds(
+            org.Hs.eg.db,
+            keys = gs_gene(tbl)$gene,
+            column = "ENSEMBL",
+            keytype = "ENTREZID",
+            multivals = "first"
+        )
+    )
 ```
 Since we are working with ASM data we thought we would subset the `airway` data to contain only the genes in the asthma pathway. This filter can be done on either the KEGG id (which for asthma is "hsa05310") or the pathway name. We demonstrate using the pathway name.
 
