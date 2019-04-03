@@ -198,7 +198,7 @@ kegg_sets <- function(species = "hsa") {
 
 Due to limiations of the KEGGREST package, `keggGet` can only retrieve 10 entries at a time. There for the `lapply` function above would take some time to run on it's own. There for we have decided to use `BiocFileCache` to make the data available to the user.
 
-```{r file_cache, message = FALSE, eval = FALSE}
+```{r file_cache, message = FALSE}
 library(BiocFileCache)
 rname <- "kegg_hsa"
 exists <- NROW(bfcquery(query=rname, field="rname")) != 0L

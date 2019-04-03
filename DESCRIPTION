@@ -1,28 +1,29 @@
 Package: GeneSet
 Title: Representing Gene Sets for Different Class Types
-Version: 0.0.1
-Authors@R:
-    person(
-        "Kayla", "Morrell", email = "kayla.morrell@roswellpark.org", 
-        role = c("aut", "cre")
-    )
+Version: 0.99.0
+Authors@R: c(
+    person("Kayla", "Morrell", email = "kayla.morrell@roswellpark.org", role = c("aut", "cre")),
+    person("Martin", "Morgan", role = "aut"))
 Description: GeneSet displays gene sets in different S3 and S4 class types. For
     the S3 class, there is 'class'-like representation and a tibble-like
     representation. For the S4 class, there is a data.frame-like representation,
     a list-like representation, and an extended S3 tibble-like representation.
-Depends: R (>= 3.4.0), dplyr
+Depends: R (>= 3.6.0), dplyr
 Imports: methods, tibble, utils, rlang, plyr, rtracklayer, stats
 Suggests:
     AnnotationDbi,
     KEGGREST,
     airway,
     org.Hs.eg.db,
+    BiocFileCache,
+    GO.db,
     testthat,
     knitr,
     rmarkdown,
     BiocStyle
+biocViews: GeneExpression, GO, KEGG, Software
 License: Artistic-2.0
 Encoding: UTF-8
-LazyData: true
+LazyData: false
 RoxygenNote: 6.1.1
 VignetteBuilder: knitr
