@@ -7,9 +7,9 @@
 \alias{GMTFile}
 \alias{import.gmt}
 \alias{import,GMTFile,ANY,ANY-method}
-\alias{export.GeneSet}
-\alias{export,GeneSet,GMTFile,ANY-method}
-\title{Importing and formating of gene sets as an S3 class tibble}
+\alias{export.ElementSet}
+\alias{export,ElementSet,GMTFile,ANY-method}
+\title{Importing and formating of element sets as an S3 class tibble}
 \usage{
 GMTFile(resource, ...)
 
@@ -17,27 +17,27 @@ import.gmt(path)
 
 \S4method{import}{GMTFile,ANY,ANY}(con, format, text, ...)
 
-export.GeneSet(tbl, path = tempfile(fileext = ".gmt"))
+export.ElementSet(tbl, path = tempfile(fileext = ".gmt"))
 
-\S4method{export}{GeneSet,GMTFile,ANY}(object, con, format, ...)
+\S4method{export}{ElementSet,GMTFile,ANY}(object, con, format, ...)
 }
 \arguments{
 \item{resource}{For `GMTFile()`, the .gmt file that will be imported in.}
 
 \item{...}{Parameters to pass to the format-specific method}
 
-\item{path}{For `import.gmt()`, a file name or URL containing gene sets.}
+\item{path}{For `import.gmt()`, a file name or URL containing element sets.}
 
-\item{con}{For `import()`, the file name or URL the gene set is
-loaded from. For `export()`, the file name or URL the gene set
+\item{con}{For `import()`, the file name or URL the element set is
+loaded from. For `export()`, the file name or URL the element set
 is to be saved to.}
 
 \item{format}{For `import()`, the format of the output.}
 
 \item{text}{For `import()`, if con is missing this is a character
-vector directly providing the gene set that should be imported.}
+vector directly providing the element set that should be imported.}
 
-\item{tbl}{For `export.GeneSet()`, a GeneSet that
+\item{tbl}{For `export.ElementSet()`, a ElementSet that
 should be exported to a gmt file.}
 
 \item{object}{For `export()`, the object to be exported.}
@@ -45,16 +45,16 @@ should be exported to a gmt file.}
 \value{
 For `GMTFile()`, an object representing the path to a .gmt file on disk
 
-For `import()`, tbl_geneset
+For `import()`, tbl_elementset
 
 For `export()`, a GMTFile object representing the location
-    where the gene set was written
+    where the element set was written
 }
 \description{
-Importing and formating of gene sets as an S3 class tibble
+Importing and formating of element sets as an S3 class tibble
 }
 \examples{
-gmtFile <- system.file(package = "GeneSet", "extdata",
-    "hallmark.gene.symbol.gmt")
+gmtFile <- system.file(package = "BiocSet", "extdata",
+    "hallmark.element.symbol.gmt")
 import(gmtFile)
 }

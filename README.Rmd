@@ -12,59 +12,59 @@ knitr::opts_chunk$set(
   out.width = "100%"
 )
 ```
-# GeneSet
+# BiocSet
 
 ## Introduction
 
-`GeneSet` is a package that represents gene sets in a tibble format with the `tbl_geneset` class. Gene sets are read in and converted into a tibble format. Typial `dplyr` operations can be performed on the tibble gene set. Basic useage of the package will be shown here, please refer to the vignette and help pages for the functions used for more advanced usage and examples.
+`BiocSet` is a package that represents element sets in a triple tibble format with the `ElementSet` class. Element sets are read in and converted into a tripple tibble format. Typial `dplyr` operations can be performed on the tripple tibble element set. Basic useage of the package will be shown here, please refer to the vignette and help pages for the functions used for more advanced usage and examples.
 
 ## Installation
 
-Intall the most recent version from Bioconductor:
+Install the most recent version from Bioconductor:
 
 ``` {r bioconductor, eval = FALSE}
 if(!requireNamespace("BiocManager", quietly = TRUE))
     install.packages("BiocManager")
-BiocManager::install("GeneSet")
+BiocManager::install("BiocSet")
 ```
 The development version is also available for install from GitHub:
 
 ``` {r github, eval = FALSE}
-BiocManager::install("Kayla-Morrell/GeneSet")
+BiocManager::install("Kayla-Morrell/BiocSet")
 ```
 
-Then load `GeneSet`:
+Then load `BiocSet`:
 
 ```{r load, message = FALSE}
-library(GeneSet)
+library(BiocSet)
 ```
 
 ## Input
 
-`GeneSet` can create a `tbl_geneset` using two different input methods. Here we will demonstate the most common approach, by inputting named character vectors of gene sets. `tbl_geneset()` returns the vectors as a `tbl_geneset` tibble containing two columns, `gene` and `set`.
+`BiocSet` can create an `ElementSet` using two different input methods. Here we will demonstate the most common approach, by inputting named character vectors of element sets. `ElementSet` returns the vectors as a triple tibble containing `es_element()`, `es_set()`, and `es_elementset()`.
 
 ```{r constructor}
-tbl <- tbl_geneset(set1 = letters, set2 = LETTERS)
+tbl <- ElementSet(set1 = letters, set2 = LETTERS)
 tbl
 ```
 
 ## Implemented functions
 
-From here, `GeneSet` can perform many `dplyr` functions such as `filter()`, `select()`, `mutate()`, `group_by()`, `ungroup()`, `summarise()`, and `arrange()`.
+From here, `BiocSet` can perform many `dplyr` functions such as `filter()`, `select()`, `mutate()`, `summarise()`, and `arrange()`.
 
 ```{r install, message = FALSE}
 library(dplyr)
 ```
 
 ```{r examples}
-tbl <- tbl_geneset(set1 = letters, set2 = LETTERS)
+tbl <- ElementSet(set1 = letters, set2 = LETTERS)
 tbl
-tbl %>% filter(gene == "a" | gene == "A")
+tbl %>% filter(element == "a" | element == "A")
 tbl %>% mutate(pval = rnorm(dim(tbl)[1]))
 tbl %>% group_by(set) %>% summarise(n = n())
 ```
-A more indepth case study example is provided for the vignette demonstrating the use of `GeneSet` with an experiment dataset `airway` from the package `airway`.
+A more indepth case study example is provided for the vignette demonstrating the use of `BiocSet` with an experiment dataset `airway` from the package `airway`.
 
 # Future aims
 
-The next steps for `GeneSet` is to develop a data structure to coordinate additional tables. Currently there is a table for the `geneset` annotation, but we would like to introduce a table for `gene` annotations and one for `set` annotations. The end goal would be to provide the user a flat table that shows all information from the three tables (a triple tibble, or tribble).
+The next steps for `BiocSet` is to develop a data structure to coordinate additional tables. Currently there is a table for the `elementset` annotation, but we would like to introduce a table for `element` annotations and one for `set` annotations. The end goal would be to provide the user a flat table that shows all information from the three tables (a triple tibble, or tribble).

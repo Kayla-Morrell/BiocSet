@@ -1,16 +1,16 @@
-.subclasses <- c("tbl_geneset_base", "tbl_gene", "tbl_set", "tbl_geneset")
+.subclasses <- c("tbl_elementset_base", "tbl_element", "tbl_set", "tbl_elementset")
 
-subclass_tbl_geneset_base <-
+subclass_tbl_elementset_base <-
     function(x, subclass)
 {
-    class(x) <- c(subclass, "tbl_geneset_base", class(x))
+    class(x) <- c(subclass, "tbl_elementset_base", class(x))
     x
 }
 
 #' @importFrom dplyr filter
 #'
 #' @export
-filter.tbl_geneset_base <-
+filter.tbl_elementset_base <-
     function(.data, ...)
 {
     tbl <- NextMethod()
@@ -21,7 +21,7 @@ filter.tbl_geneset_base <-
 #' @importFrom dplyr select
 #'
 #' @export
-select.tbl_geneset_base <-
+select.tbl_elementset_base <-
     function(.data, ...)
 {
     tbl <- NextMethod()
@@ -32,7 +32,7 @@ select.tbl_geneset_base <-
 #' @importFrom dplyr mutate
 #'
 #' @export
-mutate.tbl_geneset_base <-
+mutate.tbl_elementset_base <-
     function(.data, ...)
 {
     tbl <- NextMethod()
@@ -43,7 +43,7 @@ mutate.tbl_geneset_base <-
 #' @importFrom dplyr tbl_vars
 #'
 #' @export
-tbl_vars.tbl_geneset_base <-
+tbl_vars.tbl_elementset_base <-
     function(x)
 {
     class = class(x)
@@ -54,7 +54,7 @@ tbl_vars.tbl_geneset_base <-
 ## #' @importFrom dplyr ungroup
 ## #'
 ## #' @export
-## ungroup.tbl_geneset_base <-
+## ungroup.tbl_elementset_base <-
 ##     function(x, ...)
 ## {
 ##     class <- class(x)
@@ -67,7 +67,7 @@ tbl_vars.tbl_geneset_base <-
 #' @importFrom dplyr summarise
 #'
 #' @export
-summarise.tbl_geneset_base <-
+summarise.tbl_elementset_base <-
     function(.data, ...)
 {
     tbl <- NextMethod()
@@ -75,12 +75,12 @@ summarise.tbl_geneset_base <-
     tbl
 }
 
-summarize.tbl_geneset_base <- summarise.tbl_geneset_base
+summarize.tbl_elementset_base <- summarise.tbl_elementset_base
 
 #' @importFrom dplyr arrange
 #'
 #' @export
-arrange.tbl_geneset_base <-
+arrange.tbl_elementset_base <-
     function(.data, ...)
 {
     tbl <- NextMethod()

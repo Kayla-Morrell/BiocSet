@@ -1,4 +1,4 @@
-#' Importing and formating of gene sets as an S3 class tibble
+#' Importing and formating of element sets as an S3 class tibble
 #' @rdname import
 #'
 #' @export
@@ -16,7 +16,7 @@ GMTFile = function(resource, ...)
 
 #' @rdname import
 #'
-#' @param path For `import.gmt()`, a file name or URL containing gene sets.
+#' @param path For `import.gmt()`, a file name or URL containing element sets.
 #'
 #' @importFrom rtracklayer import export resource
 #' @importFrom methods new
@@ -25,36 +25,36 @@ GMTFile = function(resource, ...)
 #' @export
 #'
 #' @examples
-#' gmtFile <- system.file(package = "GeneSet", "extdata",
-#'     "hallmark.gene.symbol.gmt")
+#' gmtFile <- system.file(package = "BiocSet", "extdata",
+#'     "hallmark.element.symbol.gmt")
 #' import(gmtFile)
 
 import.gmt <- function(path) {
     sets <- readLines(path)
     sets <- strsplit(sets, "\t")
     names <- vapply(sets, function(set) set[[1]], character(1))
-    genes <- lapply(sets, function(set) set[-(1:2)])
-    names(genes) <- names
+    elements <- lapply(sets, function(set) set[-(1:2)])
+    names(elements) <- names
 
     source <- vapply(sets, function(set) set[[2]], character(1))
     source[source=="NA" | !nzchar(source)] <- NA
-    tbl <- do.call(GeneSet, genes)
-    tbl <- tbl %>% mutate(source = rep(source, lengths(genes)))
+    tbl <- do.call(ElementSet, elements)
+    tbl <- tbl %>% mutate(source = rep(source, lengths(elements)))
     tbl
 }
 
 
 #' @rdname import
 #'
-#' @param con For `import()`, the file name or URL the gene set is
-#'     loaded from. For `export()`, the file name or URL the gene set
+#' @param con For `import()`, the file name or URL the element set is
+#'     loaded from. For `export()`, the file name or URL the element set
 #'     is to be saved to.
 #' @param format For `import()`, the format of the output.
 #' @param text For `import()`, if con is missing this is a character
-#'     vector directly providing the gene set that should be imported.
+#'     vector directly providing the element set that should be imported.
 #' @param ... Parameters to pass to the format-specific method
 #'
-#' @return For `import()`, tbl_geneset
+#' @return For `import()`, tbl_elementset
 #'
 #' @export
 setMethod(
@@ -66,23 +66,23 @@ setMethod(
 
 #' @rdname import
 #'
-#' @param tbl For `export.GeneSet()`, a GeneSet that
+#' @param tbl For `export.ElementSet()`, a ElementSet that
 #'     should be exported to a gmt file.
 #'
 #' @export
 
-export.GeneSet <- function(tbl, path = tempfile(fileext = ".gmt")) {
-    stopifnot(is_tbl_geneset(.geneset(tbl)))
-    tbl <- .geneset(tbl)
+export.ElementSet <- function(tbl, path = tempfile(fileext = ".gmt")) {
+    stopifnot(is_tbl_elementset(.elementset(tbl)))
+    tbl <- .elementset(tbl)
     if(!"source" %in% names(tbl))
         tbl <- mutate(tbl, source = rep(NA_character_, nrow(tbl)))
     ## bug in dplyr
     if(nrow(tbl)==0L){
-        sets <- tibble(source = character(0), gene = character(0))
+        sets <- tibble(source = character(0), element = character(0))
     } else {
         sets <- group_by(tbl, set) %>%
             summarise(source = unique(source),
-                  gene = paste(gene, collapse = "\t"))
+                  element = paste(element, collapse = "\t"))
     }
 
     write.table(sets, path, sep = "\t",
@@ -94,13 +94,13 @@ export.GeneSet <- function(tbl, path = tempfile(fileext = ".gmt")) {
 #' @param object For `export()`, the object to be exported.
 #'
 #' @return For `export()`, a GMTFile object representing the location
-#'     where the gene set was written
+#'     where the element set was written
 #'
 #' @export
 setMethod(
-    "export", c("GeneSet", "GMTFile", "ANY"),
+    "export", c("ElementSet", "GMTFile", "ANY"),
     function(object, con, format, ...)
 {
-    export.GeneSet(object, resource(con))
+    export.ElementSet(object, resource(con))
     con
 })

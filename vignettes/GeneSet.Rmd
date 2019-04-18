@@ -1,13 +1,13 @@
 
 ---
-title: "GeneSet: Representing Gene Sets in the Tidyverse"
+title: "BiocSet: Representing Element Sets in the Tidyverse"
 author: "Kayla Morrell"
 date: "`r Sys.Date()`"
 output:
     BiocStyle::html_document
-package: GeneSet
+package: ElementSet
 vignette: >
-    %\VignetteIndexEntry{GeneSet: Representing Gene Sets in the Tidyverse}
+    %\VignetteIndexEntry{ElementSet: Representing Element Sets in the Tidyverse}
     %\VignetteEngine{knitr::rmarkdown}
     %\VignetteEndcoding{UTF-8}
 ---
@@ -20,7 +20,7 @@ knitr::opts_chunk$set(
 ```
 
 # Introduction
-`GeneSet` is a package that represents gene sets in a tibble format with the `GeneSet` class. Gene sets are read in and converted into a tibble format. From here, typical `dplyr` operations can be performed on the tibble gene set.
+`BiocSet` is a package that represents element sets in a tibble format with the `ElementSet` class. Element sets are read in and converted into a tibble format. From here, typical `dplyr` operations can be performed on the tibble element set.
 
 # Installation
 Install the most recent version from Bioconductor:
@@ -28,44 +28,44 @@ Install the most recent version from Bioconductor:
 ```{r bioconductor, eval = FALSE}
 if(!requireNamespace("BiocManager", quietly = TRUE))
     install.packages("BiocManager")
-BiocManager::install("GeneSet")
+BiocManager::install("BiocSet")
 ```
 
 The development version is also available for install from GitHub:
 
 ```{r github, eval = FALSE}
-BiocManager::install("Kayla-Morrell/GeneSet")
+BiocManager::install("Kayla-Morrell/BiocSet")
 ```
 
-Then load `GeneSet`:
+Then load `BiocSet`:
 
 ```{r  load, message = FALSE}
-library(GeneSet)
+library(BiocSet)
 ```
-# GeneSet
+# BiocSet
 
 ## Input and Output
 
-`GeneSet` can create a `GeneSet` using two different input methods. The first is to input named character vectors of gene sets. `GeneSet` returns three tibbles, `gene` which contains the genes, `set` which contains the sets and `geneset` which contains genes and sets. 
+`BiocSet` can create an `ElementSet` using two different input methods. The first is to input named character vectors of element sets. `ElementSet` returns three tibbles, `element` which contains the elements, `set` which contains the sets and `elementset` which contains elements and sets. 
 
 ```{r constructor}
-tbl <- GeneSet(set1 = letters, set2 = LETTERS)
+tbl <- ElementSet(set1 = letters, set2 = LETTERS)
 tbl
 ```
 
-The second method of creating a `GeneSet` would be to read in `.gmt` files. Using `import()`, a path to a downloaded `.gmt` file is read in and a `GeneSet` is returned. The example below uses a hallmark gene set downloaded from [GSEA][], which is also included with this package. This `GeneSet` includes a `source` column within the `geneset` tibble for reference as to where the gene set came from.
+The second method of creating an `ElementSet` would be to read in `.gmt` files. Using `import()`, a path to a downloaded `.gmt` file is read in and an `ElementSet` is returned. The example below uses a hallmark element set downloaded from [GSEA][], which is also included with this package. This `ElementSet` includes a `source` column within the `elementset` tibble for reference as to where the element set came from.
 
-[GSEA]: http://software.broadinstitute.org/gsea/index.jsp
+[GSEA]: http://software.broadinstitute.org/esea/index.jsp
 
 ```{r gmt}
-gmtFile <- system.file(package = "GeneSet",
+gmtFile <- system.file(package = "BiocSet",
                         "extdata",
-                        "hallmark.gene.symbol.gmt")
+                        "hallmark.element.symbol.gmt")
 tbl2 <- import(gmtFile)
 tbl2
 ```
 
-`export()` allows for a `GeneSet` to be exported into a temporary file with the extention `.gmt`.
+`export()` allows for an  `ElementSet` to be exported into a temporary file with the extention `.gmt`.
 
 ```{r export, tidy = TRUE}
 fl <- tempfile(fileext = ".gmt")
@@ -75,29 +75,29 @@ gmt
 
 ## Implemented functions
 
-`GeneSet` adopts the use of many `dplyr` functions such as `filter()`, `select()`, `mutate()`, `summarise()`, `arrange()`, and `tbl_vars()`.
+`ElementSet` adopts the use of many `dplyr` functions such as `filter()`, `select()`, `mutate()`, `summarise()`, `arrange()`, and `tbl_vars()`.
 
 ```{r examples}
-tbl <- GeneSet(set1 = letters, set2 = LETTERS)
+tbl <- ElementSet(set1 = letters, set2 = LETTERS)
 tbl
-tbl %>% filter(gene == "a" | gene == "A")
+tbl %>% filter(element == "a" | element == "A")
 tbl %>% mutate(pval = rnorm(1:52))
-tbl %>% group_by(set,gene) %>% group_vars()
+tbl %>% group_by(set,element) %>% group_vars()
 ```
 
-Another feature available to `GeneSet` is the ability to activate different tibbles. When a `GeneSet` is created, the tibble `geneset` is automatically activated and all functions will be performed on this tibble. With `gs_activate()` the user is able to pick a different tibble to activate and work on.
+Another feature available to `ElementSet` is the ability to activate different tibbles. When an `ElementSet` is created, the tibble `elementset` is automatically activated and all functions will be performed on this tibble. With `es_activate()` the user is able to pick a different tibble to activate and work on.
 
 ```{r activate}
-tbl <- GeneSet(set1 = letters, set2 = LETTERS)
+tbl <- ElementSet(set1 = letters, set2 = LETTERS)
 tbl
-tbl %>% gs_activate(gene) %>% filter(gene == "a" | gene == "A")
-tbl %>% gs_activate(set) %>% mutate(pval = rnorm(1:2))
-tbl %>% gs_activate(gene) %>% summarise(n = n())
+tbl %>% es_activate(element) %>% filter(element == "a" | element == "A")
+tbl %>% es_activate(set) %>% mutate(pval = rnorm(1:2))
+tbl %>% es_activate(element) %>% summarise(n = n())
 ```
 
 # Case study
 
-Next, we demonstrate the use of `GeneSet` with an experiement dataset `airway` from the package `airway`. This data is from an RNA-Seq experiment on airway smooth muscle (ASM) cell lines.
+Next, we demonstrate the use of `ElementSet` with an experiement dataset `airway` from the package `airway`. This data is from an RNA-Seq experiment on airway smooth muscle (ASM) cell lines.
 
 The first step is to load the library and the necessary data.
 
@@ -107,7 +107,7 @@ data("airway")
 se <- airway
 ```
 
-This function `go_sets()` discovers the keys from the org object and uses `AnnotationDbi::select` to create a mapping of Ensembl ids and GO ids. We represent these identifieres as a GeneSet.
+This function `go_sets()` discovers the keys from the org object and uses `AnnotationDbi::select` to create a mapping of Ensembl ids and GO ids. We represent these identifieres as a ElementSet.
 
 ```{r go_sets, message = FALSE}
 library(org.Hs.eg.db)
@@ -117,58 +117,58 @@ go_sets <-
     map <- AnnotationDbi::select(
         org, keys(org, "ENSEMBL"), c("ENSEMBL", "GO"), "ENSEMBL"
     )
-    do.call(GeneSet, split(map$ENSEMBL, map$GO))
+    do.call(ElementSet, split(map$ENSEMBL, map$GO))
 }
 ```
 
-Using our `go_sets` function we are able to map the Ensembl ids and GO ids from the genome wide annotation for Human data in the `org.Hs.eg.db` package. The Ensembl ids are treated as genes while the GO ids are treated as sets.
+Using our `go_sets` function we are able to map the Ensembl ids and GO ids from the genome wide annotation for Human data in the `org.Hs.eg.db` package. The Ensembl ids are treated as elements while the GO ids are treated as sets.
 
 ```{r go}
 go <- go_sets(org.Hs.eg.db)
 ```
 
-Some users may not be interested in reporting the non-descriptive genes. We demonstrate subsetting the `airway` data to include non-zero assays and then filtering out the non-descriptive genes.
+Some users may not be interested in reporting the non-descriptive elements. We demonstrate subsetting the `airway` data to include non-zero assays and then filtering out the non-descriptive elements.
 
 ```{r drop_assays}
 se1 = se[rowSums(assay(se)) != 0,]
-gs_activate(go, gene) %>% filter(gene %in% rownames(se1))
+es_activate(go, element) %>% filter(element %in% rownames(se1))
 ```
 
-It may also be of interest to users to know how many genes are in each set. Using the `count` function we are able to calculate the genes per set.
+It may also be of interest to users to know how many elements are in each set. Using the `count` function we are able to calculate the elements per set.
 
 ```{r count}
-gs_activate(go, geneset) %>% group_by(set) %>% dplyr::count()
+es_activate(go, elementset) %>% group_by(set) %>% dplyr::count()
 ```
 
-It may also be helpful to remove sets that are empty. Since we have shown how to calculate the number of genes per set, we know that this data set does not contain any empty sets. We decide to demonstrate regardless for those users that may need this functionality.
+It may also be helpful to remove sets that are empty. Since we have shown how to calculate the number of elements per set, we know that this data set does not contain any empty sets. We decide to demonstrate regardless for those users that may need this functionality.
 
 ```{r empty}
-drop <- gs_activate(go, geneset) %>% group_by(set) %>%
+drop <- es_activate(go, elementset) %>% group_by(set) %>%
      dplyr::count() %>% filter(n == 0) %>% pull(set)
-gs_activate(go, set) %>% filter(!(set %in% drop))
+es_activate(go, set) %>% filter(!(set %in% drop))
 ```
 
-Another mapping example is created using the `mapIds` function. A tibble of Ensembl ids and gene symbols made and then we use our `map_gene` function to map the Ensembl id genes in `go` to gene symbols.
+Another mapping example is created using the `mapIds` function. A tibble of Ensembl ids and element symbols made and then we use our `map_element` function to map the Ensembl id elements in `go` to element symbols.
 
 ```{r more_mapping}
 map <- mapIds(
     org.Hs.eg.db, keys(org.Hs.eg.db, "ENSEMBL"), "SYMBOL", "ENSEMBL"
 )
 tbl <- tibble::enframe(map, name = "ENSEMBL", value="SYMBOL")
-go %>% map_gene(tbl$ENSEMBL, tbl$SYMBOL)
+go %>% map_element(tbl$ENSEMBL, tbl$SYMBOL)
 
-## gs_map_org(org.Hs.eg.db, "ENSEMBL", "SYMBOL")
+## es_map_org(org.Hs.eg.db, "ENSEMBL", "SYMBOL")
 ```
 
 Another functionality to demonstrate would be adding in information to the tibbles. Using the `GO.db` library we are able to map definitions to the GO ids. From there we use the mutate function to add a defintion column to the set tibble.
 
 ```{r, message = FALSE}
 library(GO.db)
-map <- mapIds(GO.db, as.character(gs_set(go)$set), "DEFINITION", "GOID")
-gs_activate(go, "set") %>% mutate(definition = unname(map))
+map <- mapIds(GO.db, as.character(es_set(go)$set), "DEFINITION", "GOID")
+es_activate(go, "set") %>% mutate(definition = unname(map))
 ```
 
-The library `KEGGREST` is a client interface to the KEGG REST server. KEGG contains pathway maps that represent interaction, reaction and relation networks for various biological processes and diseases. We create a function that uses `KEGGREST` that develops a GeneSet that contains the genes for every pathway map in KEGG.
+The library `KEGGREST` is a client interface to the KEGG REST server. KEGG contains pathway maps that represent interaction, reaction and relation networks for various biological processes and diseases. We create a function that uses `KEGGREST` that develops a ElementSet that contains the elements for every pathway map in KEGG.
 
 <!-- need to work on the sapply function, currently taking almost 3 minutes to run the keggGet for all 330 pathways. -->
 
@@ -183,16 +183,16 @@ kegg_sets <- function(species = "hsa") {
     paths <- mutate(
         paths,
         name = sub("path:", "", name),
-        value = gsub(" \\-.*", "", value)
+        value = esub(" \\-.*", "", value)
     )
-    genes <- lapply(paths$name, function(x) {
+    elements <- lapply(paths$name, function(x) {
         path <- keggGet(x) # (n = 330) will take some time
         path[[1]]$GENE[c(TRUE, FALSE)]
     })
-    names(genes) <- paths$name
-    genes <- genes[lengths(genes) != 0]
+    names(elements) <- paths$name
+    elements <- elements[lengths(elements) != 0]
 
-    do.call(GeneSet, genes)
+    do.call(ElementSet, elements)
 }
 ```
 
@@ -210,28 +210,28 @@ if (!exists)
 kegg <- import(bfcrpath(rname=rname))
 ```
 
-When creating the KEGG pathway GeneSet we removed pathways that did not contain any genes. Since we want to add in the pathway names to our GeneSet we must first filter out the pathways that were removed. Then we can left join the pathways with the set tibble. We then mutate the gene tibble to contain both Ensembl and Entrez ids. 
+When creating the KEGG pathway ElementSet we removed pathways that did not contain any elements. Since we want to add in the pathway names to our ElementSet we must first filter out the pathways that were removed. Then we can left join the pathways with the set tibble. We then mutate the element tibble to contain both Ensembl and Entrez ids. 
 
 ```{r kegg_filter, eval = FALSE}
-paths <- filter(kegg, name %in% gs_geneset(tbl)$set)
-gs_set(tbl) <- gs_set(tbl) %>% left_join(paths, by = c("set" = "name"))
-tbl <- gs_activate(tbl, gene) %>% 
+paths <- filter(kegg, name %in% es_elementset(tbl)$set)
+es_set(tbl) <- es_set(tbl) %>% left_join(paths, by = c("set" = "name"))
+tbl <- es_activate(tbl, element) %>% 
     mutate(
         ensembl = mapIds(
             org.Hs.eg.db,
-            keys = gs_gene(tbl)$gene,
+            keys = es_element(tbl)$element,
             column = "ENSEMBL",
             keytype = "ENTREZID",
             multivals = "first"
         )
     )
 ```
-Since we are working with ASM data we thought we would subset the `airway` data to contain only the genes in the asthma pathway. This filter can be done on either the KEGG id (which for asthma is "hsa05310") or the pathway name. We demonstrate using the pathway name.
+Since we are working with ASM data we thought we would subset the `airway` data to contain only the elements in the asthma pathway. This filter can be done on either the KEGG id (which for asthma is "hsa05310") or the pathway name. We demonstrate using the pathway name.
 
 ```{r subset, eval = FALSE}
-asthma <- tbl %>% gs_activate(set) %>% filter(value == "Asthma")
+asthma <- tbl %>% es_activate(set) %>% filter(value == "Asthma")
 
-se <- se[rownames(se) %in% gs_gene(asthma)$ensembl,]
+se <- se[rownames(se) %in% es_element(asthma)$ensembl,]
 
 se
 rowData(se)
@@ -241,7 +241,7 @@ The filtering can also be done for multiple pathways.
 
 ```{r multiple, eval = FALSE}
 pathways <- c("hsa05310", "hsa04110", "hsa05224", "hsa04970")
-multipaths <- tbl %>% gs_activate(set) %>% filter(set %in% pathways)
+multipaths <- tbl %>% es_activate(set) %>% filter(set %in% pathways)
 
 multipaths
 ```

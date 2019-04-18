@@ -1,15 +1,21 @@
-Package: GeneSet
-Title: Representing Gene Sets for Different Class Types
+Package: BiocSet
+Title: Representing Different Biological Sets
 Version: 0.99.0
 Authors@R: c(
     person("Kayla", "Morrell", email = "kayla.morrell@roswellpark.org", role = c("aut", "cre")),
     person("Martin", "Morgan", role = "aut"))
-Description: GeneSet displays gene sets in different S3 and S4 class types. For
-    the S3 class, there is 'class'-like representation and a tibble-like
-    representation. For the S4 class, there is a data.frame-like representation,
-    a list-like representation, and an extended S3 tibble-like representation.
-Depends: R (>= 3.6.0), dplyr
-Imports: methods, tibble, utils, rlang, plyr, rtracklayer, stats
+Description: BiocSet displays different biological sets in a triple tibble format. These three tibbles 
+    are `element`, `set`, and `elementset`. The user has the abilty to activate one of these three 
+    tibbles to perform common functions from the dplyr package.
+Depends: R (>= 3.6.0), 
+    dplyr
+Imports: methods, 
+    tibble, 
+    utils, 
+    rlang, 
+    plyr, 
+    rtracklayer, 
+    stats
 Suggests:
     AnnotationDbi,
     KEGGREST,

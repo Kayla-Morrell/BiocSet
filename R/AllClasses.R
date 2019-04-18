@@ -1,24 +1,24 @@
-setOldClass("tbl_gene")
+setOldClass("tbl_element")
 
 setOldClass("tbl_set")
 
-setOldClass("tbl_geneset")
+setOldClass("tbl_elementset")
 
-#' @rdname geneset
+#' @rdname elementset
 #'
-#' @slot gene The gene tibble from `tbl_geneset`
-#' @slot set The set tibble from `tbl_geneset`
-#' @slot geneset The geneset tibble created from user input
+#' @slot element The element tibble from `tbl_elementset`
+#' @slot set The set tibble from `tbl_elementset`
+#' @slot elementset The elementset tibble created from user input
 #' @slot active The tibble that is active
 #'
-#' @exportClass GeneSet
+#' @exportClass ElementSet
 
-.GeneSet <- setClass(
-    "GeneSet",
+.ElementSet <- setClass(
+    "ElementSet",
     slots = c(
-        gene = "tbl_gene",
+        element = "tbl_element",
         set = "tbl_set",
-        geneset = "tbl_geneset",
+        elementset = "tbl_elementset",
         active = "character"
     )
 )

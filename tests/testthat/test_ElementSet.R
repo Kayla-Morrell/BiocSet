@@ -1,0 +1,225 @@
+context("ElementSet")
+
+test_that("'ElementSet()' works",
+{
+    es <- ElementSet(a = letters, b = LETTERS)
+    expect_s4_class(es, "ElementSet")
+    expect_identical(dim(es_element(es)), c(52L,1L))
+    expect_identical(dim(es_set(es)), c(2L,1L))
+    expect_identical(dim(es_elementset(es)), c(52L,2L))
+    expect_true(is_tbl_elementset(es_elementset(es)))
+    expect_identical(.active(es), "elementset")
+    expect_length(.active(es), 1L)
+
+    es <- ElementSet()
+    expect_s4_class(es, "ElementSet")
+    expect_identical(dim(es_elementset(es)), c(0L,2L))
+    expect_true(is_tbl_elementset(es_elementset(es)))
+
+    es <- ElementSet(set1 = character(), set2 = LETTERS)
+    expect_s4_class(es, "ElementSet")
+    expect_identical(dim(es_elementset(es)), c(26L,2L))
+    expect_true(is_tbl_elementset(es_elementset(es)))
+    expect_identical(levels(es_elementset(es)$set), c("set1", "set2"))
+
+    expect_error(ElementSet(set1 = 1:10, set2 = LETTERS))
+    expect_error(ElementSet(set1 = 1:10))
+    expect_error(ElementSet(LETTERS))
+    expect_error(ElementSet(set1 = letters, LETTERS))
+    expect_error(ElementSet(set1 = letters, set2 = 1:10))
+})
+
+test_that("'.element()' works", {
+    es <- ElementSet(set1 = letters, set2 = LETTERS)
+
+    es1 <- es %>% es_element()
+    expect_s3_class(es1, "tbl_element")
+    expect_identical(class(es1), c("tbl_element", "tbl_elementset_base",
+                                   "tbl_df", "tbl", "data.frame"))
+    expect_length(class(es1), 5)
+    expect_identical(dim(es1), c(52L,1L))
+})
+
+test_that("'.set()' works", {
+    es <- ElementSet(set1 = letters, set2 = LETTERS)
+
+    es1 <- es %>% es_set()
+    expect_s3_class(es1, "tbl_set")
+    expect_identical(class(es1), c("tbl_set", "tbl_elementset_base",
+                                  "tbl_df", "tbl", "data.frame"))
+    expect_length(class(es1), 5)
+    expect_identical(dim(es1), c(2L,1L))
+})
+
+test_that("'.elementset()' works", {
+    es <- ElementSet(set1 = letters, set2 = LETTERS)
+
+    es1 <- es %>% es_elementset()
+    expect_s3_class(es1, "tbl_elementset")
+    expect_identical(class(es1), c("tbl_elementset", "tbl_elementset_base",
+                                   "tbl_df", "tbl", "data.frame"))
+    expect_length(class(es1), 5)
+    expect_identical(dim(es1), c(52L,2L))
+})
+
+test_that("'.active()' works", {
+    es <- ElementSet(set1 = letters, set2 = LETTERS)
+
+    es1 <- es %>% .active()
+    expect_is(es1, "character")
+    expect_length(es1, 1)
+})
+
+test_that("'es_activate.ElementSet()' works", {
+    es <- ElementSet(set1 = letters, set2 = LETTERS)
+
+    expect_identical(.active(es), "elementset")
+
+    es1 <- es %>% es_activate(element)
+    expect_identical(.active(es1), "element")
+
+    es2 <- es %>% es_activate(set)
+    expect_identical(.active(es2), "set")
+
+})
+
+test_that("'filter.ElementSet()' works", {
+    es <- ElementSet(set1 = letters, set2 = LETTERS)
+    expect_equivalent(filter(es), es)
+
+    es1 <- es %>% filter(set == "set1")
+    expect_true(is_tbl_elementset(es_elementset(es1)))
+    expect_identical(dim(es_set(es1)), c(1L,1L))
+    expect_identical(dim(es_elementset(es1)), c(26L,2L))
+    expect_identical(es_elementset(es1)$element, letters)
+
+    foo <- "k"
+    es2 <- es %>% filter(element == foo)
+    expect_true(is_tbl_elementset(es_elementset(es2)))
+    expect_identical(dim(es_element(es2)), c(1L,1L))
+    expect_identical(es_elementset(es2)$element, foo)
+})
+
+test_that("'select.ElementSet()' works", {
+    es <- ElementSet(set1 = letters, set2 = LETTERS)
+
+    es1 <- es %>% select(c(element, set))
+    expect_true(is_tbl_elementset(es_elementset(es1)))
+    expect_identical(dim(es_elementset(es1)), c(52L,2L))
+    expect_identical(es1, es)
+
+    es2 <- es %>% select(element)
+    expect_true(is_tbl_elementset(es_elementset(es2)))
+    expect_identical(dim(es_elementset(es2)), c(52L,2L))
+    expect_identical(es_element(es2), es_element(es))
+
+    es3 <- es %>% select(set)
+    expect_true(is_tbl_elementset(es_elementset(es3)))
+    expect_identical(dim(es_elementset(es3)), c(52L, 2L))
+    expect_identical(es_set(es3), es_set(es))
+})
+
+test_that("'mutate.ElementSet()' works", {
+    es <- ElementSet(set1 = letters, set2 = LETTERS)
+
+    es1 <- es %>% mutate(pval = rnorm(1:52))
+    expect_true(is_tbl_elementset(es_elementset(es1)))
+    expect_identical(dim(es_elementset(es1)), c(52L,3L))
+
+    expect_error(es %>% mutate(z = 1:2))
+})
+
+test_that("'map_element.ElementSet()' works", {
+    es <- ElementSet(set1 = letters, set2 = LETTERS)
+
+    es1 <- es %>% map_element(letters, LETTERS)
+    expect_true(is_tbl_elementset(es_elementset(es1)))
+    expect_identical(dim(es_elementset(es1)), c(52L,2L))
+    expect_identical(es_elementset(es1)$element, es_element(es1)$element)
+
+    expect_error(es %>% mutate(element = 1:52))
+})
+
+test_that("'map_set.ElementSet()' works", {
+    es <- ElementSet(a = letters, B = LETTERS)
+
+    es1 <- es %>% map_set("a", "A")
+    expect_true(is_tbl_elementset(es_elementset(es1)))
+    expect_identical(dim(es_elementset(es1)), c(52L,2L))
+    expect_identical(levels(es_elementset(es1)$set), levels(es_set(es1)$set))
+
+    expect_error(es %>% mutate(set = 1:52))
+})
+
+test_that("'summarise.ElementSet()' works", {
+    es <- ElementSet(set1 = letters, set2 = LETTERS)
+
+    es1 <- es %>% summarise(n = n())
+    expect_false(is_tbl_elementset(es1))
+    expect_identical(dim(es1), c(1L,1L))
+    expect_equal(es1$n, 52L)
+
+    es2 <- es %>% group_by(element) %>% summarise(n = n())
+    expect_false(is_tbl_elementset(es2))
+    expect_identical(dim(es2), c(52L,2L))
+    expect_equal(es2$n, c(rep(1L, 52)))
+
+    es3 <- es %>% group_by(set) %>% summarise(n = n())
+    expect_false(is_tbl_elementset(es3))
+    expect_identical(dim(es3), c(2L,2L))
+    expect_equal(es3$n, c(26L, 26L))
+})
+
+test_that("'arrange.ElementSet()' works", {
+    es <- ElementSet(set1 = letters, set2 = LETTERS)
+
+    es1 <- es %>% arrange()
+    expect_true(is_tbl_elementset(es_elementset(es1)))
+    expect_equal(es1, es)
+
+    es2 <- es %>% arrange(element)
+    expect_true(is_tbl_elementset(es_elementset(es2)))
+    expect_equal(es2, es)
+    expect_equal(es_elementset(es2)$element, sort(es_elementset(es)$element))
+
+    es3 <- es %>% arrange(set)
+    expect_true(is_tbl_elementset(es_elementset(es3)))
+    expect_equal(es3, es)
+    expect_equal(es_elementset(es3)$set, sort(es_elementset(es)$set))
+
+    es4 <- es %>% arrange(element == "k")
+    expect_true(is_tbl_elementset(es_elementset(es4)))
+    expect_identical(dim(es_elementset(es4)), c(52L,2L))
+
+    es5 <- es %>% arrange(set == "set1")
+    expect_true(is_tbl_elementset(es_elementset(es5)))
+    expect_identical(dim(es_elementset(es5)), c(52L,2L))
+})
+
+test_that("'group_vars.ElementSet()' works", {
+    es <- ElementSet(set1 = letters, set2 = LETTERS)
+
+    es1 <- es %>% group_by(element) %>% group_vars()
+    expect_identical(es1, "element")
+    expect_length(es1, 1L)
+    expect_identical(class(es1), "character")
+
+    es2 <- es %>% group_by(element, set) %>% group_vars()
+    expect_identical(es2, c("element", "set"))
+    expect_length(es2, 2L)
+    expect_identical(class(es2), "character")
+})
+
+test_that("'tbl_vars.ElementSet()' works", {
+    es <- ElementSet(set1 = letters, set2 = LETTERS)
+
+    es1 <- es %>% tbl_vars()
+    expect_identical(es1, c("element", "set"))
+    expect_length(es1, 2L)
+    expect_identical(class(es1), "character")
+
+    es2 <- es %>% es_activate(element) %>% tbl_vars()
+    expect_identical(es2, "element")
+    expect_length(es2, 1L)
+    expect_identical(class(es2), "character")
+})

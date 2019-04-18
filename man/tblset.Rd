@@ -4,10 +4,10 @@
 \alias{tbl_set}
 \title{Set representation as an S3 class tibble}
 \usage{
-tbl_set(tbl_geneset)
+tbl_set(tbl_elementset)
 }
 \arguments{
-\item{tbl_geneset}{An S3 'geneset' tibble.}
+\item{tbl_elementset}{An S3 'elementset' tibble.}
 }
 \value{
 An S3 'set' object in a tibble representation.
@@ -16,6 +16,6 @@ An S3 'set' object in a tibble representation.
 Set representation as an S3 class tibble
 }
 \examples{
-tbl <- tbl_geneset(set1 = letters, set2 = LETTERS)
+tbl <- tbl_elementset(set1 = letters, set2 = LETTERS)
 tbl_set(tbl)
 }
