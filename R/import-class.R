@@ -8,7 +8,7 @@
 #'
 #' @param resource For `GMTFile()`, the .gmt file that will be imported in.
 #'
-#' @return For `GMTFile()`, an object representing the path to a .gmt file on disk
+#' @return For `GMTFile()`, an object representing the path to a .gmt file.
 #'
 #' @export
 GMTFile = function(resource, ...)
@@ -26,7 +26,7 @@ GMTFile = function(resource, ...)
 #'
 #' @examples
 #' gmtFile <- system.file(package = "BiocSet", "extdata",
-#'     "hallmark.element.symbol.gmt")
+#'     "hallmark.gene.symbol.gmt")
 #' import(gmtFile)
 
 import.gmt <- function(path) {
@@ -69,6 +69,8 @@ setMethod(
 #' @param tbl For `export.ElementSet()`, a ElementSet that
 #'     should be exported to a gmt file.
 #'
+#' @importFrom rlang .data
+#'
 #' @export
 
 export.ElementSet <- function(tbl, path = tempfile(fileext = ".gmt")) {
@@ -80,9 +82,9 @@ export.ElementSet <- function(tbl, path = tempfile(fileext = ".gmt")) {
     if(nrow(tbl)==0L){
         sets <- tibble(source = character(0), element = character(0))
     } else {
-        sets <- group_by(tbl, set) %>%
+        sets <- group_by(tbl, .data$set) %>%
             summarise(source = unique(source),
-                  element = paste(element, collapse = "\t"))
+                element = paste(.data$element, collapse = "\t"))
     }
 
     write.table(sets, path, sep = "\t",

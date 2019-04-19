@@ -43,7 +43,7 @@ should be exported to a gmt file.}
 \item{object}{For `export()`, the object to be exported.}
 }
 \value{
-For `GMTFile()`, an object representing the path to a .gmt file on disk
+For `GMTFile()`, an object representing the path to a .gmt file.
 
 For `import()`, tbl_elementset
 
@@ -55,6 +55,6 @@ Importing and formating of element sets as an S3 class tibble
 }
 \examples{
 gmtFile <- system.file(package = "BiocSet", "extdata",
-    "hallmark.element.symbol.gmt")
+    "hallmark.gene.symbol.gmt")
 import(gmtFile)
 }

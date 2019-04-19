@@ -24,10 +24,15 @@ test_that("'tbl_elementset()' works", {
 })
 
 test_that("'is_tbl_elementset()' works", {
-    expect_true(is_tbl_elementset(tibble(element = character(), set = factor())))
-    expect_true(is_tbl_elementset(tibble(element = character(), set = factor(), x = integer())))
-    expect_false(is_tbl_elementset(tibble(element = integer(), set = factor())))
-    expect_false(is_tbl_elementset(tibble(element = character(), set = integer())))
+    expect_true(is_tbl_elementset(tibble(element = character(),
+                                         set = factor())))
+    expect_true(is_tbl_elementset(tibble(element = character(),
+                                         set = factor(),
+                                         x = integer())))
+    expect_false(is_tbl_elementset(tibble(element = integer(),
+                                          set = factor())))
+    expect_false(is_tbl_elementset(tibble(element = character(),
+                                          set = integer())))
     expect_false(is_tbl_elementset(tibble()))
     expect_false(is_tbl_elementset(tibble(element = character())))
 })

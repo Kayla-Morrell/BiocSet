@@ -21,7 +21,10 @@ ElementSet <- function(..., active = c("elementset", "element", "set"))
     element <- tbl_element(elementset)
     set <- tbl_set(elementset)
 
-    .ElementSet(element = element, set = set, elementset = elementset, active = active)
+    .ElementSet(element = element,
+                set = set,
+                elementset = elementset,
+                active = active)
 }
 
 .element <- function(x) x@element
@@ -53,11 +56,17 @@ setMethod(
     {
         active <- .active(object)
         cat("class: ", class(object), "\n", sep = "")
-        cat("\nes_element()", if (active == "element") " <active>", ":\n", sep = "")
+        cat("\nes_element()", if (active == "element")
+                                " <active>", ":\n", sep = ""
+            )
         print(.element(object), n = 3)
-        cat("\nes_set()", if (active == "set") " <active>", ":\n", sep = "")
+        cat("\nes_set()", if (active == "set")
+                            " <active>", ":\n", sep = ""
+            )
         print(.set(object), n = 3)
-        cat("\nes_elementset()", if (active == "elementset") " <active>", ":\n", sep = "")
+        cat("\nes_elementset()", if (active == "elementset")
+                                    " <active>", ":\n", sep = ""
+            )
         print(.elementset(object), n = 3)
     })
 
@@ -100,7 +109,8 @@ setMethod(
     function(x, value)
 {
     stopifnot(all(value$element %in% .element(x)$element))
-    elementset <- filter(.elementset(x), .elementset(x)$element %in% value$element)
+    elementset <- filter(.elementset(x),
+                        .elementset(x)$element %in% value$element)
     initialize(x, element = value, elementset = elementset)
 })
 
@@ -128,6 +138,9 @@ setMethod(
 
 #' @rdname elementset
 #'
+#' @param es The active tibble
+#' @param value What it is being updated to 
+#'
 #' @export
 update_es_element <- function(es, value)
     .update(es, value)
@@ -145,6 +158,8 @@ update_es_elementset <- function(es, value)
     .update(es, value)
 
 #' @rdname elementset
+#'
+#' @param x The active tibble
 #'
 #' @export
 setGeneric("es_element", function(x) standardGeneric("es_element"))

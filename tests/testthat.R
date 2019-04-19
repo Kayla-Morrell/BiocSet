@@ -1,4 +1,4 @@
 library(testthat)
-library(GeneSet)
+library(BiocSet)
 
-test_check("GeneSet")
+test_check("BiocSet")

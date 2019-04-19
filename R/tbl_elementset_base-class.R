@@ -1,4 +1,7 @@
-.subclasses <- c("tbl_elementset_base", "tbl_element", "tbl_set", "tbl_elementset")
+.subclasses <- c("tbl_elementset_base",
+                "tbl_element",
+                "tbl_set",
+                "tbl_elementset")
 
 subclass_tbl_elementset_base <-
     function(x, subclass)

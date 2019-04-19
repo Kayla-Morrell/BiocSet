@@ -5,9 +5,9 @@ author: "Kayla Morrell"
 date: "`r Sys.Date()`"
 output:
     BiocStyle::html_document
-package: ElementSet
+package: BiocSet
 vignette: >
-    %\VignetteIndexEntry{ElementSet: Representing Element Sets in the Tidyverse}
+    %\VignetteIndexEntry{BiocSet: Representing Element Sets in the Tidyverse}
     %\VignetteEngine{knitr::rmarkdown}
     %\VignetteEndcoding{UTF-8}
 ---
@@ -60,7 +60,7 @@ The second method of creating an `ElementSet` would be to read in `.gmt` files. 
 ```{r gmt}
 gmtFile <- system.file(package = "BiocSet",
                         "extdata",
-                        "hallmark.element.symbol.gmt")
+                        "hallmark.gene.symbol.gmt")
 tbl2 <- import(gmtFile)
 tbl2
 ```
@@ -144,7 +144,7 @@ It may also be helpful to remove sets that are empty. Since we have shown how to
 
 ```{r empty}
 drop <- es_activate(go, elementset) %>% group_by(set) %>%
-     dplyr::count() %>% filter(n == 0) %>% pull(set)
+    dplyr::count() %>% filter(n == 0) %>% pull(set)
 es_activate(go, set) %>% filter(!(set %in% drop))
 ```
 
@@ -183,7 +183,7 @@ kegg_sets <- function(species = "hsa") {
     paths <- mutate(
         paths,
         name = sub("path:", "", name),
-        value = esub(" \\-.*", "", value)
+        value = gsub(" \\-.*", "", value)
     )
     elements <- lapply(paths$name, function(x) {
         path <- keggGet(x) # (n = 330) will take some time
@@ -198,7 +198,7 @@ kegg_sets <- function(species = "hsa") {
 
 Due to limiations of the KEGGREST package, `keggGet` can only retrieve 10 entries at a time. There for the `lapply` function above would take some time to run on it's own. There for we have decided to use `BiocFileCache` to make the data available to the user.
 
-```{r file_cache, message = FALSE}
+```{r file_cache, message = FALSE, eval = FALSE}
 library(BiocFileCache)
 rname <- "kegg_hsa"
 exists <- NROW(bfcquery(query=rname, field="rname")) != 0L

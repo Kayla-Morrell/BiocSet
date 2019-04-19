@@ -22,21 +22,21 @@ tbl_elementset <- function(...) {
     args <- list(...)
 
     stopifnot(
-	all(vapply(args, is, logical(1), "character")),
-	length(args) == 0 || !is.null(names(args)),
-	all(nzchar(names(args)))
+        all(vapply(args, is, logical(1), "character")),
+        length(args) == 0 || !is.null(names(args)),
+        all(nzchar(names(args)))
     )
 
     tbl <- tibble(
-    	element = as.character(unlist(args, use.names=FALSE)),
-	set = factor(
+        element = as.character(unlist(args, use.names=FALSE)),
+        set = factor(
             rep(names(args), lengths(args)),
             levels = names(args)
 
         )
     )
 
-    tbl <- tbl %>% distinct(element, set)
+    tbl <- tbl %>% distinct(.data$element, .data$set)
 
     subclass_tbl_elementset_base(tbl, "tbl_elementset")
 }
@@ -60,7 +60,7 @@ format.trunc_mat_tbl_elementset <- function(x, ...) {
 
 select.tbl_elementset <- function(.data, ...)
 {
-    tbl <- NextMethod("select", .data, element, set, ...)
+    tbl <- NextMethod("select", .data, .data$element, .data$set, ...)
     class(tbl) <- class(.data)
     tbl
 }

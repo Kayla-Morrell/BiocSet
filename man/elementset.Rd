@@ -95,6 +95,12 @@ character vector is the name of the element set.}
 
 \item{what}{Which of the three tibbles to activate}
 
+\item{es}{The active tibble}
+
+\item{value}{What it is being updated to}
+
+\item{x}{The active tibble}
+
 \item{from}{a vector of the values to be replaced}
 
 \item{to}{a vector of the replacement values}
