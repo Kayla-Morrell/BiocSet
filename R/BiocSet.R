@@ -1,27 +1,27 @@
 #' An element set representation as a tripple tibble
 #'
-#' @rdname elementset
+#' @rdname biocset
 #'
-#' @param ... For `ElementSet()`, named character() vectors of element
+#' @param ... For `BiocSet()`, named character() vectors of element
 #'     sets. Each character vector is an element set. The name of the
 #'     character vector is the name of the element set.
 #' @param active A character to indicate which tibble is active.
 #'
-#' @return For `ElementSet()`, an S4 'ElementSet' object in a tripple
+#' @return For `BiocSet()`, an S4 'BiocSet' object in a tripple
 #'     tibble representation.
 #'
 #' @export
 #'
 #' @examples
-#' ElementSet(set1 = letters, set2 = LETTERS)
-ElementSet <- function(..., active = c("elementset", "element", "set"))
+#' BiocSet(set1 = letters, set2 = LETTERS)
+BiocSet <- function(..., active = c("elementset", "element", "set"))
 {
     active <- match.arg(active)
     elementset <- tbl_elementset(...)
     element <- tbl_element(elementset)
     set <- tbl_set(elementset)
 
-    .ElementSet(element = element,
+    .BiocSet(element = element,
                 set = set,
                 elementset = elementset,
                 active = active)
@@ -51,7 +51,7 @@ ElementSet <- function(..., active = c("elementset", "element", "set"))
 }
 
 setMethod(
-    "show", "ElementSet",
+    "show", "BiocSet",
     function(object)
     {
         active <- .active(object)
@@ -70,7 +70,7 @@ setMethod(
         print(.elementset(object), n = 3)
     })
 
-#' @rdname elementset
+#' @rdname biocset
 #'
 #' @export
 es_activate <- function(.data, what)
@@ -78,9 +78,9 @@ es_activate <- function(.data, what)
     UseMethod("es_activate")
 }
 
-#' @rdname elementset
+#' @rdname biocset
 #'
-#' @param .data The 'ElementSet' tibble.
+#' @param .data The 'BiocSet' tibble.
 #' @param what Which of the three tibbles to activate
 #'
 #' @importFrom rlang quo_text enquo
@@ -89,9 +89,9 @@ es_activate <- function(.data, what)
 #' @export
 #'
 #' @examples
-#' es <- ElementSet(set1 = letters, set2 = LETTERS)
+#' es <- BiocSet(set1 = letters, set2 = LETTERS)
 #' es_activate(es, element)
-es_activate.ElementSet <- function(.data, what)
+es_activate.BiocSet <- function(.data, what)
 {
     what <- quo_text(enquo(what))
     .active(.data) <- what
@@ -136,7 +136,7 @@ setMethod(
     initialize(x, element = element, set = set, elementset = value)
 })
 
-#' @rdname elementset
+#' @rdname biocset
 #'
 #' @param es The active tibble
 #' @param value What it is being updated to 
@@ -145,103 +145,103 @@ setMethod(
 update_es_element <- function(es, value)
     .update(es, value)
 
-#' @rdname elementset
+#' @rdname biocset
 #'
 #' @export
 update_es_set <- function(es, value)
     .update(es, value)
 
-#' @rdname elementset
+#' @rdname biocset
 #'
 #' @export
 update_es_elementset <- function(es, value)
     .update(es, value)
 
-#' @rdname elementset
+#' @rdname biocset
 #'
 #' @param x The active tibble
 #'
 #' @export
 setGeneric("es_element", function(x) standardGeneric("es_element"))
 
-#' @rdname elementset
+#' @rdname biocset
 #'
 #' @exportMethod es_element
-setMethod("es_element", "ElementSet", .element)
+setMethod("es_element", "BiocSet", .element)
 
-#' @rdname elementset
+#' @rdname biocset
 #'
 #' @export
 setGeneric("es_set", function(x) standardGeneric("es_set"))
 
-#' @rdname elementset
+#' @rdname biocset
 #'
 #' @exportMethod es_set
-setMethod("es_set", "ElementSet", .set)
+setMethod("es_set", "BiocSet", .set)
 
-#' @rdname elementset
+#' @rdname biocset
 #'
 #' @export
 setGeneric("es_elementset", function(x) standardGeneric("es_elementset"))
 
-#' @rdname elementset
+#' @rdname biocset
 #'
 #' @exportMethod es_elementset
-setMethod("es_elementset", "ElementSet", .elementset)
+setMethod("es_elementset", "BiocSet", .elementset)
 
 ## es_set(es) <- es_set(es) %>% left_join(paths, by = c("set" = "name"))
 
-#' @rdname elementset
+#' @rdname biocset
 #'
 #' @export
 `es_element<-` <- update_es_element
 
-#' @rdname elementset
+#' @rdname biocset
 #'
 #' @export
 `es_set<-` <- update_es_set
 
-#' @rdname elementset
+#' @rdname biocset
 #'
 #' @export
 `es_elementset<-` <- update_es_elementset
 
-#' @rdname elementset
+#' @rdname biocset
 #'
 #' @export
 #'
 #' @examples
-#' es <- ElementSet(set1 = letters, set2 = LETTERS)
+#' es <- BiocSet(set1 = letters, set2 = LETTERS)
 #' es %>% es_activate(element) %>% filter(element == "a")
-filter.ElementSet <- function(.data, ...)
+filter.BiocSet <- function(.data, ...)
 {
     sub <- .active_value(.data)
     tbl <- filter(sub, ...)
     .update(.data, tbl)
 }
 
-#' @rdname elementset
+#' @rdname biocset
 #'
 #' @export
 #'
 #' @examples
-#' es <- ElementSet(set1 = letters, set2 = LETTERS)
+#' es <- BiocSet(set1 = letters, set2 = LETTERS)
 #' es %>% select(element)
-select.ElementSet <- function(.data, ...)
+select.BiocSet <- function(.data, ...)
 {
     sub <- .active_value(.data)
     tbl <- select(sub, ...)
     .update(.data, tbl)
 }
 
-#' @rdname elementset
+#' @rdname biocset
 #'
 #' @export
 #'
 #' @examples
-#' es <- ElementSet(set1 = letters, set2 = LETTERS)
+#' es <- BiocSet(set1 = letters, set2 = LETTERS)
 #' es %>% es_activate(set) %>% mutate(pval = rnorm(1:2))
-mutate.ElementSet <- function(.data, ...)
+mutate.BiocSet <- function(.data, ...)
 {
     stopifnot(!any(c("element", "set") %in% names(list(...))))
 
@@ -250,12 +250,12 @@ mutate.ElementSet <- function(.data, ...)
     .update(.data, tbl)
 }
 
-#' @rdname elementset
+#' @rdname biocset
 #'
 #' @export
 map_element <- function(.data, from, to) UseMethod("map_element")
 
-#' @rdname elementset
+#' @rdname biocset
 #'
 #' @param from a vector of the values to be replaced
 #' @param to a vector of the replacement values
@@ -264,9 +264,9 @@ map_element <- function(.data, from, to) UseMethod("map_element")
 #'
 #' @export
 #' @examples
-#' es <- ElementSet(set1 = letters, set2 = LETTERS)
+#' es <- BiocSet(set1 = letters, set2 = LETTERS)
 #' es %>% map_element(letters, LETTERS)
-map_element.ElementSet <- function(.data, from, to)
+map_element.BiocSet <- function(.data, from, to)
 {
     stopifnot(is.character(from), is.character(to), length(from) == length(to))
 
@@ -281,21 +281,21 @@ map_element.ElementSet <- function(.data, from, to)
     initialize(.data, element = element, elementset = es)
 }
 
-#' @rdname elementset
+#' @rdname biocset
 #'
 #' @export
 map_set <- function(.data, from, to) UseMethod("map_set")
 
-#' @rdname elementset
+#' @rdname biocset
 #'
 #' @importFrom plyr mapvalues
 #'
 #' @export
 #'
 #' @examples
-#' es <- ElementSet(a = letters, B = LETTERS)
+#' es <- BiocSet(a = letters, B = LETTERS)
 #' es %>% map_set("set1", "foo")
-map_set.ElementSet <- function(.data, from, to)
+map_set.BiocSet <- function(.data, from, to)
 {
     stopifnot(is.character(from), is.character(to), length(from) == length(to))
 
@@ -310,7 +310,7 @@ map_set.ElementSet <- function(.data, from, to)
     initialize(.data, set = set, elementset = es)
 }
 
-#' @rdname elementset
+#' @rdname biocset
 #'
 #' @param add by default, `group_by()` will override existing groups. To add to
 #' existing groups, add should be TRUE.
@@ -318,66 +318,66 @@ map_set.ElementSet <- function(.data, from, to)
 #' @export
 #'
 #' @examples
-#' es <- ElementSet(set1 = letters, set2 = LETTERS)
+#' es <- BiocSet(set1 = letters, set2 = LETTERS)
 #' es %>% group_by(element, set)
-group_by.ElementSet <- function(.data, ..., add = FALSE)
+group_by.BiocSet <- function(.data, ..., add = FALSE)
 {
     sub <- .active_value(.data)
     group_by(sub, ..., add = FALSE)
 }
 
-## #' @rdname elementset
+## #' @rdname biocset
 ## #'
-## #' @param x a ElementSet
+## #' @param x a BiocSet
 ## #'
 ## #' @export
 ## #'
 ## #' @examples
-## #' es <- ElementSet(set1 = letters, set2 = LETTERS)
+## #' es <- BiocSet(set1 = letters, set2 = LETTERS)
 ## #' es %>% group_by(set) %>% summarise(n = n()) %>% ungroup()
-## ungroup.ElementSet <- function(x, ...)
+## ungroup.BiocSet <- function(x, ...)
 ## {
 ##     sub <- .active_value(x)
 ##     tbl <- ungroup(sub, ...)
 ##     .update(x, tbl)
 ## }
 
-#' @rdname elementset
+#' @rdname biocset
 #'
 #' @export
 #'
 #' @examples
-#' es <- ElementSet(set1 = letters, set2 = LETTERS)
+#' es <- BiocSet(set1 = letters, set2 = LETTERS)
 #' es %>% es_activate(set) %>% summarise(n = n())
-summarise.ElementSet <- function(.data, ...)
+summarise.BiocSet <- function(.data, ...)
 {
     sub <- .active_value(.data)
     summarise(sub, ...)
 }
 
-#' @rdname elementset
+#' @rdname biocset
 #'
 #' @export
 #'
 #' @examples
-#' es <- ElementSet(set1 = letters, set2 = LETTERS)
+#' es <- BiocSet(set1 = letters, set2 = LETTERS)
 #' es %>% es_activate(element) %>% arrange(desc(element))
-arrange.ElementSet <- function(.data, ...)
+arrange.BiocSet <- function(.data, ...)
 {
     sub <- .active_value(.data)
     tbl <- arrange(sub, ...)
     .update(.data, tbl)
 }
 
-#' @rdname elementset
+#' @rdname biocset
 #'
 #' @importFrom dplyr tbl_vars
 #' @export
 #'
 #' @examples
-#' es <- ElementSet(set1 = letters, set2 = LETTERS)
+#' es <- BiocSet(set1 = letters, set2 = LETTERS)
 #' es %>% mutate(pval = rnorm(1:52)) %>% tbl_vars()
-tbl_vars.ElementSet <- function(x)
+tbl_vars.BiocSet <- function(x)
 {
     active <- .active(x)
     sub <- slot(x, active)

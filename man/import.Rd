@@ -7,8 +7,8 @@
 \alias{GMTFile}
 \alias{import.gmt}
 \alias{import,GMTFile,ANY,ANY-method}
-\alias{export.ElementSet}
-\alias{export,ElementSet,GMTFile,ANY-method}
+\alias{export.BiocSet}
+\alias{export,BiocSet,GMTFile,ANY-method}
 \title{Importing and formating of element sets as an S3 class tibble}
 \usage{
 GMTFile(resource, ...)
@@ -17,9 +17,9 @@ import.gmt(path)
 
 \S4method{import}{GMTFile,ANY,ANY}(con, format, text, ...)
 
-export.ElementSet(tbl, path = tempfile(fileext = ".gmt"))
+export.BiocSet(tbl, path = tempfile(fileext = ".gmt"))
 
-\S4method{export}{ElementSet,GMTFile,ANY}(object, con, format, ...)
+\S4method{export}{BiocSet,GMTFile,ANY}(object, con, format, ...)
 }
 \arguments{
 \item{resource}{For `GMTFile()`, the .gmt file that will be imported in.}
@@ -37,7 +37,7 @@ is to be saved to.}
 \item{text}{For `import()`, if con is missing this is a character
 vector directly providing the element set that should be imported.}
 
-\item{tbl}{For `export.ElementSet()`, a ElementSet that
+\item{tbl}{For `export.BiocSet()`, a BiocSet that
 should be exported to a gmt file.}
 
 \item{object}{For `export()`, the object to be exported.}

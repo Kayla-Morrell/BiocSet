@@ -4,17 +4,17 @@ setOldClass("tbl_set")
 
 setOldClass("tbl_elementset")
 
-#' @rdname elementset
+#' @rdname biocset
 #'
 #' @slot element The element tibble from `tbl_elementset`
 #' @slot set The set tibble from `tbl_elementset`
 #' @slot elementset The elementset tibble created from user input
 #' @slot active The tibble that is active
 #'
-#' @exportClass ElementSet
+#' @exportClass BiocSet
 
-.ElementSet <- setClass(
-    "ElementSet",
+.BiocSet <- setClass(
+    "BiocSet",
     slots = c(
         element = "tbl_element",
         set = "tbl_set",

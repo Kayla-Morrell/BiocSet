@@ -17,12 +17,12 @@ test_that("'import()' works", {
     export(es, fl)
     expect_identical(es, import(fl))
 
-    es <- ElementSet() %>% mutate(source = character(0))
+    es <- BiocSet() %>% mutate(source = character(0))
     fl <- tempfile(fileext = ".gmt")
     export(es, fl)
     expect_identical(es, import(fl))
 
-    es <- ElementSet(a = letters, b = LETTERS)
+    es <- BiocSet(a = letters, b = LETTERS)
     fl <- tempfile(fileext = ".gmt")
     export(es, fl)
     expect_identical(es %>% mutate(source = NA_character_), import(fl))

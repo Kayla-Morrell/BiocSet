@@ -38,7 +38,7 @@ import.gmt <- function(path) {
 
     source <- vapply(sets, function(set) set[[2]], character(1))
     source[source=="NA" | !nzchar(source)] <- NA
-    tbl <- do.call(ElementSet, elements)
+    tbl <- do.call(BiocSet, elements)
     tbl <- tbl %>% mutate(source = rep(source, lengths(elements)))
     tbl
 }
@@ -66,14 +66,14 @@ setMethod(
 
 #' @rdname import
 #'
-#' @param tbl For `export.ElementSet()`, a ElementSet that
+#' @param tbl For `export.BiocSet()`, a BiocSet that
 #'     should be exported to a gmt file.
 #'
 #' @importFrom rlang .data
 #'
 #' @export
 
-export.ElementSet <- function(tbl, path = tempfile(fileext = ".gmt")) {
+export.BiocSet <- function(tbl, path = tempfile(fileext = ".gmt")) {
     stopifnot(is_tbl_elementset(.elementset(tbl)))
     tbl <- .elementset(tbl)
     if(!"source" %in% names(tbl))
@@ -100,9 +100,9 @@ export.ElementSet <- function(tbl, path = tempfile(fileext = ".gmt")) {
 #'
 #' @export
 setMethod(
-    "export", c("ElementSet", "GMTFile", "ANY"),
+    "export", c("BiocSet", "GMTFile", "ANY"),
     function(object, con, format, ...)
 {
-    export.ElementSet(object, resource(con))
+    export.BiocSet(object, resource(con))
     con
 })

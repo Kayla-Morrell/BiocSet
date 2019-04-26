@@ -20,7 +20,7 @@ knitr::opts_chunk$set(
 ```
 
 # Introduction
-`BiocSet` is a package that represents element sets in a tibble format with the `ElementSet` class. Element sets are read in and converted into a tibble format. From here, typical `dplyr` operations can be performed on the tibble element set.
+`BiocSet` is a package that represents element sets in a tibble format with the `BiocSet` class. Element sets are read in and converted into a tibble format. From here, typical `dplyr` operations can be performed on the tibble element set.
 
 # Installation
 Install the most recent version from Bioconductor:
@@ -46,14 +46,14 @@ library(BiocSet)
 
 ## Input and Output
 
-`BiocSet` can create an `ElementSet` using two different input methods. The first is to input named character vectors of element sets. `ElementSet` returns three tibbles, `element` which contains the elements, `set` which contains the sets and `elementset` which contains elements and sets. 
+`BiocSet` can create an `BiocSet` using two different input methods. The first is to input named character vectors of element sets. `BiocSet` returns three tibbles, `element` which contains the elements, `set` which contains the sets and `elementset` which contains elements and sets. 
 
 ```{r constructor}
-tbl <- ElementSet(set1 = letters, set2 = LETTERS)
+tbl <- BiocSet(set1 = letters, set2 = LETTERS)
 tbl
 ```
 
-The second method of creating an `ElementSet` would be to read in `.gmt` files. Using `import()`, a path to a downloaded `.gmt` file is read in and an `ElementSet` is returned. The example below uses a hallmark element set downloaded from [GSEA][], which is also included with this package. This `ElementSet` includes a `source` column within the `elementset` tibble for reference as to where the element set came from.
+The second method of creating an `BiocSet` would be to read in `.gmt` files. Using `import()`, a path to a downloaded `.gmt` file is read in and an `BiocSet` is returned. The example below uses a hallmark element set downloaded from [GSEA][], which is also included with this package. This `BiocSet` includes a `source` column within the `elementset` tibble for reference as to where the element set came from.
 
 [GSEA]: http://software.broadinstitute.org/esea/index.jsp
 
@@ -65,7 +65,7 @@ tbl2 <- import(gmtFile)
 tbl2
 ```
 
-`export()` allows for an  `ElementSet` to be exported into a temporary file with the extention `.gmt`.
+`export()` allows for an  `BiocSet` to be exported into a temporary file with the extention `.gmt`.
 
 ```{r export, tidy = TRUE}
 fl <- tempfile(fileext = ".gmt")
@@ -75,20 +75,20 @@ gmt
 
 ## Implemented functions
 
-`ElementSet` adopts the use of many `dplyr` functions such as `filter()`, `select()`, `mutate()`, `summarise()`, `arrange()`, and `tbl_vars()`.
+`BiocSet` adopts the use of many `dplyr` functions such as `filter()`, `select()`, `mutate()`, `summarise()`, `arrange()`, and `tbl_vars()`.
 
 ```{r examples}
-tbl <- ElementSet(set1 = letters, set2 = LETTERS)
+tbl <- BiocSet(set1 = letters, set2 = LETTERS)
 tbl
 tbl %>% filter(element == "a" | element == "A")
 tbl %>% mutate(pval = rnorm(1:52))
 tbl %>% group_by(set,element) %>% group_vars()
 ```
 
-Another feature available to `ElementSet` is the ability to activate different tibbles. When an `ElementSet` is created, the tibble `elementset` is automatically activated and all functions will be performed on this tibble. With `es_activate()` the user is able to pick a different tibble to activate and work on.
+Another feature available to `BiocSet` is the ability to activate different tibbles. When an `BiocSet` is created, the tibble `elementset` is automatically activated and all functions will be performed on this tibble. With `es_activate()` the user is able to pick a different tibble to activate and work on.
 
 ```{r activate}
-tbl <- ElementSet(set1 = letters, set2 = LETTERS)
+tbl <- BiocSet(set1 = letters, set2 = LETTERS)
 tbl
 tbl %>% es_activate(element) %>% filter(element == "a" | element == "A")
 tbl %>% es_activate(set) %>% mutate(pval = rnorm(1:2))
@@ -97,7 +97,7 @@ tbl %>% es_activate(element) %>% summarise(n = n())
 
 # Case study
 
-Next, we demonstrate the use of `ElementSet` with an experiement dataset `airway` from the package `airway`. This data is from an RNA-Seq experiment on airway smooth muscle (ASM) cell lines.
+Next, we demonstrate the use of `BiocSet` with an experiement dataset `airway` from the package `airway`. This data is from an RNA-Seq experiment on airway smooth muscle (ASM) cell lines.
 
 The first step is to load the library and the necessary data.
 
@@ -107,7 +107,7 @@ data("airway")
 se <- airway
 ```
 
-This function `go_sets()` discovers the keys from the org object and uses `AnnotationDbi::select` to create a mapping of Ensembl ids and GO ids. We represent these identifieres as a ElementSet.
+This function `go_sets()` discovers the keys from the org object and uses `AnnotationDbi::select` to create a mapping of Ensembl ids and GO ids. We represent these identifieres as a BiocSet.
 
 ```{r go_sets, message = FALSE}
 library(org.Hs.eg.db)
@@ -117,7 +117,7 @@ go_sets <-
     map <- AnnotationDbi::select(
         org, keys(org, "ENSEMBL"), c("ENSEMBL", "GO"), "ENSEMBL"
     )
-    do.call(ElementSet, split(map$ENSEMBL, map$GO))
+    do.call(BiocSet, split(map$ENSEMBL, map$GO))
 }
 ```
 
@@ -149,7 +149,7 @@ es_activate(go, set) %>% filter(!(set %in% drop))
 ```
 
 Another mapping example is created using the `mapIds` function. A tibble of Ensembl ids and element symbols made and then we use our `map_element` function to map the Ensembl id elements in `go` to element symbols.
-
+113 library(org.Hs.eg.db)
 ```{r more_mapping}
 map <- mapIds(
     org.Hs.eg.db, keys(org.Hs.eg.db, "ENSEMBL"), "SYMBOL", "ENSEMBL"
@@ -168,7 +168,7 @@ map <- mapIds(GO.db, as.character(es_set(go)$set), "DEFINITION", "GOID")
 es_activate(go, "set") %>% mutate(definition = unname(map))
 ```
 
-The library `KEGGREST` is a client interface to the KEGG REST server. KEGG contains pathway maps that represent interaction, reaction and relation networks for various biological processes and diseases. We create a function that uses `KEGGREST` that develops a ElementSet that contains the elements for every pathway map in KEGG.
+The library `KEGGREST` is a client interface to the KEGG REST server. KEGG contains pathway maps that represent interaction, reaction and relation networks for various biological processes and diseases. We create a function that uses `KEGGREST` that develops a BiocSet that contains the elements for every pathway map in KEGG.
 
 <!-- need to work on the sapply function, currently taking almost 3 minutes to run the keggGet for all 330 pathways. -->
 
@@ -182,8 +182,8 @@ kegg_sets <- function(species = "hsa") {
     paths <- tibble::enframe(keggList("pathway", "hsa"))
     paths <- mutate(
         paths,
-        name = sub("path:", "", name),
-        value = gsub(" \\-.*", "", value)
+        name = gsub("path:", "", name),
+        value = gsub("\\-.*", "", value)
     )
     elements <- lapply(paths$name, function(x) {
         path <- keggGet(x) # (n = 330) will take some time
@@ -192,13 +192,13 @@ kegg_sets <- function(species = "hsa") {
     names(elements) <- paths$name
     elements <- elements[lengths(elements) != 0]
 
-    do.call(ElementSet, elements)
+    do.call(BiocSet, elements)
 }
 ```
 
 Due to limiations of the KEGGREST package, `keggGet` can only retrieve 10 entries at a time. There for the `lapply` function above would take some time to run on it's own. There for we have decided to use `BiocFileCache` to make the data available to the user.
 
-```{r file_cache, message = FALSE, eval = FALSE}
+```{r file_cache, message = FALSE}
 library(BiocFileCache)
 rname <- "kegg_hsa"
 exists <- NROW(bfcquery(query=rname, field="rname")) != 0L
@@ -210,7 +210,7 @@ if (!exists)
 kegg <- import(bfcrpath(rname=rname))
 ```
 
-When creating the KEGG pathway ElementSet we removed pathways that did not contain any elements. Since we want to add in the pathway names to our ElementSet we must first filter out the pathways that were removed. Then we can left join the pathways with the set tibble. We then mutate the element tibble to contain both Ensembl and Entrez ids. 
+When creating the KEGG pathway BiocSet we removed pathways that did not contain any elements. Since we want to add in the pathway names to our BiocSet we must first filter out the pathways that were removed. Then we can left join the pathways with the set tibble. We then mutate the element tibble to contain both Ensembl and Entrez ids. 
 
 ```{r kegg_filter, eval = FALSE}
 paths <- filter(kegg, name %in% es_elementset(tbl)$set)

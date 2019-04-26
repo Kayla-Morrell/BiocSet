@@ -1,9 +1,9 @@
-context("ElementSet")
+context("BiocSet")
 
-test_that("'ElementSet()' works",
+test_that("'BiocSet()' works",
 {
-    es <- ElementSet(a = letters, b = LETTERS)
-    expect_s4_class(es, "ElementSet")
+    es <- BiocSet(a = letters, b = LETTERS)
+    expect_s4_class(es, "BiocSet")
     expect_identical(dim(es_element(es)), c(52L,1L))
     expect_identical(dim(es_set(es)), c(2L,1L))
     expect_identical(dim(es_elementset(es)), c(52L,2L))
@@ -11,26 +11,26 @@ test_that("'ElementSet()' works",
     expect_identical(.active(es), "elementset")
     expect_length(.active(es), 1L)
 
-    es <- ElementSet()
-    expect_s4_class(es, "ElementSet")
+    es <- BiocSet()
+    expect_s4_class(es, "BiocSet")
     expect_identical(dim(es_elementset(es)), c(0L,2L))
     expect_true(is_tbl_elementset(es_elementset(es)))
 
-    es <- ElementSet(set1 = character(), set2 = LETTERS)
-    expect_s4_class(es, "ElementSet")
+    es <- BiocSet(set1 = character(), set2 = LETTERS)
+    expect_s4_class(es, "BiocSet")
     expect_identical(dim(es_elementset(es)), c(26L,2L))
     expect_true(is_tbl_elementset(es_elementset(es)))
     expect_identical(levels(es_elementset(es)$set), c("set1", "set2"))
 
-    expect_error(ElementSet(set1 = 1:10, set2 = LETTERS))
-    expect_error(ElementSet(set1 = 1:10))
-    expect_error(ElementSet(LETTERS))
-    expect_error(ElementSet(set1 = letters, LETTERS))
-    expect_error(ElementSet(set1 = letters, set2 = 1:10))
+    expect_error(BiocSet(set1 = 1:10, set2 = LETTERS))
+    expect_error(BiocSet(set1 = 1:10))
+    expect_error(BiocSet(LETTERS))
+    expect_error(BiocSet(set1 = letters, LETTERS))
+    expect_error(BiocSet(set1 = letters, set2 = 1:10))
 })
 
 test_that("'.element()' works", {
-    es <- ElementSet(set1 = letters, set2 = LETTERS)
+    es <- BiocSet(set1 = letters, set2 = LETTERS)
 
     es1 <- es %>% es_element()
     expect_s3_class(es1, "tbl_element")
@@ -41,7 +41,7 @@ test_that("'.element()' works", {
 })
 
 test_that("'.set()' works", {
-    es <- ElementSet(set1 = letters, set2 = LETTERS)
+    es <- BiocSet(set1 = letters, set2 = LETTERS)
 
     es1 <- es %>% es_set()
     expect_s3_class(es1, "tbl_set")
@@ -52,7 +52,7 @@ test_that("'.set()' works", {
 })
 
 test_that("'.elementset()' works", {
-    es <- ElementSet(set1 = letters, set2 = LETTERS)
+    es <- BiocSet(set1 = letters, set2 = LETTERS)
 
     es1 <- es %>% es_elementset()
     expect_s3_class(es1, "tbl_elementset")
@@ -63,15 +63,15 @@ test_that("'.elementset()' works", {
 })
 
 test_that("'.active()' works", {
-    es <- ElementSet(set1 = letters, set2 = LETTERS)
+    es <- BiocSet(set1 = letters, set2 = LETTERS)
 
     es1 <- es %>% .active()
     expect_is(es1, "character")
     expect_length(es1, 1)
 })
 
-test_that("'es_activate.ElementSet()' works", {
-    es <- ElementSet(set1 = letters, set2 = LETTERS)
+test_that("'es_activate.BiocSet()' works", {
+    es <- BiocSet(set1 = letters, set2 = LETTERS)
 
     expect_identical(.active(es), "elementset")
 
@@ -83,8 +83,8 @@ test_that("'es_activate.ElementSet()' works", {
 
 })
 
-test_that("'filter.ElementSet()' works", {
-    es <- ElementSet(set1 = letters, set2 = LETTERS)
+test_that("'filter.BiocSet()' works", {
+    es <- BiocSet(set1 = letters, set2 = LETTERS)
     expect_equivalent(filter(es), es)
 
     es1 <- es %>% filter(set == "set1")
@@ -100,8 +100,8 @@ test_that("'filter.ElementSet()' works", {
     expect_identical(es_elementset(es2)$element, foo)
 })
 
-test_that("'select.ElementSet()' works", {
-    es <- ElementSet(set1 = letters, set2 = LETTERS)
+test_that("'select.BiocSet()' works", {
+    es <- BiocSet(set1 = letters, set2 = LETTERS)
 
     es1 <- es %>% select(c(element, set))
     expect_true(is_tbl_elementset(es_elementset(es1)))
@@ -119,8 +119,8 @@ test_that("'select.ElementSet()' works", {
     expect_identical(es_set(es3), es_set(es))
 })
 
-test_that("'mutate.ElementSet()' works", {
-    es <- ElementSet(set1 = letters, set2 = LETTERS)
+test_that("'mutate.BiocSet()' works", {
+    es <- BiocSet(set1 = letters, set2 = LETTERS)
 
     es1 <- es %>% mutate(pval = rnorm(1:52))
     expect_true(is_tbl_elementset(es_elementset(es1)))
@@ -129,8 +129,8 @@ test_that("'mutate.ElementSet()' works", {
     expect_error(es %>% mutate(z = 1:2))
 })
 
-test_that("'map_element.ElementSet()' works", {
-    es <- ElementSet(set1 = letters, set2 = LETTERS)
+test_that("'map_element.BiocSet()' works", {
+    es <- BiocSet(set1 = letters, set2 = LETTERS)
 
     es1 <- es %>% map_element(letters, LETTERS)
     expect_true(is_tbl_elementset(es_elementset(es1)))
@@ -140,8 +140,8 @@ test_that("'map_element.ElementSet()' works", {
     expect_error(es %>% mutate(element = 1:52))
 })
 
-test_that("'map_set.ElementSet()' works", {
-    es <- ElementSet(a = letters, B = LETTERS)
+test_that("'map_set.BiocSet()' works", {
+    es <- BiocSet(a = letters, B = LETTERS)
 
     es1 <- es %>% map_set("a", "A")
     expect_true(is_tbl_elementset(es_elementset(es1)))
@@ -151,8 +151,8 @@ test_that("'map_set.ElementSet()' works", {
     expect_error(es %>% mutate(set = 1:52))
 })
 
-test_that("'summarise.ElementSet()' works", {
-    es <- ElementSet(set1 = letters, set2 = LETTERS)
+test_that("'summarise.BiocSet()' works", {
+    es <- BiocSet(set1 = letters, set2 = LETTERS)
 
     es1 <- es %>% summarise(n = n())
     expect_false(is_tbl_elementset(es1))
@@ -170,8 +170,8 @@ test_that("'summarise.ElementSet()' works", {
     expect_equal(es3$n, c(26L, 26L))
 })
 
-test_that("'arrange.ElementSet()' works", {
-    es <- ElementSet(set1 = letters, set2 = LETTERS)
+test_that("'arrange.BiocSet()' works", {
+    es <- BiocSet(set1 = letters, set2 = LETTERS)
 
     es1 <- es %>% arrange()
     expect_true(is_tbl_elementset(es_elementset(es1)))
@@ -196,8 +196,8 @@ test_that("'arrange.ElementSet()' works", {
     expect_identical(dim(es_elementset(es5)), c(52L,2L))
 })
 
-test_that("'group_vars.ElementSet()' works", {
-    es <- ElementSet(set1 = letters, set2 = LETTERS)
+test_that("'group_vars.BiocSet()' works", {
+    es <- BiocSet(set1 = letters, set2 = LETTERS)
 
     es1 <- es %>% group_by(element) %>% group_vars()
     expect_identical(es1, "element")
@@ -210,8 +210,8 @@ test_that("'group_vars.ElementSet()' works", {
     expect_identical(class(es2), "character")
 })
 
-test_that("'tbl_vars.ElementSet()' works", {
-    es <- ElementSet(set1 = letters, set2 = LETTERS)
+test_that("'tbl_vars.BiocSet()' works", {
+    es <- BiocSet(set1 = letters, set2 = LETTERS)
 
     es1 <- es %>% tbl_vars()
     expect_identical(es1, c("element", "set"))
