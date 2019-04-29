@@ -196,20 +196,6 @@ test_that("'arrange.BiocSet()' works", {
     expect_identical(dim(es_elementset(es5)), c(52L,2L))
 })
 
-test_that("'group_vars.BiocSet()' works", {
-    es <- BiocSet(set1 = letters, set2 = LETTERS)
-
-    es1 <- es %>% group_by(element) %>% group_vars()
-    expect_identical(es1, "element")
-    expect_length(es1, 1L)
-    expect_identical(class(es1), "character")
-
-    es2 <- es %>% group_by(element, set) %>% group_vars()
-    expect_identical(es2, c("element", "set"))
-    expect_length(es2, 2L)
-    expect_identical(class(es2), "character")
-})
-
 test_that("'tbl_vars.BiocSet()' works", {
     es <- BiocSet(set1 = letters, set2 = LETTERS)
 
