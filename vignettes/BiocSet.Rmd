@@ -1,15 +1,20 @@
-
 ---
 title: "BiocSet: Representing Element Sets in the Tidyverse"
-author: "Kayla Morrell"
+author: 
+- name: Kayla Morrell
+  affiliation: Roswell Park Comprehensive Cancer Center, Buffalo, NY
+- name: Martin Morgan
+  affiliation: Roswell Park Comprehensive Cancer Center, Buffalo, NY
 date: "`r Sys.Date()`"
 output:
-    BiocStyle::html_document
+    BiocStyle::html_document:
+        toc: true
+        toc_float: true
 package: BiocSet
 vignette: >
-    %\VignetteIndexEntry{BiocSet: Representing Element Sets in the Tidyverse}
-    %\VignetteEngine{knitr::rmarkdown}
-    %\VignetteEndcoding{UTF-8}
+  %\VignetteIndexEntry{BiocSet: Representing Element Sets in the Tidyverse}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEndcoding{UTF-8}
 ---
 
 ```{r setup, include = FALSE}
