@@ -383,7 +383,7 @@ map_set <- function(.data, from, to) UseMethod("map_set")
 #' @export
 #'
 #' @examples
-#' es <- BiocSet(a = letters, B = LETTERS)
+#' es <- BiocSet(set1 = letters, set2 = LETTERS)
 #' es %>% map_set("set1", "foo")
 map_set.BiocSet <- function(.data, from, to)
 {
@@ -514,7 +514,7 @@ arrange_set <- function(.data, ...)
 #' @export
 #'
 #' @examples
-#' es <- BiocSet(set1 = lettes, set2 = LETTERS)
+#' es <- BiocSet(set1 = letters, set2 = LETTERS)
 #' es %>% arrange_elementset(desc(element))
 arrange_elementset <- function(.data, ...)
         es_activate(.data, "elementset") %>% arrange(...)
