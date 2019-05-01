@@ -90,3 +90,13 @@ arrange.tbl_elementset_base <-
     class(tbl) <- class(.data)
     tbl
 }
+
+#' @importFrom dplyr union
+#'
+#' @export
+union.tbl_elementset_base <- function(x, y, ...)
+{
+    tbl <- NextMethod()
+    class(tbl) <- class(x)
+    tbl
+}
