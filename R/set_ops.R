@@ -1,4 +1,11 @@
+#' Set operations for BiocSets
+#'
 #' @rdname set_op
+#'
+#' @param x The first BiocSet to perform operations on
+#' @param y The second BiocSet to perform operations on
+#' 
+#' @return For union, a tibble with the results of the union of x and y
 #' 
 #' @export
 #'
@@ -61,6 +68,8 @@ union_elementset <- function(x, y, ...)
 
 #' @rdname set_op
 #'
+#' 
+#' @return For intersect, a tibble with the intersect of x and y 
 #' @export
 #'
 #' @examples
