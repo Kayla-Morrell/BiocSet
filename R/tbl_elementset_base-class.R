@@ -100,3 +100,13 @@ union.tbl_elementset_base <- function(x, y, ...)
     class(tbl) <- class(x)
     tbl
 }
+
+#' @importFrom dplyr intersect
+#' 
+#' @export
+intersect.tbl_elementset_base <- function(x, y, ...)
+{
+    tbl <- NextMethod()
+    class(tbl) <- class(x)
+    tbl
+}
