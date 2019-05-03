@@ -11,11 +11,8 @@
 \alias{update_es_set}
 \alias{update_es_elementset}
 \alias{es_element}
-\alias{es_element,BiocSet-method}
 \alias{es_set}
-\alias{es_set,BiocSet-method}
 \alias{es_elementset}
-\alias{es_elementset,BiocSet-method}
 \alias{es_element<-}
 \alias{es_set<-}
 \alias{es_elementset<-}
@@ -35,7 +32,6 @@
 \alias{map_element.BiocSet}
 \alias{map_set}
 \alias{map_set.BiocSet}
-\alias{group_by.BiocSet}
 \alias{summarise.BiocSet}
 \alias{summarise_element}
 \alias{summarise_set}
@@ -61,15 +57,9 @@ update_es_elementset(es, value)
 
 es_element(x)
 
-\S4method{es_element}{BiocSet}(x)
-
 es_set(x)
 
-\S4method{es_set}{BiocSet}(x)
-
 es_elementset(x)
-
-\S4method{es_elementset}{BiocSet}(x)
 
 es_element(es) <- value
 
@@ -109,8 +99,6 @@ map_set(.data, from, to)
 
 \method{map_set}{BiocSet}(.data, from, to)
 
-\method{group_by}{BiocSet}(.data, ..., add = FALSE)
-
 \method{summarise}{BiocSet}(.data, ...)
 
 summarise_element(.data, ...)
@@ -149,9 +137,6 @@ character vector is the name of the element set.}
 \item{from}{a vector of the values to be replaced}
 
 \item{to}{a vector of the replacement values}
-
-\item{add}{by default, `group_by()` will override existing groups. To add to
-existing groups, add should be TRUE.}
 }
 \value{
 For `BiocSet()`, an S4 'BiocSet' object in a tripple
@@ -204,8 +189,6 @@ es <- BiocSet(set1 = letters, set2 = LETTERS)
 es \%>\% map_element(letters, LETTERS)
 es <- BiocSet(set1 = letters, set2 = LETTERS)
 es \%>\% map_set("set1", "foo")
-es <- BiocSet(set1 = letters, set2 = LETTERS)
-es \%>\% group_by(element, set)
 es <- BiocSet(set1 = letters, set2 = LETTERS)
 es \%>\% es_activate(set) \%>\% summarise(n = n())
 es <- BiocSet(set1 = letters, set2 = LETTERS)

@@ -71,7 +71,7 @@ setMethod(
     })
 
 #' @rdname biocset
-#'
+#' 
 #' @export
 es_activate <- function(.data, what)
 {
@@ -164,9 +164,6 @@ update_es_elementset <- function(es, value)
 #' @export
 setGeneric("es_element", function(x) standardGeneric("es_element"))
 
-#' @rdname biocset
-#'
-#' @exportMethod es_element
 setMethod("es_element", "BiocSet", .element)
 
 #' @rdname biocset
@@ -174,9 +171,6 @@ setMethod("es_element", "BiocSet", .element)
 #' @export
 setGeneric("es_set", function(x) standardGeneric("es_set"))
 
-#' @rdname biocset
-#'
-#' @exportMethod es_set
 setMethod("es_set", "BiocSet", .set)
 
 #' @rdname biocset
@@ -184,12 +178,7 @@ setMethod("es_set", "BiocSet", .set)
 #' @export
 setGeneric("es_elementset", function(x) standardGeneric("es_elementset"))
 
-#' @rdname biocset
-#'
-#' @exportMethod es_elementset
 setMethod("es_elementset", "BiocSet", .elementset)
-
-## es_set(es) <- es_set(es) %>% left_join(paths, by = c("set" = "name"))
 
 #' @rdname biocset
 #'
@@ -227,8 +216,11 @@ filter.BiocSet <- function(.data, ...)
 #' @examples
 #' es <- BiocSet(set1 = letters, set2 = LETTERS)
 #' filter_element(es, element == "a")
-filter_element <- function(.data, ...)
-        es_activate(.data, "element") %>% filter(...)
+filter_element <- function(.data, ...) {
+    act <- .active(.data)
+    tbl <- es_activate(.data, "element") %>% filter(...)
+    initialize(tbl, active = act)
+}
 
 #' @rdname biocset
 #'
@@ -237,8 +229,11 @@ filter_element <- function(.data, ...)
 #' @examples
 #' es <- BiocSet(set1 = letters, set2 = LETTERS)
 #' filter_set(es, set == "set1")
-filter_set <- function(.data, ...)
-        es_activate(.data, "set") %>% filter(...)
+filter_set <- function(.data, ...) {
+    act <- .active(.data)
+    tbl <- es_activate(.data, "set") %>% filter(...)
+    initialize(tbl, active = act)
+}
 
 #' @rdname biocset
 #'
@@ -247,8 +242,11 @@ filter_set <- function(.data, ...)
 #' @examples
 #' es <- BiocSet(set1 = letters, set2 = LETTERS)
 #' filter_elementset(es, element == "a" | element == "A")
-filter_elementset <- function(.data, ...)
-        es_activate(.data, "elementset") %>% filter(...)
+filter_elementset <- function(.data, ...) {
+        act <- .active(.data)
+        tbl <- es_activate(.data, "elementset") %>% filter(...)
+        initialize(tbl, active = act)
+}
 
 #' @rdname biocset
 #'
@@ -271,8 +269,11 @@ select.BiocSet <- function(.data, ...)
 #' @examples
 #' es <- BiocSet(set1 = letters, set2 = LETTERS)
 #' es %>% select_element(element)
-select_element <- function(.data, ...)
-        es_activate(.data, "element") %>% select(...)
+select_element <- function(.data, ...) {
+    act <- .active(.data)
+    tbl <- es_activate(.data, "element") %>% select(...)
+    initialize(tbl, active = act)
+}
 
 #' @rdname biocset
 #'
@@ -281,8 +282,11 @@ select_element <- function(.data, ...)
 #' @examples
 #' es <- BiocSet(set1 = letters, set2 = LETTERS)
 #' es %>% select_set(set)
-select_set <- function(.data, ...)
-        es_activate(.data, "set") %>% select(...)
+select_set <- function(.data, ...) {
+    act <- .active(.data)
+    tbl <- es_activate(.data, "set") %>% select(...)
+    initialize(tbl, active = act)
+}
 
 #' @rdname biocset
 #' 
@@ -291,8 +295,11 @@ select_set <- function(.data, ...)
 #' @examples
 #' es <- BiocSet(set1 = letters, set2 = LETTERS)
 #' es %>% select_elementset(element)
-select_elementset <- function(.data, ...)
-        es_activate(.data, "elementset") %>% select(...)
+select_elementset <- function(.data, ...) {
+    act <- .active(.data)
+    tbl <- es_activate(.data, "elementset") %>% select(...)
+    initialize(tbl, active = act)
+}
 
 #' @rdname biocset
 #'
@@ -317,8 +324,11 @@ mutate.BiocSet <- function(.data, ...)
 #' @examples
 #' es <- BiocSet(set1 = letters, set2 = LETTERS)
 #' es %>% mutate_element(pval = rnorm(1:52))
-mutate_element <- function(.data, ...)
-        es_activate(.data, "element") %>% mutate(...)
+mutate_element <- function(.data, ...) {
+    act <- .active(.data)
+    tbl <- es_activate(.data, "element") %>% mutate(...)
+    initialize(tbl, active = act)
+}
 
 #' @rdname biocset
 #'
@@ -327,8 +337,11 @@ mutate_element <- function(.data, ...)
 #' @examples
 #' es <- BiocSet(set1 = letters, set2 = LETTERS)
 #' es %>% mutate_set(pval = rnorm(1:2))
-mutate_set <- function(.data, ...)
-        es_activate(.data, "set") %>% mutate(...)
+mutate_set <- function(.data, ...) {
+    act <- .active(.data)
+    tbl <- es_activate(.data, "set") %>% mutate(...)
+    initialize(tbl, active = act)
+}
 
 #' @rdname biocset
 #'
@@ -337,8 +350,11 @@ mutate_set <- function(.data, ...)
 #' @examples
 #' es <- BiocSet(set1 = letters, set2 = LETTERS)
 #' es %>% mutate_elementset(pval = rnorm(1:52))
-mutate_elementset <- function(.data, ...)
-        es_activate(.data, "elementset") %>% mutate(...)
+mutate_elementset <- function(.data, ...) {
+    act <- .active(.data)
+    tbl <- es_activate(.data, "elementset") %>% mutate(...)
+    initialize(tbl, active = act)
+}
 
 #' @rdname biocset
 #'
@@ -402,38 +418,6 @@ map_set.BiocSet <- function(.data, from, to)
 
 #' @rdname biocset
 #'
-#' @param add by default, `group_by()` will override existing groups. To add to
-#' existing groups, add should be TRUE.
-#'
-#' @export
-#'
-#' @examples
-#' es <- BiocSet(set1 = letters, set2 = LETTERS)
-#' es %>% group_by(element, set)
-group_by.BiocSet <- function(.data, ..., add = FALSE)
-{
-    sub <- .active_value(.data)
-    group_by(sub, ..., add = FALSE)
-}
-
-## #' @rdname biocset
-## #'
-## #' @param x a BiocSet
-## #'
-## #' @export
-## #'
-## #' @examples
-## #' es <- BiocSet(set1 = letters, set2 = LETTERS)
-## #' es %>% group_by(set) %>% summarise(n = n()) %>% ungroup()
-## ungroup.BiocSet <- function(x, ...)
-## {
-##     sub <- .active_value(x)
-##     tbl <- ungroup(sub, ...)
-##     .update(x, tbl)
-## }
-
-#' @rdname biocset
-#'
 #' @export
 #'
 #' @examples
@@ -452,8 +436,11 @@ summarise.BiocSet <- function(.data, ...)
 #' @examples
 #' es <- BiocSet(set1 = letters, set2 = LETTERS)
 #' es %>% summarise_element(n = n())
-summarise_element <- function(.data, ...)
-        es_activate(.data, "element") %>% summarise(...)
+summarise_element <- function(.data, ...) {
+    act <- .active(.data)
+    tbl <- es_activate(.data, "element") %>% summarise(...)
+    initialize(tbl, active = act)
+}
 
 #' @rdname biocset
 #'
@@ -462,8 +449,11 @@ summarise_element <- function(.data, ...)
 #' @examples
 #' es <- BiocSet(set1 = letters, set2 = LETTERS)
 #' es %>% summarise_set(n = n())
-summarise_set <- function(.data, ...)
-        es_activate(.data, "set") %>% summarise(...)
+summarise_set <- function(.data, ...) {
+    act <- .active(.data)
+    tbl <- es_activate(.data, "set") %>% summarise(...)
+    initialize(tbl, active = act)
+}
 
 #' @rdname biocset
 #'
@@ -472,8 +462,11 @@ summarise_set <- function(.data, ...)
 #' @examples
 #' es <- BiocSet(set1 = letters, set2 = LETTERS)
 #' es %>% summarise_elementset(n = n())
-summarise_elementset <- function(.data, ...)
-        es_activate(.data, "elementset") %>% summarise(...)
+summarise_elementset <- function(.data, ...) {
+    act <- .active(.data)
+    tbl <- es_activate(.data, "elementset") %>% summarise(...)
+    initialize(tbl, active = act)
+}
 
 #' @rdname biocset
 #'
@@ -496,8 +489,11 @@ arrange.BiocSet <- function(.data, ...)
 #' @examples
 #' es <- BiocSet(set1 = letters, set2 = LETTERS)
 #' es %>% arrange_element(desc(element))
-arrange_element <- function(.data, ...)
-        es_activate(.data, "element") %>% arrange(...)
+arrange_element <- function(.data, ...) {
+    act <- .active(.data)
+    tbl <- es_activate(.data, "element") %>% arrange(...)
+    initialize(tbl, active = act)
+}
 
 #' @rdname biocset
 #'
@@ -506,8 +502,11 @@ arrange_element <- function(.data, ...)
 #' @examples
 #' es <- BiocSet(set1 = letters, set2 = LETTERS)
 #' es %>% arrange_set(desc(set))
-arrange_set <- function(.data, ...)
-        es_activate(.data, "set") %>% arrange(...)
+arrange_set <- function(.data, ...) {
+    act <- .active(.data)
+    tbl <- es_activate(.data, "set") %>% arrange(...)
+    initialize(tbl, active = act)
+}
 
 #' @rdname biocset
 #'
@@ -516,8 +515,11 @@ arrange_set <- function(.data, ...)
 #' @examples
 #' es <- BiocSet(set1 = letters, set2 = LETTERS)
 #' es %>% arrange_elementset(desc(element))
-arrange_elementset <- function(.data, ...)
-        es_activate(.data, "elementset") %>% arrange(...)
+arrange_elementset <- function(.data, ...) {
+    act <- .active(.data)
+    tbl <- es_activate(.data, "elementset") %>% arrange(...)
+    initialize(tbl, active = act)
+}
 
 #' @rdname biocset
 #'
@@ -532,4 +534,10 @@ tbl_vars.BiocSet <- function(x)
     active <- .active(x)
     sub <- slot(x, active)
     tbl_vars(sub)
+}
+
+group_by.BiocSet <- function(.data, ..., add = FALSE)
+{
+    sub <- .active_value(.data)
+    group_by(sub, ..., add = FALSE)
 }

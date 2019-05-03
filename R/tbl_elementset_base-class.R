@@ -54,19 +54,6 @@ tbl_vars.tbl_elementset_base <-
     tbl_vars(x)
 }
 
-## #' @importFrom dplyr ungroup
-## #'
-## #' @export
-## ungroup.tbl_elementset_base <-
-##     function(x, ...)
-## {
-##     class <- class(x)
-##     class(x) <- setdiff(class, .subclasses)
-##     tbl <- ungroup(x, ...)
-##     class(tbl) <- setdiff(class, "grouped_df")
-##     tbl
-## }
-
 #' @importFrom dplyr summarise
 #'
 #' @export
@@ -96,6 +83,7 @@ arrange.tbl_elementset_base <-
 #' @export
 union.tbl_elementset_base <- function(x, y, ...)
 {
+    stopifnot(class(x) == class(y))
     tbl <- NextMethod()
     class(tbl) <- class(x)
     tbl
@@ -106,6 +94,7 @@ union.tbl_elementset_base <- function(x, y, ...)
 #' @export
 intersect.tbl_elementset_base <- function(x, y, ...)
 {
+    stopifnot(class(x) == class(y))
     tbl <- NextMethod()
     class(tbl) <- class(x)
     tbl
