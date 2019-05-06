@@ -2,30 +2,12 @@
 % Please edit documentation in R/set_ops.R
 \name{union.BiocSet}
 \alias{union.BiocSet}
-\alias{union_element}
-\alias{union_set}
-\alias{union_elementset}
 \alias{intersect.BiocSet}
-\alias{intersect_element}
-\alias{intersect_set}
-\alias{intersect_elementset}
 \title{Set operations for BiocSets}
 \usage{
 \method{union}{BiocSet}(x, y, ...)
 
-union_element(x, y, ...)
-
-union_set(x, y, ...)
-
-union_elementset(x, y, ...)
-
 \method{intersect}{BiocSet}(x, y, ...)
-
-intersect_element(x, y, ...)
-
-intersect_set(x, y, ...)
-
-intersect_elementset(x, y, ...)
 }
 \arguments{
 \item{x}{The first BiocSet to perform operations on}
@@ -44,25 +26,7 @@ Set operations for BiocSets
 es1 <- BiocSet(set1 = letters[c(1:3)], set2 = LETTERS[c(1:3)])
 es2 <- BiocSet(set1 = letters[c(2:4)], set2 = LETTERS[c(2:4)])
 union(es1, es2)
-es1 <- BiocSet(set1 = letters[c(1:3)], set2 = LETTERS[c(1:3)])
-es2 <- BiocSet(set1 = letters[c(2:4)], set2 = LETTERS[c(2:4)])
-union_element(es1, es2)
-es1 <- BiocSet(set1 = letters[c(1:3)], set2 = LETTERS[c(1:3)])
-es2 <- BiocSet(set1 = letters[c(2:4)], set2 = LETTERS[c(2:4)])
-union_set(es1, es2)
-es1 <- BiocSet(set1 = letters[c(1:3)], set2 = LETTERS[c(1:3)])
-es2 <- BiocSet(set1 = letters[c(2:4)], set2 = LETTERS[c(2:4)])
-union_elementset(es1, es2)
 es1 <- BiocSet(set1 = letters[c(1:4)], set2 = LETTERS[c(1:4)])
 es2 <- BiocSet(set1 = letters[c(3:8)], set2 = LETTERS[c(3:8)])
 intersect(es1, es2)
-es1 <- BiocSet(set1 = letters[c(1:4)], set2 = LETTERS[c(1:4)])
-es2 <- BiocSet(set1 = letters[c(3:8)], set2 = LETTERS[c(3:8)])
-intersect_element(es1, es2)
-es1 <- BiocSet(set1 = letters[c(1:4)], set2 = LETTERS[c(1:4)])
-es2 <- BiocSet(set1 = letters[c(3:8)], set2 = LETTERS[c(3:8)])
-intersect_set(es1, es2)
-es1 <- BiocSet(set1 = letters[c(1:4)], set2 = LETTERS[c(1:4)])
-es2 <- BiocSet(set1 = letters[c(3:8)], set2 = LETTERS[c(3:8)])
-intersect_elementset(es1, es2)
 }
