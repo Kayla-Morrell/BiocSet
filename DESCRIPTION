@@ -17,7 +17,7 @@ Imports: methods,
     rlang, 
     plyr, 
     rtracklayer, 
-    stats
+    stats,
 Suggests:
     AnnotationDbi,
     KEGGREST,
