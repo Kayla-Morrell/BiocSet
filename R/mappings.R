@@ -39,6 +39,8 @@ go_sets <- function(org, from)
 es_map <- function(es, org, from, to)
 {
     stopifnot(
+        all(es_element(es)$element %in%
+            keys(org, keytype = from)),
         from %in% keytypes(org),
         to %in% keytypes(org)
     )
@@ -55,6 +57,9 @@ es_map <- function(es, org, from, to)
 #'
 #' @importFrom KEGGREST keggList keggGet
 #'
+#' @return A BiocSet object with Entrez IDs reported as elements (default from
+#'        KEGGREST) and KEGG pathways as sets.
+#'
 #' @export
 #'
 #' @examples
@@ -62,6 +67,11 @@ es_map <- function(es, org, from, to)
 #' kegg_sets("hsa", pathways)
 kegg_sets <- function(species, pathways) 
 {
+    stopifnot(
+        species %in% keggList("organism")[,"organism"],
+        gsub("hsa", "hsa:", pathways) %in% names(keggList(species))
+    )
+
     paths <- enframe(keggList("pathway", species))
     paths <- mutate(
         paths,
