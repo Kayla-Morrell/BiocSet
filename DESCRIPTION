@@ -18,8 +18,8 @@ Imports: methods,
     plyr, 
     rtracklayer, 
     stats,
+    AnnotationDbi
 Suggests:
-    AnnotationDbi,
     KEGGREST,
     airway,
     org.Hs.eg.db,

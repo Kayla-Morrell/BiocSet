@@ -19,7 +19,7 @@ go_sets <- function(org, from)
     map <- AnnotationDbi::select(
         org, keys(org, from), c(from, "GO"), from
     )
-    do.call(BiocSet, split(map[,names(map) == from], map$GO))
+    do.call(BiocSet, split(map[[from]], map$GO))
 }
 
 #' @rdname mappings
@@ -44,7 +44,7 @@ es_map <- function(es, org, from, to)
 
     map <- mapIds(org, keys(org, from), to, from)
     tbl <- enframe(map, name = from, value = to)
-    es %>% map_element(tbl$from, tbl$to)
+    es %>% map_element(tbl[[from]], tbl[[to]])
 }
 
 #' @rdname mappings
@@ -67,10 +67,14 @@ kegg_sets <- function(species, pathways)
         name = gsub("path:", "", name),
         value = gsub("\\-.*", "", value)
     )
+    paths <- paths[paths$name %in% pathways,]
+
     if (length(pathways) <= 10)
     {
         path <- keggGet(pathways)
-        path[[1]]$GENE[c(TRUE, FALSE)]
+        elements <- lapply(seq_along(path), function(x) {
+            path[[x]]$GENE[c(TRUE, FALSE)]
+        })
     }
     else
     { 
