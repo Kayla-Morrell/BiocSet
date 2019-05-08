@@ -33,6 +33,7 @@ go_sets <- function(org, from)
 #' @export
 #'
 #' @examples
+#' library(org.Hs.eg.db)
 #' es <- BiocSet(set1 = c("PRKACA", "TGFA", "MAP2K1"), set2 = c("CREB3", "FOS"))
 #' es_map(es, org.Hs.eg.db, "SYMBOL", "ENTREZID") 
 es_map <- function(es, org, from, to)
