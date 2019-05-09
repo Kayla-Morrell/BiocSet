@@ -9,7 +9,7 @@ Description: BiocSet displays different biological sets in a triple tibble
     format. These three tibbles are `element`, `set`, and `elementset`. The
     user has the abilty to activate one of these three tibbles to perform common
     functions from the dplyr package.
-Depends: R (>= 3.7.0), 
+Depends: R (>= 3.6), 
     dplyr
 Imports: methods, 
     tibble, 
@@ -18,9 +18,9 @@ Imports: methods,
     plyr, 
     rtracklayer, 
     stats,
-    AnnotationDbi
+    AnnotationDbi,
+    KEGGREST
 Suggests:
-    KEGGREST,
     airway,
     org.Hs.eg.db,
     BiocFileCache,

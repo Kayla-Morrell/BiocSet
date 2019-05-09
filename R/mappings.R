@@ -67,18 +67,7 @@ es_map <- function(es, org, from, to)
 #' kegg_sets("hsa", pathways)
 kegg_sets <- function(species, pathways) 
 {
-    stopifnot(
-        species %in% keggList("organism")[,"organism"],
-        gsub("hsa", "hsa:", pathways) %in% names(keggList(species))
-    )
-
-    paths <- enframe(keggList("pathway", species))
-    paths <- mutate(
-        paths,
-        name = gsub("path:", "", name),
-        value = gsub("\\-.*", "", value)
-    )
-    paths <- paths[paths$name %in% pathways,]
+    stopifnot(species %in% keggList("organism")[,"organism"])
 
     if (length(pathways) <= 10)
     {
@@ -95,7 +84,7 @@ kegg_sets <- function(species, pathways)
         })
     }
 
-    names(elements) <- paths$name
+    names(elements) <- pathways
     elements <- elements[lengths(elements) != 0]
 
     do.call(BiocSet, elements)

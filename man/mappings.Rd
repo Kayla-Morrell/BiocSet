@@ -25,12 +25,17 @@ kegg_sets(species, pathways)
 
 \item{pathways}{A character vector containing the pathways to map from}
 }
+\value{
+A BiocSet object with Entrez IDs reported as elements (default from
+       KEGGREST) and KEGG pathways as sets.
+}
 \description{
 Functions for mapping elements and sets to different ids
 }
 \examples{
 library(org.Hs.eg.db)
 go_sets(org.Hs.eg.db, "ENSEMBL")
+library(org.Hs.eg.db)
 es <- BiocSet(set1 = c("PRKACA", "TGFA", "MAP2K1"), set2 = c("CREB3", "FOS"))
 es_map(es, org.Hs.eg.db, "SYMBOL", "ENTREZID") 
 pathways <- c("hsa05310", "hsa04110", "hsa05224", "hsa04970")
