@@ -87,7 +87,6 @@ tbl <- BiocSet(set1 = letters, set2 = LETTERS)
 tbl
 tbl %>% filter(element == "a" | element == "A")
 tbl %>% mutate(pval = rnorm(1:52))
-tbl %>% group_by(set, element) %>% group_vars()
 ```
 
 Another feature available to `BiocSet` is the ability to activate different tibbles. When an `BiocSet` is created, the tibble `elementset` is automatically activated and all functions will be performed on this tibble. With `es_activate()` the user is able to pick a different tibble to activate and work on.

@@ -11,8 +11,11 @@
 \alias{update_es_set}
 \alias{update_es_elementset}
 \alias{es_element}
+\alias{es_element,BiocSet-method}
 \alias{es_set}
+\alias{es_set,BiocSet-method}
 \alias{es_elementset}
+\alias{es_elementset,BiocSet-method}
 \alias{es_element<-}
 \alias{es_set<-}
 \alias{es_elementset<-}
@@ -41,6 +44,7 @@
 \alias{arrange_set}
 \alias{arrange_elementset}
 \alias{tbl_vars.BiocSet}
+\alias{group_by.BiocSet}
 \title{An element set representation as a tripple tibble}
 \usage{
 BiocSet(..., active = c("elementset", "element", "set"))
@@ -57,9 +61,15 @@ update_es_elementset(es, value)
 
 es_element(x)
 
+\S4method{es_element}{BiocSet}(x)
+
 es_set(x)
 
+\S4method{es_set}{BiocSet}(x)
+
 es_elementset(x)
+
+\S4method{es_elementset}{BiocSet}(x)
 
 es_element(es) <- value
 
@@ -116,6 +126,8 @@ arrange_set(.data, ...)
 arrange_elementset(.data, ...)
 
 \method{tbl_vars}{BiocSet}(x)
+
+\method{group_by}{BiocSet}(.data, ..., add = FALSE)
 }
 \arguments{
 \item{...}{For `BiocSet()`, named character() vectors of element
@@ -137,6 +149,8 @@ character vector is the name of the element set.}
 \item{from}{a vector of the values to be replaced}
 
 \item{to}{a vector of the replacement values}
+
+\item{add}{logical, whether to add to the existing groups.}
 }
 \value{
 For `BiocSet()`, an S4 'BiocSet' object in a tripple
@@ -207,4 +221,6 @@ es <- BiocSet(set1 = letters, set2 = LETTERS)
 es \%>\% arrange_elementset(desc(element))
 es <- BiocSet(set1 = letters, set2 = LETTERS)
 es \%>\% mutate(pval = rnorm(1:52)) \%>\% tbl_vars()
+es <- BiocSet(set1 = letters, set2 = LETTERS)
+es \%>\% group_by(element, set)
 }

@@ -5,7 +5,7 @@
 #' @param org The AnnotationDbi object to identify keys/mappings from 
 #' @param from A character to indicate which identifier to map from
 #'
-#' @importFrom AnnotationDbi keytypes mapIds
+#' @importFrom AnnotationDbi keytypes keys
 #'
 #' @export
 #'
@@ -33,7 +33,6 @@ go_sets <- function(org, from)
 #' @export
 #'
 #' @examples
-#' library(org.Hs.eg.db)
 #' es <- BiocSet(set1 = c("PRKACA", "TGFA", "MAP2K1"), set2 = c("CREB3", "FOS"))
 #' es_map(es, org.Hs.eg.db, "SYMBOL", "ENTREZID") 
 es_map <- function(es, org, from, to)
@@ -67,7 +66,9 @@ es_map <- function(es, org, from, to)
 #' kegg_sets("hsa", pathways)
 kegg_sets <- function(species, pathways) 
 {
-    stopifnot(species %in% keggList("organism")[,"organism"])
+    stopifnot(species %in% keggList("organism")[,"organism"],
+        all(gsub("([[:alpha:]]{3})", "path:\\1", pathways) %in% names(keggList("pathway", species)))
+    )
 
     if (length(pathways) <= 10)
     {
@@ -78,7 +79,16 @@ kegg_sets <- function(species, pathways)
     }
     else
     { 
-        elements <- lapply(paths$name, function(x) {
+            name <- value <- NULL
+            paths <- enframe(keggList("pathway", "hsa"))
+            paths <- mutate(
+                paths, 
+                name = gsub("path:", "", name),
+                value = gsub("\\-.*", "", value)
+            )
+            paths <- paths[paths$name %in% pathways,]
+
+            elements <- lapply(paths$name, function(x) {
             path <- keggGet(x)
             path[[1]]$GENE[c(TRUE, FALSE)]
         })

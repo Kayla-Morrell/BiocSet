@@ -13,6 +13,8 @@
 \item{x}{The first BiocSet to perform operations on}
 
 \item{y}{The second BiocSet to perform operations on}
+
+\item{...}{other arguments passed on to methods}
 }
 \value{
 For union, a tibble with the results of the union of x and y

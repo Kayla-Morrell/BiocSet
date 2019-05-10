@@ -164,6 +164,9 @@ update_es_elementset <- function(es, value)
 #' @export
 setGeneric("es_element", function(x) standardGeneric("es_element"))
 
+#' @rdname biocset
+#' @docType methods
+#' @export
 setMethod("es_element", "BiocSet", .element)
 
 #' @rdname biocset
@@ -171,6 +174,9 @@ setMethod("es_element", "BiocSet", .element)
 #' @export
 setGeneric("es_set", function(x) standardGeneric("es_set"))
 
+#' @rdname biocset
+#' @docType methods
+#' @export
 setMethod("es_set", "BiocSet", .set)
 
 #' @rdname biocset
@@ -178,6 +184,9 @@ setMethod("es_set", "BiocSet", .set)
 #' @export
 setGeneric("es_elementset", function(x) standardGeneric("es_elementset"))
 
+#' @rdname biocset
+#' @docType methods
+#' @export
 setMethod("es_elementset", "BiocSet", .elementset)
 
 #' @rdname biocset
@@ -438,8 +447,7 @@ summarise.BiocSet <- function(.data, ...)
 #' es %>% summarise_element(n = n())
 summarise_element <- function(.data, ...) {
     act <- .active(.data)
-    tbl <- es_activate(.data, "element") %>% summarise(...)
-    initialize(tbl, active = act)
+    es_activate(.data, "element") %>% summarise(...)
 }
 
 #' @rdname biocset
@@ -451,8 +459,7 @@ summarise_element <- function(.data, ...) {
 #' es %>% summarise_set(n = n())
 summarise_set <- function(.data, ...) {
     act <- .active(.data)
-    tbl <- es_activate(.data, "set") %>% summarise(...)
-    initialize(tbl, active = act)
+    es_activate(.data, "set") %>% summarise(...)
 }
 
 #' @rdname biocset
@@ -464,8 +471,7 @@ summarise_set <- function(.data, ...) {
 #' es %>% summarise_elementset(n = n())
 summarise_elementset <- function(.data, ...) {
     act <- .active(.data)
-    tbl <- es_activate(.data, "elementset") %>% summarise(...)
-    initialize(tbl, active = act)
+    es_activate(.data, "elementset") %>% summarise(...)
 }
 
 #' @rdname biocset
@@ -524,6 +530,7 @@ arrange_elementset <- function(.data, ...) {
 #' @rdname biocset
 #'
 #' @importFrom dplyr tbl_vars
+#'
 #' @export
 #'
 #' @examples
@@ -536,6 +543,17 @@ tbl_vars.BiocSet <- function(x)
     tbl_vars(sub)
 }
 
+#' @rdname biocset
+#'
+#' @importFrom dplyr group_by
+#'
+#' @param add logical, whether to add to the existing groups.
+#'
+#' @export
+#'
+#' @examples
+#' es <- BiocSet(set1 = letters, set2 = LETTERS)
+#' es %>% group_by(element, set)
 group_by.BiocSet <- function(.data, ..., add = FALSE)
 {
     sub <- .active_value(.data)
