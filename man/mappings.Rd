@@ -35,7 +35,6 @@ Functions for mapping elements and sets to different ids
 \examples{
 library(org.Hs.eg.db)
 go_sets(org.Hs.eg.db, "ENSEMBL")
-library(org.Hs.eg.db)
 es <- BiocSet(set1 = c("PRKACA", "TGFA", "MAP2K1"), set2 = c("CREB3", "FOS"))
 es_map(es, org.Hs.eg.db, "SYMBOL", "ENTREZID") 
 pathways <- c("hsa05310", "hsa04110", "hsa05224", "hsa04970")

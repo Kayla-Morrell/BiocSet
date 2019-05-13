@@ -16,9 +16,10 @@ test_that("'go_sets()' works",
     expect_true(all(es_set(es)$set %in%
         keys(org.Hs.eg.db, keytype="GO")))
 
-    expect_error(es <- go_sets(org.Hs.eg.db))
-    expect_error(es <- go_sets(org.Hs.eg.db, ENSEMBL))
-    expect_error(es <- go_sets(org.Hs.eg.db, "IDS"))
+    expect_error(go_sets(org.Hs.eg.db))
+    expect_error(go_sets(org.Hs.eg.db, ENSEMBL))
+    expect_error(go_sets(org.Hs.eg.db, "IDS"))
+    expect_error(go_sets(species, "ENSEMBL"))
 })
 
 test_that("'es_map()' works",
@@ -44,6 +45,7 @@ test_that("'es_map()' works",
     expect_error(es_map(es, org.Hs.eg.db, SYMBOL, "ENTREZID"))
     expect_error(es_map(es, org.Hs.eg.db, "SYMBOL", 10))
     expect_error(es_map(es, org.Hs.eg.db, "SYMBOL", "IDS"))
+    expect_error(es_map(es, species, "SYMBOL", "ENTREZID"))
 })
 
 test_that("'kegg_sets()' works",
@@ -54,9 +56,16 @@ test_that("'kegg_sets()' works",
     expect_s4_class(es, "BiocSet")
     expect_identical(dim(es_element(es)), c(288L, 1L))
     expect_identical(dim(es_set(es)), c(3L, 1L))
-    expect_equal(dim(es_set(es))[1], length(pathways))
     expect_identical(dim(es_elementset(es)), c(302L, 2L))
     expect_true(is_tbl_elementset(es_elementset(es)))
+
+    pathways2 <- c("hsa00010", "hsa00020", "hsa00030", "hsa00040", "hsa00051", "hsa00052", "hsa00053", "hsa00061", "hsa00062", "hsa00071", "hsa00072", "hsa00100", "hsa00120")
+    es2 <- kegg_sets("hsa", pathways2)
+
+    expect_identical(dim(es_element(es2)), c(281L, 1L))
+    expect_identical(dim(es_set(es2)), c(13L, 1L))
+    expect_identical(dim(es_elementset(es2)), c(388L, 2L))
+    expect_true(is_tbl_elementset(es_elementset(es2)))
 
     expect_error(kegg_sets(hsa, pathways))
     expect_error(kegg_sets("hsa"))

@@ -67,7 +67,8 @@ es_map <- function(es, org, from, to)
 kegg_sets <- function(species, pathways) 
 {
     stopifnot(species %in% keggList("organism")[,"organism"],
-        all(gsub("([[:alpha:]]{3})", "path:\\1", pathways) %in% names(keggList("pathway", species)))
+        all(gsub("([[:alpha:]]{3})", "path:\\1", pathways) %in% 
+            names(keggList("pathway", species)))
     )
 
     if (length(pathways) <= 10)
@@ -79,16 +80,7 @@ kegg_sets <- function(species, pathways)
     }
     else
     { 
-            name <- value <- NULL
-            paths <- enframe(keggList("pathway", "hsa"))
-            paths <- mutate(
-                paths, 
-                name = gsub("path:", "", name),
-                value = gsub("\\-.*", "", value)
-            )
-            paths <- paths[paths$name %in% pathways,]
-
-            elements <- lapply(paths$name, function(x) {
+            elements <- lapply(pathways, function(x) {
             path <- keggGet(x)
             path[[1]]$GENE[c(TRUE, FALSE)]
         })
