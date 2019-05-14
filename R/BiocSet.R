@@ -204,7 +204,9 @@ setMethod("es_elementset", "BiocSet", .elementset)
 #' @export
 `es_elementset<-` <- update_es_elementset
 
-#' @rdname biocset
+#' Major dplyr functions adapted into BiocSet
+#' 
+#' @rdname major_func
 #'
 #' @export
 #'
@@ -257,7 +259,7 @@ filter_elementset <- function(.data, ...) {
         initialize(tbl, active = act)
 }
 
-#' @rdname biocset
+#' @rdname major_func
 #'
 #' @export
 #'
@@ -310,7 +312,7 @@ select_elementset <- function(.data, ...) {
     initialize(tbl, active = act)
 }
 
-#' @rdname biocset
+#' @rdname major_func
 #'
 #' @export
 #'
@@ -425,7 +427,7 @@ map_set.BiocSet <- function(.data, from, to)
     initialize(.data, set = set, elementset = es)
 }
 
-#' @rdname biocset
+#' @rdname major_func
 #'
 #' @export
 #'
@@ -474,7 +476,7 @@ summarise_elementset <- function(.data, ...) {
     es_activate(.data, "elementset") %>% summarise(...)
 }
 
-#' @rdname biocset
+#' @rdname major_func
 #'
 #' @export
 #'
@@ -527,7 +529,7 @@ arrange_elementset <- function(.data, ...) {
     initialize(tbl, active = act)
 }
 
-#' @rdname biocset
+#' @rdname major_func
 #'
 #' @importFrom dplyr tbl_vars
 #'
@@ -543,7 +545,7 @@ tbl_vars.BiocSet <- function(x)
     tbl_vars(sub)
 }
 
-#' @rdname biocset
+#' @rdname major_func
 #'
 #' @importFrom dplyr group_by
 #'

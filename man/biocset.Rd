@@ -19,15 +19,12 @@
 \alias{es_element<-}
 \alias{es_set<-}
 \alias{es_elementset<-}
-\alias{filter.BiocSet}
 \alias{filter_element}
 \alias{filter_set}
 \alias{filter_elementset}
-\alias{select.BiocSet}
 \alias{select_element}
 \alias{select_set}
 \alias{select_elementset}
-\alias{mutate.BiocSet}
 \alias{mutate_element}
 \alias{mutate_set}
 \alias{mutate_elementset}
@@ -35,16 +32,12 @@
 \alias{map_element.BiocSet}
 \alias{map_set}
 \alias{map_set.BiocSet}
-\alias{summarise.BiocSet}
 \alias{summarise_element}
 \alias{summarise_set}
 \alias{summarise_elementset}
-\alias{arrange.BiocSet}
 \alias{arrange_element}
 \alias{arrange_set}
 \alias{arrange_elementset}
-\alias{tbl_vars.BiocSet}
-\alias{group_by.BiocSet}
 \title{An element set representation as a tripple tibble}
 \usage{
 BiocSet(..., active = c("elementset", "element", "set"))
@@ -77,23 +70,17 @@ es_set(es) <- value
 
 es_elementset(es) <- value
 
-\method{filter}{BiocSet}(.data, ...)
-
 filter_element(.data, ...)
 
 filter_set(.data, ...)
 
 filter_elementset(.data, ...)
 
-\method{select}{BiocSet}(.data, ...)
-
 select_element(.data, ...)
 
 select_set(.data, ...)
 
 select_elementset(.data, ...)
-
-\method{mutate}{BiocSet}(.data, ...)
 
 mutate_element(.data, ...)
 
@@ -109,25 +96,17 @@ map_set(.data, from, to)
 
 \method{map_set}{BiocSet}(.data, from, to)
 
-\method{summarise}{BiocSet}(.data, ...)
-
 summarise_element(.data, ...)
 
 summarise_set(.data, ...)
 
 summarise_elementset(.data, ...)
 
-\method{arrange}{BiocSet}(.data, ...)
-
 arrange_element(.data, ...)
 
 arrange_set(.data, ...)
 
 arrange_elementset(.data, ...)
-
-\method{tbl_vars}{BiocSet}(x)
-
-\method{group_by}{BiocSet}(.data, ..., add = FALSE)
 }
 \arguments{
 \item{...}{For `BiocSet()`, named character() vectors of element
@@ -149,8 +128,6 @@ character vector is the name of the element set.}
 \item{from}{a vector of the values to be replaced}
 
 \item{to}{a vector of the replacement values}
-
-\item{add}{logical, whether to add to the existing groups.}
 }
 \value{
 For `BiocSet()`, an S4 'BiocSet' object in a tripple
@@ -176,23 +153,17 @@ BiocSet(set1 = letters, set2 = LETTERS)
 es <- BiocSet(set1 = letters, set2 = LETTERS)
 es_activate(es, element)
 es <- BiocSet(set1 = letters, set2 = LETTERS)
-es \%>\% es_activate(element) \%>\% filter(element == "a")
-es <- BiocSet(set1 = letters, set2 = LETTERS)
 filter_element(es, element == "a")
 es <- BiocSet(set1 = letters, set2 = LETTERS)
 filter_set(es, set == "set1")
 es <- BiocSet(set1 = letters, set2 = LETTERS)
 filter_elementset(es, element == "a" | element == "A")
 es <- BiocSet(set1 = letters, set2 = LETTERS)
-es \%>\% select(element)
-es <- BiocSet(set1 = letters, set2 = LETTERS)
 es \%>\% select_element(element)
 es <- BiocSet(set1 = letters, set2 = LETTERS)
 es \%>\% select_set(set)
 es <- BiocSet(set1 = letters, set2 = LETTERS)
 es \%>\% select_elementset(element)
-es <- BiocSet(set1 = letters, set2 = LETTERS)
-es \%>\% es_activate(set) \%>\% mutate(pval = rnorm(1:2))
 es <- BiocSet(set1 = letters, set2 = LETTERS)
 es \%>\% mutate_element(pval = rnorm(1:52))
 es <- BiocSet(set1 = letters, set2 = LETTERS)
@@ -204,23 +175,15 @@ es \%>\% map_element(letters, LETTERS)
 es <- BiocSet(set1 = letters, set2 = LETTERS)
 es \%>\% map_set("set1", "foo")
 es <- BiocSet(set1 = letters, set2 = LETTERS)
-es \%>\% es_activate(set) \%>\% summarise(n = n())
-es <- BiocSet(set1 = letters, set2 = LETTERS)
 es \%>\% summarise_element(n = n())
 es <- BiocSet(set1 = letters, set2 = LETTERS)
 es \%>\% summarise_set(n = n())
 es <- BiocSet(set1 = letters, set2 = LETTERS)
 es \%>\% summarise_elementset(n = n())
 es <- BiocSet(set1 = letters, set2 = LETTERS)
-es \%>\% es_activate(element) \%>\% arrange(desc(element))
-es <- BiocSet(set1 = letters, set2 = LETTERS)
 es \%>\% arrange_element(desc(element))
 es <- BiocSet(set1 = letters, set2 = LETTERS)
 es \%>\% arrange_set(desc(set))
 es <- BiocSet(set1 = letters, set2 = LETTERS)
 es \%>\% arrange_elementset(desc(element))
-es <- BiocSet(set1 = letters, set2 = LETTERS)
-es \%>\% mutate(pval = rnorm(1:52)) \%>\% tbl_vars()
-es <- BiocSet(set1 = letters, set2 = LETTERS)
-es \%>\% group_by(element, set)
 }
