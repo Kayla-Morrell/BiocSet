@@ -25,6 +25,12 @@
 \method{group_by}{BiocSet}(.data, ..., add = FALSE)
 }
 \arguments{
+\item{.data}{The 'BiocSet' tibble}
+
+\item{...}{Additional arguments passed to function.}
+
+\item{x}{A 'BiocSet' object.}
+
 \item{add}{logical, whether to add to the existing groups.}
 }
 \description{

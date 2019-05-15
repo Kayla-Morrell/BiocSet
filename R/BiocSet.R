@@ -208,6 +208,9 @@ setMethod("es_elementset", "BiocSet", .elementset)
 #' 
 #' @rdname major_func
 #'
+#' @param .data The 'BiocSet' tibble
+#' @param ... Additional arguments passed to function.
+#'
 #' @export
 #'
 #' @examples
@@ -532,6 +535,8 @@ arrange_elementset <- function(.data, ...) {
 #' @rdname major_func
 #'
 #' @importFrom dplyr tbl_vars
+#'
+#' @param x A 'BiocSet' object.
 #'
 #' @export
 #'

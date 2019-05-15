@@ -27,6 +27,7 @@ test_that("'BiocSet()' works",
     expect_error(BiocSet(LETTERS))
     expect_error(BiocSet(set1 = letters, LETTERS))
     expect_error(BiocSet(set1 = letters, set2 = 1:10))
+    expect_error(BiocSet(1:10))
 })
 
 test_that("'.element()' works", {
