@@ -38,17 +38,10 @@ url_ref <- function(search, ...)
             sep = ""
             ), ...)
     }
-    else if (!is.na(as.numeric(x))) {
-        browseURL(paste(
-            "https://www.ncbi.nlm.nih.gov/gene/?term=",
-            search,
-            sep = ""
-            ), ...)
-    }
     else
         browseURL(paste(
             "https://www.ncbi.nlm.nih.gov/gene/?term=",
             search,
-            sep = "",
+            sep = ""
             ), ...)
 }

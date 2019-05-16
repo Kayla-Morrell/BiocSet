@@ -14,7 +14,7 @@ test_that("'url_ref()' works",
     foo4 <- url_ref("map05310", browser = "false")
     expect_null(foo4)
 
-    foo5 <- url_ref("BRAC1", browser = "false")
+    foo5 <- url_ref("BRCA1", browser = "false")
     expect_null(foo5)
 
     foo6 <- url_ref("GO:0000010")
