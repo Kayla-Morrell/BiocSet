@@ -99,6 +99,8 @@ test_that("'filter.BiocSet()' works", {
     expect_true(is_tbl_elementset(es_elementset(es2)))
     expect_identical(dim(es_element(es2)), c(1L,1L))
     expect_identical(es_elementset(es2)$element, foo)
+
+    expect_error(es %>% filter(a))
 })
 
 test_that("'select.BiocSet()' works", {
@@ -118,6 +120,8 @@ test_that("'select.BiocSet()' works", {
     expect_true(is_tbl_elementset(es_elementset(es3)))
     expect_identical(dim(es_elementset(es3)), c(52L, 2L))
     expect_identical(es_set(es3), es_set(es))
+
+    expect_error(es %>% select(a))
 })
 
 test_that("'mutate.BiocSet()' works", {
@@ -128,6 +132,8 @@ test_that("'mutate.BiocSet()' works", {
     expect_identical(dim(es_elementset(es1)), c(52L,3L))
 
     expect_error(es %>% mutate(z = 1:2))
+    expect_error(es %>% mutate(1:2))
+    expect_error(es %>% mutate(a))
 })
 
 test_that("'map_element.BiocSet()' works", {
@@ -138,7 +144,7 @@ test_that("'map_element.BiocSet()' works", {
     expect_identical(dim(es_elementset(es1)), c(52L,2L))
     expect_identical(es_elementset(es1)$element, es_element(es1)$element)
 
-    expect_error(es %>% mutate(element = 1:52))
+    expect_error(es %>% map_element())
 })
 
 test_that("'map_set.BiocSet()' works", {
@@ -149,7 +155,7 @@ test_that("'map_set.BiocSet()' works", {
     expect_identical(dim(es_elementset(es1)), c(52L,2L))
     expect_identical(levels(es_elementset(es1)$set), levels(es_set(es1)$set))
 
-    expect_error(es %>% mutate(set = 1:52))
+    expect_error(es %>% map_set())
 })
 
 test_that("'summarise.BiocSet()' works", {
@@ -169,6 +175,8 @@ test_that("'summarise.BiocSet()' works", {
     expect_false(is_tbl_elementset(es3))
     expect_identical(dim(es3), c(2L,2L))
     expect_equal(es3$n, c(26L, 26L))
+
+    expect_error(es %>% summarise(a))
 })
 
 test_that("'arrange.BiocSet()' works", {

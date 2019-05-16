@@ -9,6 +9,8 @@
 #'
 #' @importFrom utils browseURL
 #'
+#' @return NULL
+#'
 #' @export
 #'
 #' @examples

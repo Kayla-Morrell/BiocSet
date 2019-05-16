@@ -211,6 +211,8 @@ setMethod("es_elementset", "BiocSet", .elementset)
 #' @param .data The 'BiocSet' tibble
 #' @param ... Additional arguments passed to function.
 #'
+#' @return A 'BiocSet' object
+#'
 #' @export
 #'
 #' @examples

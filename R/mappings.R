@@ -7,6 +7,8 @@
 #'
 #' @importFrom AnnotationDbi keytypes keys
 #'
+#' @return A BiocSet object
+#'
 #' @export
 #'
 #' @examples
@@ -52,41 +54,43 @@ es_map <- function(es, org, from, to)
 #' @rdname mappings
 #'
 #' @param species Which species the pathways are from
-#' @param pathways A character vector containing the pathways to map from
 #'
 #' @importFrom KEGGREST keggList keggGet
 #'
-#' @return A BiocSet object with Entrez IDs reported as elements (default from
-#'        KEGGREST) and KEGG pathways as sets.
+#' @return For kegg_sets(), a BiocSet object with Entrez IDs reported as 
+#'        elements (default from KEGGREST) and KEGG pathways as sets.
 #'
 #' @export
 #'
 #' @examples
-#' pathways <- c("hsa05310", "hsa04110", "hsa05224", "hsa04970")
-#' kegg_sets("hsa", pathways)
-kegg_sets <- function(species, pathways) 
+#' kegg_sets("hsa")
+kegg_sets <- function(species) 
 {
-    stopifnot(species %in% keggList("organism")[,"organism"],
-        all(gsub("([[:alpha:]]{3})", "path:\\1", pathways) %in% 
-            names(keggList("pathway", species)))
-    )
+    stopifnot(species %in% keggList("organism")[,"organism"])
 
-    if (length(pathways) <= 10)
+    paths <- enframe(keggList("pathway", species))
+    paths <- mutate(
+        paths,
+        name = gsub("path:", "", name),
+        value = gsub("\\-.*", "", value)
+        )
+
+    if (length(paths$name) <= 10)
     {
-        path <- keggGet(pathways)
+        path <- keggGet(paths$name)
         elements <- lapply(seq_along(path), function(x) {
             path[[x]]$GENE[c(TRUE, FALSE)]
         })
     }
     else
     { 
-            elements <- lapply(pathways, function(x) {
+            elements <- lapply(paths$name, function(x) {
             path <- keggGet(x)
             path[[1]]$GENE[c(TRUE, FALSE)]
         })
     }
 
-    names(elements) <- pathways
+    names(elements) <- paths$name
     elements <- elements[lengths(elements) != 0]
 
     do.call(BiocSet, elements)

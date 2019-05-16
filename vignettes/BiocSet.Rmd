@@ -25,7 +25,7 @@ knitr::opts_chunk$set(
 ```
 
 # Introduction
-`BiocSet` is a package that represents element sets in a tibble format with the `BiocSet` class. Element sets are read in and converted into a tibble format. From here, typical `dplyr` operations can be performed on the tibble element set.
+`BiocSet` is a package that represents element sets in a tibble format with the `BiocSet` class. Element sets are read in and converted into a tibble format. From here, typical `dplyr` operations can be performed on the tibble element set. `BiocSet` also provides functionality for mapping different ID types and being directed to a reference webpage for specific elements/sets.
 
 # Installation
 Install the most recent version from Bioconductor:
@@ -89,14 +89,14 @@ tbl %>% filter(element == "a" | element == "A")
 tbl %>% mutate(pval = rnorm(1:52))
 ```
 
-Another feature available to `BiocSet` is the ability to activate different tibbles. When an `BiocSet` is created, the tibble `elementset` is automatically activated and all functions will be performed on this tibble. With `es_activate()` the user is able to pick a different tibble to activate and work on.
+Another feature available to `BiocSet` is the ability to activate different tibbles. When a `BiocSet` is created, the tibble `elementset` is automatically activated and all functions will be performed on this tibble. With each of the functions the user is able to pick a different tibble to activate and work on by using 'verb_tibble'. After the function is executed than the 'active' tibble is returned back to the tibble that was active before the function call. Some examples are shown below of how these functions work.
 
 ```{r activate}
 tbl <- BiocSet(set1 = letters, set2 = LETTERS)
 tbl
-tbl %>% es_activate(element) %>% filter(element == "a" | element == "A")
-tbl %>% es_activate(set) %>% mutate(pval = rnorm(1:2))
-tbl %>% es_activate(element) %>% summarise(n = n())
+tbl %>% filter_element(element == "a" | element == "A")
+tbl %>% mutate_set(pval = rnorm(1:2))
+tbl %>% arrange_elementset(desc(element))
 ```
 
 # Case study
@@ -111,37 +111,25 @@ data("airway")
 se <- airway
 ```
 
-This function `go_sets()` discovers the keys from the org object and uses `AnnotationDbi::select` to create a mapping of Ensembl ids and GO ids. We represent these identifieres as a BiocSet.
+This function `go_sets()` discovers the keys from the org object and uses `AnnotationDbi::select` to create a mapping to GO ids. We represent these identifieres as a BiocSet. Using our `go_sets` function we are able to map the Ensembl ids and GO ids from the genome wide annotation for Human data in the `org.Hs.eg.db` package. The Ensembl ids are treated as elements while the GO ids are treated as sets.
 
 ```{r go_sets, message = FALSE}
 library(org.Hs.eg.db)
-go_sets <- 
-    function(org = org.Hs.eg.db)
-{
-    map <- AnnotationDbi::select(
-        org, keys(org, "ENSEMBL"), c("ENSEMBL", "GO"), "ENSEMBL"
-    )
-    do.call(BiocSet, split(map$ENSEMBL, map$GO))
-}
-```
-
-Using our `go_sets` function we are able to map the Ensembl ids and GO ids from the genome wide annotation for Human data in the `org.Hs.eg.db` package. The Ensembl ids are treated as elements while the GO ids are treated as sets.
-
-```{r go}
-go <- go_sets(org.Hs.eg.db)
+go <- go_sets(org.Hs.eg.db, "ENSEMBL")
+go
 ```
 
 Some users may not be interested in reporting the non-descriptive elements. We demonstrate subsetting the `airway` data to include non-zero assays and then filtering out the non-descriptive elements.
 
 ```{r drop_assays}
 se1 = se[rowSums(assay(se)) != 0,]
-es_activate(go, element) %>% filter(element %in% rownames(se1))
+go %>% filter_element(element %in% rownames(se1))
 ```
 
 It may also be of interest to users to know how many elements are in each set. Using the `count` function we are able to calculate the elements per set.
 
 ```{r count}
-es_activate(go, elementset) %>% group_by(set) %>% dplyr::count()
+go %>% group_by(set) %>% dplyr::count()
 ```
 
 It may also be helpful to remove sets that are empty. Since we have shown how to calculate the number of elements per set, we know that this data set does not contain any empty sets. We decide to demonstrate regardless for those users that may need this functionality.
@@ -149,53 +137,30 @@ It may also be helpful to remove sets that are empty. Since we have shown how to
 ```{r empty}
 drop <- es_activate(go, elementset) %>% group_by(set) %>%
     dplyr::count() %>% filter(n == 0) %>% pull(set)
-es_activate(go, set) %>% filter(!(set %in% drop))
+go %>% filter_set(!(set %in% drop))
 ```
 
-Another mapping example is created using the `mapIds` function. A tibble of Ensembl ids and element symbols made and then we use our `map_element` function to map the Ensembl id elements in `go` to element symbols.
+To simplify mapping we created a function called `es_map`. This takes four arguements, a `BiocSet` object, an `AnnotationDbi` object, the id to map from, and the ide to map to. The function then performs the mapping using `mapIds` from `AnnotationDbi` and returns a `BiocSet` object. In the example below we show how to use this function to map the Ensembl ids from `go` to gene symbols.
 
-```{r more_mapping}
-map <- mapIds(
-    org.Hs.eg.db, keys(org.Hs.eg.db, "ENSEMBL"), "SYMBOL", "ENSEMBL"
-)
-tbl <- tibble::enframe(map, name = "ENSEMBL", value="SYMBOL")
-go %>% map_element(tbl$ENSEMBL, tbl$SYMBOL)
-
-## es_map_org(org.Hs.eg.db, "ENSEMBL", "SYMBOL")
+```{r es_map}
+go %>% es_map(org.Hs.eg.db, "ENSEMBL", "SYMBOL")
 ```
 
-Another functionality to demonstrate would be adding in information to the tibbles. Using the `GO.db` library we are able to map definitions to the GO ids. From there we use the mutate function to add a defintion column to the set tibble.
+Another functionality of `BiocSet` is the ability to add information to the tibbles. Using the `GO.db` library we are able to map definitions to the GO ids. From there we use the mutate function to add a defintion column to the set tibble.
 
-```{r, message = FALSE}
+```{r adding, message = FALSE}
 library(GO.db)
 map <- mapIds(GO.db, as.character(es_set(go)$set), "DEFINITION", "GOID")
-es_activate(go, "set") %>% mutate(definition = unname(map))
+go %>% mutate_set(definition = unname(map))
 ```
 
-The library `KEGGREST` is a client interface to the KEGG REST server. KEGG contains pathway maps that represent interaction, reaction and relation networks for various biological processes and diseases. We create a function that uses `KEGGREST` that develops a BiocSet that contains the elements for every pathway map in KEGG.
+The library `KEGGREST` is a client interface to the KEGG REST server. KEGG contains pathway maps that represent interaction, reaction and relation networks for various biological processes and diseases. `BiocSet` has a function that utilizes `KEGGREST` to develop a BiocSet that contains the elements for every pathway map in KEGG.
 
-```{r kegg, message = FALSE}
-library(KEGGREST)
-
-kegg_sets <- function(species = "hsa") {
-    paths <- tibble::enframe(keggList("pathway", "hsa"))
-    paths <- mutate(
-        paths,
-        name = gsub("path:", "", name),
-        value = gsub("\\-.*", "", value)
-    )
-    elements <- lapply(paths$name, function(x) {
-        path <- keggGet(x) # (n = 330) will take some time
-        path[[1]]$GENE[c(TRUE, FALSE)]
-    })
-    names(elements) <- paths$name
-    elements <- elements[lengths(elements) != 0]
-
-    do.call(BiocSet, elements)
-}
+```{r kegg_sets, message = FALSE}
+kegg_sets("hsa")
 ```
 
-Due to limiations of the KEGGREST package, `keggGet` can only retrieve 10 entries at a time. There for the `lapply` function above would take some time to run on it's own. There for we have decided to use `BiocFileCache` to make the data available to the user.
+Due to limiations of the KEGGREST package, `kegg_sets` can take some time to run depending on the amount of pathways for the species of interest. Therefore we demonstrate using `BiocFileCache` to make the data available to the user.
 
 ```{r file_cache, message = FALSE}
 library(BiocFileCache)
@@ -209,38 +174,36 @@ if (!exists)
 kegg <- import(bfcrpath(rname=rname))
 ```
 
-When creating the KEGG pathway BiocSet we removed pathways that did not contain any elements. Since we want to add in the pathway names to our BiocSet we must first filter out the pathways that were removed. Then we can left join the pathways with the set tibble. We then mutate the element tibble to contain both Ensembl and Entrez ids. 
+Within the `kegg_sets()` function we remove pathways that do not contain any elements. Since we want to add in the pathway names to our BiocSet we must first filter out the pathways that were removed. Then we can left join the pathways with the set tibble. We then mutate the element tibble to contain both Ensembl and Entrez ids. 
 
 ```{r kegg_filter}
 #paths <- filter(kegg, name %in% es_elementset(tbl)$set)
 #es_set(tbl) <- es_set(tbl) %>% left_join(paths, by = c("set" = "name"))
-kegg <- es_activate(kegg, element) %>% 
-    mutate(
-        ensembl = mapIds(
-            org.Hs.eg.db,
-            keys = es_element(kegg)$element,
-            column = "ENSEMBL",
-            keytype = "ENTREZID",
-            multivals = "first"
+kegg <- kegg %>% mutate_element(
+            ensembl = mapIds(
+                org.Hs.eg.db,
+                keys = es_element(kegg)$element,
+                column = "ENSEMBL",
+                keytype = "ENTREZID",
+                multivals = "first"
+            )
         )
-    )
 ```
 Since we are working with ASM data we thought we would subset the `airway` data to contain only the elements in the asthma pathway. This filter can be done on either the KEGG id (which for asthma is "hsa05310") or the pathway name. We demonstrate using the pathway name.
 
 ```{r subset}
-asthma <- kegg %>% es_activate(set) %>% filter(set == "hsa05310")
+asthma <- kegg %>% filter_set(set == "hsa05310")
 
 se <- se[rownames(se) %in% es_element(asthma)$ensembl,]
 
 se
-rowData(se)
 ```
 
 The filtering can also be done for multiple pathways. 
 
 ```{r multiple}
 pathways <- c("hsa05310", "hsa04110", "hsa05224", "hsa04970")
-multipaths <- kegg %>% es_activate(set) %>% filter(set %in% pathways)
+multipaths <- kegg %>% filter_set(set %in% pathways)
 
 multipaths
 ```

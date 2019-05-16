@@ -83,7 +83,7 @@ arrange.tbl_elementset_base <-
 #' @export
 union.tbl_elementset_base <- function(x, y, ...)
 {
-    stopifnot(class(x) == class(y))
+    stopifnot(is(x) == is(y))
     tbl <- NextMethod()
     class(tbl) <- class(x)
     tbl
@@ -94,7 +94,7 @@ union.tbl_elementset_base <- function(x, y, ...)
 #' @export
 intersect.tbl_elementset_base <- function(x, y, ...)
 {
-    stopifnot(class(x) == class(y))
+    stopifnot(is(x) == is(y))
     tbl <- NextMethod()
     class(tbl) <- class(x)
     tbl
