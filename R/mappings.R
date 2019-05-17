@@ -29,7 +29,7 @@ go_sets <- function(org, from)
 #' @param es The BiocSet object to map the elements on
 #' @param to A character to indicate which identifier to map to
 #'
-#' @importFrom AnnotationDbi mapIds
+#' @importFrom AnnotationDbi mapIds keytypes
 #' @importFrom tibble enframe
 #'
 #' @export
@@ -83,11 +83,11 @@ kegg_sets <- function(species)
             path[[x]]$GENE[c(TRUE, FALSE)]
         })
     }
-    else
+    else 
     { 
-            elements <- lapply(paths$name, function(x) {
-            path <- keggGet(x)
-            path[[1]]$GENE[c(TRUE, FALSE)]
+        elements <- lapply(paths$name, function(x) {
+        path <- keggGet(x)
+        path[[1]]$GENE[c(TRUE, FALSE)]
         })
     }
 
@@ -96,3 +96,41 @@ kegg_sets <- function(species)
 
     do.call(BiocSet, elements)
 }
+
+#' @rdname mappings
+#' 
+#' @param add The id to add to the `BiocSet` object
+#'
+#' @export
+#'
+#' @examples
+#' library(org.Hs.eg.db)
+#' es <- BiocSet(set1 = c("PRKACA", "TGFA", "MAP2K1"), set2 = c("FOS", "BRCA1"))
+#' map <- map_add(es, org.Hs.eg.db, "SYMBOL", "ENTREZID")
+#' es %>% mutate_element(entrez = map)
+map_add <- function(es, org, from, add) 
+{
+    stopifnot(from %in% keytypes(org),
+        add %in% keytypes(org))
+     
+    if (from %in% c("ENTREZID", "ENSEMBL", "SYMBOL")) 
+    {
+        map <- mapIds(org, 
+            keys = es_element(es)$element,
+            column = add,
+            keytype = from,
+            multivals = "first"
+        )
+        unname(map)
+    }
+    else 
+    {
+        map <- mapIds(org,
+            keys = as.character(es_set(es)$set),
+            column = add,
+            keytype = from,
+            multivals = "first"
+        )
+        unname(map)
+    }
+} 

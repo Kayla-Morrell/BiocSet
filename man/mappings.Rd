@@ -4,6 +4,7 @@
 \alias{go_sets}
 \alias{es_map}
 \alias{kegg_sets}
+\alias{map_add}
 \title{Functions for mapping elements and sets to different ids}
 \usage{
 go_sets(org, from)
@@ -11,6 +12,8 @@ go_sets(org, from)
 es_map(es, org, from, to)
 
 kegg_sets(species)
+
+map_add(es, org, from, add)
 }
 \arguments{
 \item{org}{The AnnotationDbi object to identify keys/mappings from}
@@ -22,6 +25,8 @@ kegg_sets(species)
 \item{to}{A character to indicate which identifier to map to}
 
 \item{species}{Which species the pathways are from}
+
+\item{add}{The id to add to the `BiocSet` object}
 }
 \value{
 A BiocSet object
@@ -38,4 +43,6 @@ go_sets(org.Hs.eg.db, "ENSEMBL")
 es <- BiocSet(set1 = c("PRKACA", "TGFA", "MAP2K1"), set2 = c("CREB3", "FOS"))
 es_map(es, org.Hs.eg.db, "SYMBOL", "ENTREZID") 
 kegg_sets("hsa")
+es <- BiocSet(set1 = c("PRKACA", "TGFA", "MAP2K1"), set2 = c("FOS", "BRCA1"))
+es \%>\% mutate_element(entrez = map_add(org.Hs.eg.db, "SYMBOL", "ENTREZID"))
 }

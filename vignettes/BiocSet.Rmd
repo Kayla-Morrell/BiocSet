@@ -208,7 +208,7 @@ multipaths
 
 # Information look up
 
-A final feature to `BiocSet` is the ability to look up information about the different elements/sets. A user could utilize the function `url_ref()` to get more information about a specific id. Below is an example of looking up information for one of the Entrez ids (which is an element) and one of the GO ids (which is a set) in the `go` data set we worked with above.
+A final feature to `BiocSet` is the ability to look up information about the different elements/sets. A user could utilize the function `url_ref()` to get more information about a specific id. Below is an example of looking up information for one of the Ensembl ids (which is an element) and one of the GO ids (which is a set) in the `go` data set we worked with above.
 
 ```{r url}
 go
