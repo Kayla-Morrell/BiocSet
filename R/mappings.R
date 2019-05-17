@@ -68,6 +68,7 @@ kegg_sets <- function(species)
 {
     stopifnot(species %in% keggList("organism")[,"organism"])
 
+    name <- value <- NULL
     paths <- enframe(keggList("pathway", species))
     paths <- mutate(
         paths,

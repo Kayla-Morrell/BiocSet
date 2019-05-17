@@ -33,6 +33,9 @@
 
 \item{add}{logical, whether to add to the existing groups.}
 }
+\value{
+A 'BiocSet' object
+}
 \description{
 Major dplyr functions adapted into BiocSet
 }

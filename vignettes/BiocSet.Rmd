@@ -177,8 +177,6 @@ kegg <- import(bfcrpath(rname=rname))
 Within the `kegg_sets()` function we remove pathways that do not contain any elements. Since we want to add in the pathway names to our BiocSet we must first filter out the pathways that were removed. Then we can left join the pathways with the set tibble. We then mutate the element tibble to contain both Ensembl and Entrez ids. 
 
 ```{r kegg_filter}
-#paths <- filter(kegg, name %in% es_elementset(tbl)$set)
-#es_set(tbl) <- es_set(tbl) %>% left_join(paths, by = c("set" = "name"))
 kegg <- kegg %>% mutate_element(
             ensembl = mapIds(
                 org.Hs.eg.db,
@@ -206,6 +204,16 @@ pathways <- c("hsa05310", "hsa04110", "hsa05224", "hsa04970")
 multipaths <- kegg %>% filter_set(set %in% pathways)
 
 multipaths
+```
+
+# Information look up
+
+A final feature to `BiocSet` is the ability to look up information about the different elements/sets. A user could utilize the function `url_ref()` to get more information about a specific id. Below is an example of looking up information for one of the Entrez ids (which is an element) and one of the GO ids (which is a set) in the `go` data set we worked with above.
+
+```{r url}
+go
+url_ref("ENSG00000151729")
+url_ref("GO:0000003")
 ```
 
 # Session info

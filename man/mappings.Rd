@@ -10,7 +10,7 @@ go_sets(org, from)
 
 es_map(es, org, from, to)
 
-kegg_sets(species, pathways)
+kegg_sets(species)
 }
 \arguments{
 \item{org}{The AnnotationDbi object to identify keys/mappings from}
@@ -22,12 +22,12 @@ kegg_sets(species, pathways)
 \item{to}{A character to indicate which identifier to map to}
 
 \item{species}{Which species the pathways are from}
-
-\item{pathways}{A character vector containing the pathways to map from}
 }
 \value{
-A BiocSet object with Entrez IDs reported as elements (default from
-       KEGGREST) and KEGG pathways as sets.
+A BiocSet object
+
+For kegg_sets(), a BiocSet object with Entrez IDs reported as 
+       elements (default from KEGGREST) and KEGG pathways as sets.
 }
 \description{
 Functions for mapping elements and sets to different ids
@@ -37,6 +37,5 @@ library(org.Hs.eg.db)
 go_sets(org.Hs.eg.db, "ENSEMBL")
 es <- BiocSet(set1 = c("PRKACA", "TGFA", "MAP2K1"), set2 = c("CREB3", "FOS"))
 es_map(es, org.Hs.eg.db, "SYMBOL", "ENTREZID") 
-pathways <- c("hsa05310", "hsa04110", "hsa05224", "hsa04970")
-kegg_sets("hsa", pathways)
+kegg_sets("hsa")
 }
