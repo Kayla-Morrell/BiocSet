@@ -146,18 +146,19 @@ To simplify mapping we created a function called `es_map`. This takes four argue
 go %>% es_map(org.Hs.eg.db, "ENSEMBL", "SYMBOL")
 ```
 
-Another functionality of `BiocSet` is the ability to add information to the tibbles. Using the `GO.db` library we are able to map definitions to the GO ids. From there we use the mutate function to add a defintion column to the set tibble.
+Another functionality of `BiocSet` is the ability to add information to the tibbles. Using the `GO.db` library we are able to map definitions to the GO ids. From there we can add the mapping to the tibble using `map_add()` and the mutate function.
 
 ```{r adding, message = FALSE}
 library(GO.db)
-map <- mapIds(GO.db, as.character(es_set(go)$set), "DEFINITION", "GOID")
-go %>% mutate_set(definition = unname(map))
+map <- map_add(go, GO.db, "GOID", "DEFINITION")
+go %>% mutate_set(definition = map)
 ```
 
 The library `KEGGREST` is a client interface to the KEGG REST server. KEGG contains pathway maps that represent interaction, reaction and relation networks for various biological processes and diseases. `BiocSet` has a function that utilizes `KEGGREST` to develop a BiocSet that contains the elements for every pathway map in KEGG.
 
 ```{r kegg_sets, message = FALSE}
-kegg_sets("hsa")
+kegg <- kegg_sets("hsa")
+kegg
 ```
 
 Due to limiations of the KEGGREST package, `kegg_sets` can take some time to run depending on the amount of pathways for the species of interest. Therefore we demonstrate using `BiocFileCache` to make the data available to the user.
@@ -178,14 +179,8 @@ Within the `kegg_sets()` function we remove pathways that do not contain any ele
 
 ```{r kegg_filter}
 kegg <- kegg %>% mutate_element(
-            ensembl = mapIds(
-                org.Hs.eg.db,
-                keys = es_element(kegg)$element,
-                column = "ENSEMBL",
-                keytype = "ENTREZID",
-                multivals = "first"
+            ensembl = map_add(kegg, org.Hs.eg.db, "ENTREZID", "ENSEMBL")
             )
-        )
 ```
 Since we are working with ASM data we thought we would subset the `airway` data to contain only the elements in the asthma pathway. This filter can be done on either the KEGG id (which for asthma is "hsa05310") or the pathway name. We demonstrate using the pathway name.
 

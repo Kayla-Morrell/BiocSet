@@ -58,7 +58,7 @@ es_map <- function(es, org, from, to)
 #' @importFrom KEGGREST keggList keggGet
 #'
 #' @return For kegg_sets(), a BiocSet object with Entrez IDs reported as 
-#'        elements (default from KEGGREST) and KEGG pathways as sets.
+#'         elements (default from KEGGREST) and KEGG pathways as sets.
 #'
 #' @export
 #'
@@ -112,7 +112,7 @@ map_add <- function(es, org, from, add)
 {
     stopifnot(from %in% keytypes(org),
         add %in% keytypes(org))
-     
+
     if (from %in% c("ENTREZID", "ENSEMBL", "SYMBOL")) 
     {
         map <- mapIds(org, 

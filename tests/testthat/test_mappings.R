@@ -62,3 +62,17 @@ test_that("'es_map()' works",
 #    expect_error(kegg_sets(hsa))
 #    expect_error(kegg_sets(1:10))     
 #})
+
+test_that("'map_add()' works",
+{
+    library(org.Hs.eg.db)
+    es <- BiocSet(set1 = c("PRKACA", "TGFA", "MAP2K1"), set2 = c("FOS", "BRCA1"))
+    map <- map_add(es, org.Hs.eg.db, "SYMBOL", "ENTREZID")
+
+    expect_identical(length(map), 5L)
+    expect_identical(class(map), "character")
+    expect_identical(map, c("5566", "7039", "5604", "2353", "672"))
+
+    expect_error(map_add(org.Hs.eg.db, "SYMBOL", "ENTREZID"))
+    expect_error(map_add(es, org.Hs.eg.db, "ENTREZID", "SYMBOL"))
+})
