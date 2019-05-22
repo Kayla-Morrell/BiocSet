@@ -9,10 +9,15 @@
 #'
 #' @importFrom utils browseURL
 #'
+#' @return A default browser will open with the information about the id 
+#'     displayed.
+#'
 #' @export
 #'
 #' @examples
+#' \dontrun{
 #' url_ref("GO:0000002")
+#' }
 url_ref <- function(search, ...) 
 {
     if (grepl("GO", search)) {
