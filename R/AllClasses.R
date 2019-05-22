@@ -9,7 +9,7 @@ setOldClass("tbl_elementset")
 #' @slot element The element tibble from `tbl_elementset`
 #' @slot set The set tibble from `tbl_elementset`
 #' @slot elementset The elementset tibble created from user input
-#' @slot active The tibble that is active
+#' @slot active Character, indicates which tibble is active
 #'
 #' @exportClass BiocSet
 
