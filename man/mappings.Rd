@@ -32,7 +32,7 @@ map_add(es, org, from, add)
 A BiocSet object
 
 For kegg_sets(), a BiocSet object with Entrez IDs reported as 
-       elements (default from KEGGREST) and KEGG pathways as sets.
+    elements (default from KEGGREST) and KEGG pathways as sets.
 }
 \description{
 Functions for mapping elements and sets to different ids
@@ -42,7 +42,9 @@ library(org.Hs.eg.db)
 go_sets(org.Hs.eg.db, "ENSEMBL")
 es <- BiocSet(set1 = c("PRKACA", "TGFA", "MAP2K1"), set2 = c("CREB3", "FOS"))
 es_map(es, org.Hs.eg.db, "SYMBOL", "ENTREZID") 
-kegg_sets("hsa")
+\dontrun{
+kegg_sets("hsa")i
+}
 library(org.Hs.eg.db)
 es <- BiocSet(set1 = c("PRKACA", "TGFA", "MAP2K1"), set2 = c("FOS", "BRCA1"))
 map <- map_add(es, org.Hs.eg.db, "SYMBOL", "ENTREZID")

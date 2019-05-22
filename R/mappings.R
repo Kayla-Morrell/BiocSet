@@ -58,12 +58,14 @@ es_map <- function(es, org, from, to)
 #' @importFrom KEGGREST keggList keggGet
 #'
 #' @return For kegg_sets(), a BiocSet object with Entrez IDs reported as 
-#'         elements (default from KEGGREST) and KEGG pathways as sets.
+#'     elements (default from KEGGREST) and KEGG pathways as sets.
 #'
 #' @export
 #'
 #' @examples
+#' \donttest{
 #' kegg_sets("hsa")
+#' }
 kegg_sets <- function(species) 
 {
     stopifnot(species %in% keggList("organism")[,"organism"])

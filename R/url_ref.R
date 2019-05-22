@@ -3,8 +3,8 @@
 #' @rdname url_ref
 #'
 #' @param search character, the id to look up. For KEGG, "map" will have to 
-#'               replace the letters before the numbers, e.g. "hsa05310" should
-#'               become "map05310".
+#'     replace the letters before the numbers, e.g. "hsa05310" should
+#'     become "map05310".
 #' @param ... additional arguments to pass to 'browseURL'.
 #'
 #' @importFrom utils browseURL
