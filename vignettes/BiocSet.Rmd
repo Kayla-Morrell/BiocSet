@@ -25,7 +25,11 @@ knitr::opts_chunk$set(
 ```
 
 # Introduction
-`BiocSet` is a package that represents element sets in a tibble format with the `BiocSet` class. Element sets are read in and converted into a tibble format. From here, typical `dplyr` operations can be performed on the element set. `BiocSet` also provides functionality for mapping different ID types and being directed to a reference webpage for specific elements/sets.
+`BiocSet` is a package that represents element sets in a tibble format with the
+ `BiocSet` class. Element sets are read in and converted into a tibble format. 
+From here, typical `dplyr` operations can be performed on the element set. 
+`BiocSet` also provides functionality for mapping different ID types and being 
+directed to a reference webpage for specific elements/sets.
 
 # Installation
 Install the most recent version from Bioconductor:
@@ -51,14 +55,22 @@ library(BiocSet)
 
 ## Input and Output
 
-`BiocSet` can create a `BiocSet` object using two different input methods. The first is to input named character vectors of element sets. `BiocSet` returns three tibbles, `element` which contains the elements, `set` which contains the sets and `elementset` which contains elements and sets together. 
+`BiocSet` can create a `BiocSet` object using two different input methods. The 
+first is to input named character vectors of element sets. `BiocSet` returns 
+three tibbles, `element` which contains the elements, `set` which contains the 
+sets and `elementset` which contains elements and sets together. 
 
 ```{r constructor}
 tbl <- BiocSet(set1 = letters, set2 = LETTERS)
 tbl
 ```
 
-The second method of creating a `BiocSet` oject would be to read in a `.gmt` file. Using `import()`, a path to a downloaded `.gmt` file is read in and a `BiocSet` object is returned. The example below uses a hallmark element set downloaded from [GSEA][], which is also included with this package. This `BiocSet` includes a `source` column within the `elementset` tibble for reference as to where the element set came from.
+The second method of creating a `BiocSet` oject would be to read in a `.gmt` 
+file. Using `import()`, a path to a downloaded `.gmt` file is read in and a 
+`BiocSet` object is returned. The example below uses a hallmark element set 
+downloaded from [GSEA][], which is also included with this package. This 
+`BiocSet` includes a `source` column within the `elementset` tibble for 
+reference as to where the element set came from.
 
 [GSEA]: http://software.broadinstitute.org/esea/index.jsp
 
@@ -70,7 +82,8 @@ tbl2 <- import(gmtFile)
 tbl2
 ```
 
-`export()` allows for a `BiocSet` object to be exported into a temporary file with the extention `.gmt`.
+`export()` allows for a `BiocSet` object to be exported into a temporary file 
+with the extention `.gmt`.
 
 ```{r export, tidy = TRUE}
 fl <- tempfile(fileext = ".gmt")
@@ -80,7 +93,8 @@ gmt
 
 ## Implemented functions
 
-`BiocSet` adopts the use of many `dplyr` functions such as `filter()`, `select()`, `mutate()`, `summarise()`, `arrange()`, and `tbl_vars()`.
+`BiocSet` adopts the use of many `dplyr` functions such as `filter()`, 
+`select()`, `mutate()`, `summarise()`, `arrange()`, and `tbl_vars()`.
 
 ```{r examples}
 tbl <- BiocSet(set1 = letters, set2 = LETTERS)
@@ -89,7 +103,13 @@ tbl %>% filter(element == "a" | element == "A")
 tbl %>% mutate(pval = rnorm(1:52))
 ```
 
-Another feature available to `BiocSet` is the ability to activate different tibbles. When a `BiocSet` is created, the tibble `elementset` is automatically activated and all functions will be performed on this tibble. With each of the functions the user is able to pick a different tibble to activate and work on by using 'verb_tibble'. After the function is executed than the 'active' tibble is returned back to the tibble that was active before the function call. Some examples are shown below of how these functions work.
+Another feature available to `BiocSet` is the ability to activate different 
+tibbles. When a `BiocSet` is created, the tibble `elementset` is automatically 
+activated and all functions will be performed on this tibble. With each of the 
+functions the user is able to pick a different tibble to activate and work on 
+by using 'verb_tibble'. After the function is executed than the 'active' tibble
+ is returned back to the tibble that was active before the function call. Some 
+examples are shown below of how these functions work.
 
 ```{r activate}
 tbl <- BiocSet(set1 = letters, set2 = LETTERS)
@@ -101,7 +121,9 @@ tbl %>% arrange_elementset(desc(element))
 
 # Case study
 
-Next, we demonstrate the use of `BiocSet` with an experiment dataset `airway` from the package `airway`. This data is from an RNA-Seq experiment on airway smooth muscle (ASM) cell lines.
+Next, we demonstrate the use of `BiocSet` with an experiment dataset `airway` 
+from the package `airway`. This data is from an RNA-Seq experiment on airway 
+smooth muscle (ASM) cell lines.
 
 The first step is to load the library and the necessary data.
 
@@ -111,7 +133,12 @@ data("airway")
 se <- airway
 ```
 
-The function `go_sets()` discovers the keys from the org object and uses `AnnotationDbi::select` to create a mapping to GO ids. We represent these identifieres as a `BiocSet` object. Using the `go_sets` function we are able to map the Ensembl ids and GO ids from the genome wide annotation for Human data in the `org.Hs.eg.db` package. The Ensembl ids are treated as elements while the GO ids are treated as sets.
+The function `go_sets()` discovers the keys from the org object and uses 
+`AnnotationDbi::select` to create a mapping to GO ids. We represent these 
+identifieres as a `BiocSet` object. Using the `go_sets` function we are able to
+ map the Ensembl ids and GO ids from the genome wide annotation for Human data 
+in the `org.Hs.eg.db` package. The Ensembl ids are treated as elements while 
+the GO ids are treated as sets.
 
 ```{r go_sets, message = FALSE}
 library(org.Hs.eg.db)
@@ -119,20 +146,26 @@ go <- go_sets(org.Hs.eg.db, "ENSEMBL")
 go
 ```
 
-Some users may not be interested in reporting the non-descriptive elements. We demonstrate subsetting the `airway` data to include non-zero assays and then filtering out the non-descriptive elements.
+Some users may not be interested in reporting the non-descriptive elements. We 
+demonstrate subsetting the `airway` data to include non-zero assays and then 
+filtering out the non-descriptive elements.
 
 ```{r drop_assays}
 se1 = se[rowSums(assay(se)) != 0,]
 go %>% filter_element(element %in% rownames(se1))
 ```
 
-It may also be of interest to users to know how many elements are in each set. Using the `count` function we are able to calculate the elements per set.
+It may also be of interest to users to know how many elements are in each set. 
+Using the `count` function we are able to calculate the elements per set.
 
 ```{r count}
 go %>% group_by(set) %>% dplyr::count()
 ```
 
-It may also be helpful to remove sets that are empty. Since we have shown how to calculate the number of elements per set, we know that this data set does not contain any empty sets. We decide to demonstrate regardless for those users that may need this functionality.
+It may also be helpful to remove sets that are empty. Since we have shown how 
+to calculate the number of elements per set, we know that this data set does 
+not contain any empty sets. We decide to demonstrate regardless for those users
+ that may need this functionality.
 
 ```{r empty}
 drop <- es_activate(go, elementset) %>% group_by(set) %>%
@@ -140,13 +173,20 @@ drop <- es_activate(go, elementset) %>% group_by(set) %>%
 go %>% filter_set(!(set %in% drop))
 ```
 
-To simplify mapping we created a function called `es_map`. This takes four arguements, a `BiocSet` object, an `AnnotationDbi` object, the id to map from, and the id to map to. The function utilizes `mapIds` from `AnnotationDbi` and returns a `BiocSet` object. In the example below we show how to use this function to map the Ensembl ids from `go` to gene symbols.
+To simplify mapping we created a function called `es_map`. This takes four 
+arguements, a `BiocSet` object, an `AnnotationDbi` object, the id to map from, 
+and the id to map to. The function utilizes `mapIds` from `AnnotationDbi` and 
+returns a `BiocSet` object. In the example below we show how to use this 
+function to map the Ensembl ids from `go` to gene symbols.
 
 ```{r es_map}
 go %>% es_map(org.Hs.eg.db, "ENSEMBL", "SYMBOL")
 ```
 
-Another functionality of `BiocSet` is the ability to add information to the tibbles. Using the `GO.db` library we are able to map definitions to the GO ids. From there we can add the mapping to the tibble using `map_add()` and the mutate function.
+Another functionality of `BiocSet` is the ability to add information to the 
+tibbles. Using the `GO.db` library we are able to map definitions to the GO 
+ids. From there we can add the mapping to the tibble using `map_add()` and the 
+mutate function.
 
 ```{r adding, message = FALSE}
 library(GO.db)
@@ -154,14 +194,20 @@ map <- map_add(go, GO.db, "GOID", "DEFINITION")
 go %>% mutate_set(definition = map)
 ```
 
-The library `KEGGREST` is a client interface to the KEGG REST server. KEGG contains pathway maps that represent interaction, reaction and relation networks for various biological processes and diseases. `BiocSet` has a function that utilizes `KEGGREST` to develop a BiocSet that contains the elements for every pathway map in KEGG.
+The library `KEGGREST` is a client interface to the KEGG REST server. 
+KEGG contains pathway maps that represent interaction, reaction and relation 
+networks for various biological processes and diseases. `BiocSet` has a 
+function that utilizes `KEGGREST` to develop a BiocSet that contains the 
+elements for every pathway map in KEGG.
 
 ```{r kegg_sets, message = FALSE}
 kegg <- kegg_sets("hsa")
 kegg
 ```
 
-Due to limiations of the KEGGREST package, `kegg_sets` can take some time to run depending on the amount of pathways for the species of interest. Therefore we demonstrate using `BiocFileCache` to make the data available to the user.
+Due to limiations of the KEGGREST package, `kegg_sets` can take some time to 
+run depending on the amount of pathways for the species of interest. Therefore 
+we demonstrate using `BiocFileCache` to make the data available to the user.
 
 ```{r file_cache, message = FALSE}
 library(BiocFileCache)
@@ -175,14 +221,19 @@ if (!exists)
 kegg <- import(bfcrpath(rname=rname))
 ```
 
-Within the `kegg_sets()` function we remove pathways that do not contain any elements. We then mutate the element tibble using the `map_add` function to contain both Ensembl and Entrez ids. 
+Within the `kegg_sets()` function we remove pathways that do not contain any 
+elements. We then mutate the element tibble using the `map_add` function to 
+contain both Ensembl and Entrez ids. 
 
 ```{r kegg_filter}
 kegg <- kegg %>% mutate_element(
             ensembl = map_add(kegg, org.Hs.eg.db, "ENTREZID", "ENSEMBL")
             )
 ```
-Since we are working with ASM data we thought we would subset the `airway` data to contain only the elements in the asthma pathway. This filter is performed on the KEGG id, which for asthma is "hsa05310".
+
+Since we are working with ASM data we thought we would subset the `airway` data
+ to contain only the elements in the asthma pathway. This filter is performed 
+on the KEGG id, which for asthma is "hsa05310".
 
 ```{r subset}
 asthma <- kegg %>% filter_set(set == "hsa05310")
@@ -203,7 +254,11 @@ multipaths
 
 # Information look up
 
-A final feature to `BiocSet` is the ability to look up information about the different elements/sets. A user could utilize the function `url_ref()` to get more information about a specific id. Below is an example of looking up information for one of the Ensembl ids (which is an element) and one of the GO ids (which is a set) in the `go` data set we worked with above.
+A final feature to `BiocSet` is the ability to look up information about the 
+different elements/sets. A user could utilize the function `url_ref()` to get 
+more information about a specific id. Below is an example of looking up 
+information for one of the Ensembl ids (which is an element) and one of the GO 
+ids (which is a set) in the `go` data set we worked with above.
 
 ```{r url, eval = FALSE}
 go

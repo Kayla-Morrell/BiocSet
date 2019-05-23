@@ -145,7 +145,7 @@ An element set representation as a tripple tibble
 
 \item{\code{elementset}}{The elementset tibble created from user input}
 
-\item{\code{active}}{The tibble that is active}
+\item{\code{active}}{Character, indicates which tibble is active}
 }}
 
 \examples{

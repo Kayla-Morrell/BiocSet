@@ -42,8 +42,8 @@ library(org.Hs.eg.db)
 go_sets(org.Hs.eg.db, "ENSEMBL")
 es <- BiocSet(set1 = c("PRKACA", "TGFA", "MAP2K1"), set2 = c("CREB3", "FOS"))
 es_map(es, org.Hs.eg.db, "SYMBOL", "ENTREZID") 
-\dontrun{
-kegg_sets("hsa")i
+\donttest{
+kegg_sets("hsa")
 }
 library(org.Hs.eg.db)
 es <- BiocSet(set1 = c("PRKACA", "TGFA", "MAP2K1"), set2 = c("FOS", "BRCA1"))

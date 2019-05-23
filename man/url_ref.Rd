@@ -13,9 +13,15 @@ become "map05310".}
 
 \item{...}{additional arguments to pass to 'browseURL'.}
 }
+\value{
+A default browser will open with the information about the id 
+    displayed.
+}
 \description{
 Functions to access help for the different identifiers
 }
 \examples{
+\dontrun{
 url_ref("GO:0000002")
+}
 }
