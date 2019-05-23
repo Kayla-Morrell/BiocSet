@@ -14,6 +14,9 @@
 #' @examples
 #' library(org.Hs.eg.db)
 #' go_sets(org.Hs.eg.db, "ENSEMBL")
+# add in evidence and ontology (use match.arg())
+# filter(goid, ONTOLOGY %in% ontology, EVIDENCE %in% evidence)
+# default for both should be all, ideally
 go_sets <- function(org, from)
 {
     stopifnot(from %in% keytypes(org))
@@ -87,10 +90,15 @@ kegg_sets <- function(species)
     }
     else 
     { 
-        elements <- lapply(paths$name, function(x) {
-        path <- keggGet(x)
-        path[[1]]$GENE[c(TRUE, FALSE)]
+        grp <- cumsum(seq_along(path$name) %% 10L == 1L)
+        path_names <- split(paths$name, grp)
+        elements <- lapply(path_names, function(x) {
+            paths <- keggGet(x)
+            lapply(paths, function(path) path$GENE[c(TRUE, FALSE)])
         })
+        lens <- lengths(elements)
+        elements <- unlist(elements, use.names = FALSE)
+        names(elements) <- rep(paths$name, lens)
     }
 
     names(elements) <- paths$name
@@ -135,4 +143,6 @@ map_add <- function(es, org, from, add)
         )
         unname(map)
     }
-} 
+}
+
+## map_add_element() and map_add_set() 

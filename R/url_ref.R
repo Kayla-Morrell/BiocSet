@@ -18,35 +18,35 @@
 #' \dontrun{
 #' url_ref("GO:0000002")
 #' }
+# Thoughts about when calling url_ref() creating an extra column in element
+# and set that have the url ready if the user wants to look it up
 url_ref <- function(search, ...) 
 {
-    if (grepl("GO", search)) {
-        browseURL(paste(
+    if (startsWith(search, "GO")) {
+        url <- paste0(
             "http://amigo.geneontology.org/amigo/medial_search?q=",
             search,
-            "&searchtype=all",
-            sep = ""
-            ), ...)
+            "&searchtype=all"
+            )
     }
-    else if (grepl("ENSG", search)) {
-        browseURL(paste(
+    else if (startsWith(search, "ENSG")) {
+        url <- paste0(
             "https://www.ensembl.org/Homo_sapiens/Gene/Summary?db=core;g=",
             search,
-            ";r=19:14091688-14118084",
-            sep = ""
-            ), ...)
+            ";r=19:14091688-14118084"
+            )
     }
-    else if (grepl("map", search)) {
-        browseURL(paste(
+    else if (starsWith(searh, "map")) {
+        url <- paste0(
             "https://www.genome.jp/dbget-bin/www_bget?pathway:",
-            search,
-            sep = ""
-            ), ...)
+            search
+            )
     }
     else
-        browseURL(paste(
+        url <- paste0(
             "https://www.ncbi.nlm.nih.gov/gene/?term=",
-            search,
-            sep = ""
-            ), ...)
+            search
+            )
+
+    browseURL(url, ...)
 }

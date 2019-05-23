@@ -226,9 +226,8 @@ elements. We then mutate the element tibble using the `map_add` function to
 contain both Ensembl and Entrez ids. 
 
 ```{r kegg_filter}
-kegg <- kegg %>% mutate_element(
-            ensembl = map_add(kegg, org.Hs.eg.db, "ENTREZID", "ENSEMBL")
-            )
+map <- map_add(kegg, org.Hs.eg.db, "ENTREZID", "ENSEMBL")
+kegg <- kegg %>% mutate_element(ensembl = map)
 ```
 
 Since we are working with ASM data we thought we would subset the `airway` data
