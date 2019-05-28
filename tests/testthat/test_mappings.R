@@ -48,31 +48,28 @@ test_that("'es_map()' works",
     expect_error(es_map(es, species, "SYMBOL", "ENTREZID"))
 })
 
-#test_that("'kegg_sets()' works",
-#{
-#    es <- kegg_sets("hsa")
-#
-#    expect_s4_class(es, "BiocSet")
-#    expect_identical(dim(es_element(es)), c(7833L, 1L))
-#    expect_identical(dim(es_set(es)), c(322L, 1L))
-#    expect_identical(dim(es_elementset(es)), c(28645L, 2L))
-#    expect_true(is_tbl_elementset(es_elementset(es)))
-#
-#    expect_error(kegg_sets("hsa", pathways))
-#    expect_error(kegg_sets(hsa))
-#    expect_error(kegg_sets(1:10))     
-#})
-
-test_that("'map_add()' works",
+test_that("'map_add_element()' works",
 {
     library(org.Hs.eg.db)
     es <- BiocSet(set1 = c("PRKACA", "TGFA", "MAP2K1"), set2 = c("FOS", "BRCA1"))
-    map <- map_add(es, org.Hs.eg.db, "SYMBOL", "ENTREZID")
+    map <- map_add_element(es, org.Hs.eg.db, "SYMBOL", "ENTREZID")
 
     expect_identical(length(map), 5L)
     expect_identical(class(map), "character")
     expect_identical(map, c("5566", "7039", "5604", "2353", "672"))
 
-    expect_error(map_add(org.Hs.eg.db, "SYMBOL", "ENTREZID"))
-    expect_error(map_add(es, org.Hs.eg.db, "ENTREZID", "SYMBOL"))
+    expect_error(map_add_element(org.Hs.eg.db, "SYMBOL", "ENTREZID"))
+})
+
+test_that("'map_add_set()' works",
+{
+    library(org.Hs.eg.db)
+    library(GO.db)
+    go <- go_sets(org.Hs.eg.db, "ENSEMBL")
+    map <- map_add_set(go, GO.db, "GOID", "DEFINITION")
+
+    expect_identical(length(map), 17495L)
+    expect_identical(class(map), "character")
+
+    expect_error(map_add_set(GO.db, "GOID", "DEFINITION"))
 })

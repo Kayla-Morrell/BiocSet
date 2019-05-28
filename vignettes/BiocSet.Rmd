@@ -190,7 +190,7 @@ mutate function.
 
 ```{r adding, message = FALSE}
 library(GO.db)
-map <- map_add(go, GO.db, "GOID", "DEFINITION")
+map <- map_add_set(go, GO.db, "GOID", "DEFINITION")
 go %>% mutate_set(definition = map)
 ```
 
@@ -226,7 +226,7 @@ elements. We then mutate the element tibble using the `map_add` function to
 contain both Ensembl and Entrez ids. 
 
 ```{r kegg_filter}
-map <- map_add(kegg, org.Hs.eg.db, "ENTREZID", "ENSEMBL")
+map <- map_add_element(kegg, org.Hs.eg.db, "ENTREZID", "ENSEMBL")
 kegg <- kegg %>% mutate_element(ensembl = map)
 ```
 

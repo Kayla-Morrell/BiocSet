@@ -36,7 +36,7 @@ url_ref <- function(search, ...)
             ";r=19:14091688-14118084"
             )
     }
-    else if (starsWith(searh, "map")) {
+    else if (startsWith(search, "map")) {
         url <- paste0(
             "https://www.genome.jp/dbget-bin/www_bget?pathway:",
             search

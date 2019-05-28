@@ -4,7 +4,8 @@
 \alias{go_sets}
 \alias{es_map}
 \alias{kegg_sets}
-\alias{map_add}
+\alias{map_add_element}
+\alias{map_add_set}
 \title{Functions for mapping elements and sets to different ids}
 \usage{
 go_sets(org, from)
@@ -13,7 +14,9 @@ es_map(es, org, from, to)
 
 kegg_sets(species)
 
-map_add(es, org, from, add)
+map_add_element(es, org, from, add)
+
+map_add_set(es, org, from, add)
 }
 \arguments{
 \item{org}{The AnnotationDbi object to identify keys/mappings from}
@@ -47,6 +50,11 @@ kegg_sets("hsa")
 }
 library(org.Hs.eg.db)
 es <- BiocSet(set1 = c("PRKACA", "TGFA", "MAP2K1"), set2 = c("FOS", "BRCA1"))
-map <- map_add(es, org.Hs.eg.db, "SYMBOL", "ENTREZID")
+map <- mapp_add_element(es, org.Hs.eg.db, "SYMBOL", "ENTREZID")
 es \%>\% mutate_element(entrez = map)
+library(org.Hs.eg.db)
+library(GO.db)
+go <- go_sets(org.Hs.eg.db, "ENSEMBL")
+map <- map_add_set(go, GO.db, "GOID", "DEFINTION")
+go \%>\% mutate_set(defintion = map)
 }

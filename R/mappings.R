@@ -90,7 +90,7 @@ kegg_sets <- function(species)
     }
     else 
     { 
-        grp <- cumsum(seq_along(path$name) %% 10L == 1L)
+        grp <- cumsum(seq_along(paths$name) %% 10L == 1L)
         path_names <- split(paths$name, grp)
         elements <- lapply(path_names, function(x) {
             paths <- keggGet(x)
@@ -98,7 +98,7 @@ kegg_sets <- function(species)
         })
         lens <- lengths(elements)
         elements <- unlist(elements, use.names = FALSE)
-        names(elements) <- rep(paths$name, lens)
+        names(elements) <- rep(paths$name, each = lens)
     }
 
     names(elements) <- paths$name
@@ -112,37 +112,46 @@ kegg_sets <- function(species)
 #' @param add The id to add to the `BiocSet` object
 #'
 #' @export
-#'
+#' 
 #' @examples
 #' library(org.Hs.eg.db)
 #' es <- BiocSet(set1 = c("PRKACA", "TGFA", "MAP2K1"), set2 = c("FOS", "BRCA1"))
-#' map <- map_add(es, org.Hs.eg.db, "SYMBOL", "ENTREZID")
+#' map <- mapp_add_element(es, org.Hs.eg.db, "SYMBOL", "ENTREZID")
 #' es %>% mutate_element(entrez = map)
-map_add <- function(es, org, from, add) 
+map_add_element <- function(es, org, from, add)
 {
     stopifnot(from %in% keytypes(org),
         add %in% keytypes(org))
 
-    if (from %in% c("ENTREZID", "ENSEMBL", "SYMBOL")) 
-    {
-        map <- mapIds(org, 
-            keys = es_element(es)$element,
-            column = add,
-            keytype = from,
-            multivals = "first"
-        )
-        unname(map)
-    }
-    else 
-    {
-        map <- mapIds(org,
-            keys = as.character(es_set(es)$set),
-            column = add,
-            keytype = from,
-            multivals = "first"
-        )
-        unname(map)
-    }
+    map <- mapIds(org,
+        keys = es_element(es)$element,
+        column = add,
+        keytype = from,
+        multivals = "first"
+    )
+    unname(map)
 }
 
-## map_add_element() and map_add_set() 
+#' @rdname mappings
+#' 
+#' @export
+#'
+#' @examples
+#' library(org.Hs.eg.db)
+#' library(GO.db)
+#' go <- go_sets(org.Hs.eg.db, "ENSEMBL")
+#' map <- map_add_set(go, GO.db, "GOID", "DEFINTION")
+#' go %>% mutate_set(defintion = map)
+map_add_set <- function(es, org, from, add)
+{
+    stopifnot(from %in% keytypes(org),
+        add %in% keytypes(org))
+
+    map <- mapIds(org,
+        keys = as.character(es_set(es)$set),
+        column = add,
+        keytype = from,
+        multivals = "first"
+    )
+    unname(map)
+}
