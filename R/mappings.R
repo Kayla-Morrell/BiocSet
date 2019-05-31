@@ -81,28 +81,19 @@ kegg_sets <- function(species)
         value = gsub("\\-.*", "", value)
         )
 
-    if (length(paths$name) <= 10)
-    {
-        path <- keggGet(paths$name)
-        elements <- lapply(seq_along(path), function(x) {
-            path[[x]]$GENE[c(TRUE, FALSE)]
-        })
-    }
-    else 
-    { 
-        grp <- cumsum(seq_along(paths$name) %% 10L == 1L)
-        path_names <- split(paths$name, grp)
-        elements <- lapply(path_names, function(x) {
-            paths <- keggGet(x)
-            lapply(paths, function(path) path$GENE[c(TRUE, FALSE)])
-        })
-        lens <- lengths(elements)
-        elements <- unlist(elements, use.names = FALSE)
-        names(elements) <- rep(paths$name, each = lens)
-    }
+    grp <- cumsum(seq_along(paths$name) %% 10L == 1L)
+    path_names <- split(paths$name, grp)
+    elements <- lapply(path_names, function(x) {
+        paths <- keggGet(x)
+        lapply(paths, function(path) path$GENE[c(TRUE, FALSE)])
+    })
 
-    names(elements) <- paths$name
-    elements <- elements[lengths(elements) != 0]
+    paths_len <- unlist(lapply(
+        seq_along(elements), function(x) lengths(elements[[x]])
+    ))
+    elements <- unlist(elements, use.names = FALSE)
+    elements <- split(elements, rep(seq_along(paths_len), paths_len))
+    names(elements) <- paths$name[which(paths_len != 0)]
 
     do.call(BiocSet, elements)
 }
