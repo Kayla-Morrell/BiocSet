@@ -8,7 +8,8 @@
 \alias{map_add_set}
 \title{Functions for mapping elements and sets to different ids}
 \usage{
-go_sets(org, from)
+go_sets(org, from, go = c("GO", "GOID"), evidence = NULL,
+  ontology = NULL)
 
 es_map(es, org, from, to)
 
@@ -22,6 +23,13 @@ map_add_set(es, org, from, add)
 \item{org}{The AnnotationDbi object to identify keys/mappings from}
 
 \item{from}{A character to indicate which identifier to map from}
+
+\item{go}{Character, the column name for the GO ids. Default is "GO".}
+
+\item{evidence}{Character, the evidence codes for GO associations with 
+a gene of interest. Default is all possible evidence codes.}
+
+\item{ontology}{Character, which Gene Ontology. Default is BP, CC, and MF}
 
 \item{es}{The BiocSet object to map the elements on}
 
@@ -45,9 +53,7 @@ library(org.Hs.eg.db)
 go_sets(org.Hs.eg.db, "ENSEMBL")
 es <- BiocSet(set1 = c("PRKACA", "TGFA", "MAP2K1"), set2 = c("CREB3", "FOS"))
 es_map(es, org.Hs.eg.db, "SYMBOL", "ENTREZID") 
-\donttest{
 kegg_sets("hsa")
-}
 library(org.Hs.eg.db)
 es <- BiocSet(set1 = c("PRKACA", "TGFA", "MAP2K1"), set2 = c("FOS", "BRCA1"))
 map <- mapp_add_element(es, org.Hs.eg.db, "SYMBOL", "ENTREZID")

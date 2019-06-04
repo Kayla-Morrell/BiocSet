@@ -4,6 +4,10 @@
 #'
 #' @param org The AnnotationDbi object to identify keys/mappings from 
 #' @param from A character to indicate which identifier to map from
+#' @param go Character, the column name for the GO ids. Default is "GO".
+#' @param evidence Character, the evidence codes for GO associations with 
+#'    a gene of interest. Default is all possible evidence codes.
+#' @param ontology Character, which Gene Ontology. Default is BP, CC, and MF
 #'
 #' @importFrom AnnotationDbi keytypes keys
 #'
@@ -14,17 +18,42 @@
 #' @examples
 #' library(org.Hs.eg.db)
 #' go_sets(org.Hs.eg.db, "ENSEMBL")
-# add in evidence and ontology (use match.arg())
-# filter(goid, ONTOLOGY %in% ontology, EVIDENCE %in% evidence)
-# default for both should be all, ideally
-go_sets <- function(org, from)
+go_sets <- function(org, from, go = c("GO", "GOID"), evidence = NULL, 
+    ontology = NULL)
 {
     stopifnot(from %in% keytypes(org))
 
+    go <- match.arg(go)
     map <- AnnotationDbi::select(
-        org, keys(org, from), c(from, "GO"), from
+        org, keys(org, from), c(from, go), from
     )
-    do.call(BiocSet, split(map[[from]], map$GO))
+    map <- map[!is.na(map),]
+    
+    evidence_choices <- levels(as.factor(map$EVIDENCE))
+    if (is.null(evidence)) {
+        evidence <- evidence_choices
+    }
+    else
+        evidence <- match.arg(evidence, evidence_choices, several.ok = TRUE)
+
+    ontology_choices <- levels(as.factor(map$ONTOLOGY))
+    if (is.null(ontology)) {
+        ontology <- ontology_choices
+    }
+    else
+        ontology <- match.arg(ontology, ontology_choices, several.ok = TRUE)
+    
+    map <- filter(map, ONTOLOGY %in% ontology, EVIDENCE %in% evidence)
+    do.call(BiocSet, split(map[[from]], map[[go]]))
+
+    # want to store the evidence and ontology information somewhere
+    # but not sure where the information belongs...
+    # I thought it would go in tbl_elementset, but something strange is 
+    # happening when performing `BiocSet`...
+    # There are the correct number of elements and sets but there seems to be
+    # some missing for elementset... I'm lost
+    #es <- do.call(BiocSet, split(map[[from]], map[[go]]))
+    #es %>% mutate_elementset(evidence = map$EVIDENCE, ontology = map$ONTOLOGY)
 }
 
 #' @rdname mappings
@@ -66,9 +95,7 @@ es_map <- function(es, org, from, to)
 #' @export
 #'
 #' @examples
-#' \donttest{
 #' kegg_sets("hsa")
-#' }
 kegg_sets <- function(species) 
 {
     stopifnot(species %in% keggList("organism")[,"organism"])
