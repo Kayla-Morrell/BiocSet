@@ -2,51 +2,60 @@
 #'
 #' @rdname url_ref
 #'
-#' @param search character, the id to look up. For KEGG, "map" will have to 
-#'     replace the letters before the numbers, e.g. "hsa05310" should
-#'     become "map05310".
-#' @param ... additional arguments to pass to 'browseURL'.
+#' @param es A BiocSet object in which the reference urls should be added to.
 #'
-#' @importFrom utils browseURL
-#'
-#' @return A default browser will open with the information about the id 
-#'     displayed.
+#' @return A BiocSet object with the url column added to element or set.
 #'
 #' @export
 #'
 #' @examples
-#' \dontrun{
-#' url_ref("GO:0000002")
-#' }
-# Thoughts about when calling url_ref() creating an extra column in element
-# and set that have the url ready if the user wants to look it up
-url_ref <- function(search, ...) 
+#' es <- BiocSet(set1 = c("TP53", "TNF", "EGFR"), set2 = c("IL6", "VEGFA"))
+#' url_ref_element(es)
+url_ref_element <- function(es) 
 {
-    if (startsWith(search, "GO")) {
-        url <- paste0(
-            "http://amigo.geneontology.org/amigo/medial_search?q=",
-            search,
-            "&searchtype=all"
+    elements <- es_element(es)$element
+    url <- vapply(elements, function(x) {
+        if (startsWith(x, "ENSG")) {
+            paste0(
+                "https://www.ensembl.org/Homo_sapiens/Gene/Summary?db=core;g=",
+                x,
+                ";r=19:14091688-14118084"
             )
-    }
-    else if (startsWith(search, "ENSG")) {
-        url <- paste0(
-            "https://www.ensembl.org/Homo_sapiens/Gene/Summary?db=core;g=",
-            search,
-            ";r=19:14091688-14118084"
+        }
+        else
+            paste0(
+                "https://www.ncbi.nlm.nih.gov/gene/?term=",
+                x
             )
-    }
-    else if (startsWith(search, "map")) {
-        url <- paste0(
-            "https://www.genome.jp/dbget-bin/www_bget?pathway:",
-            search
-            )
-    }
-    else
-        url <- paste0(
-            "https://www.ncbi.nlm.nih.gov/gene/?term=",
-            search
-            )
+    }, character(1))
 
-    browseURL(url, ...)
+    es %>% mutate_element(url = url)
+}
+
+#' @rdname url_ref
+#' 
+#' @export
+#'
+#' @examples
+#' es <- BiocSet("GO:0000002" = c("TP53", "TNF"), "GO:0000003" = c("IL6"))            
+#' url_ref_set(es)
+url_ref_set <- function(es)
+{
+    sets <- as.character(es_set(es)$set)
+    url <- vapply(sets, function(x) {
+        if (startsWith(x, "GO")) {
+            paste0(
+                "http://amigo.geneontology.org/amigo/medial_search?q=",
+                x,
+                "&searchtype=all"
+            )
+        }
+        else
+            paste0(
+                "https://www.genome.jp/dbget-bin/www_bget?pathway:",
+                x
+            )
+        }, character(1))
+
+    es %>% mutate_set(url = url)
 }
