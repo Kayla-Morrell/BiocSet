@@ -43,7 +43,7 @@ go_sets <- function(org, from, go = c("GO", "GOID"), evidence = NULL,
     else
         ontology <- match.arg(ontology, ontology_choices, several.ok = TRUE)
     
-    map <- filter(map, ONTOLOGY %in% ontology, EVIDENCE %in% evidence)
+    map <- filter(map, map$ONTOLOGY %in% ontology, map$EVIDENCE %in% evidence)
     do.call(BiocSet, split(map[[from]], map[[go]]))
 
     # want to store the evidence and ontology information somewhere
@@ -134,7 +134,7 @@ kegg_sets <- function(species)
 #' @examples
 #' library(org.Hs.eg.db)
 #' es <- BiocSet(set1 = c("PRKACA", "TGFA", "MAP2K1"), set2 = c("FOS", "BRCA1"))
-#' map <- mapp_add_element(es, org.Hs.eg.db, "SYMBOL", "ENTREZID")
+#' map <- map_add_element(es, org.Hs.eg.db, "SYMBOL", "ENTREZID")
 #' es %>% mutate_element(entrez = map)
 map_add_element <- function(es, org, from, add)
 {
