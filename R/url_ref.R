@@ -37,7 +37,7 @@ url_ref_element <- function(es)
 #' @export
 #'
 #' @examples
-#' es <- BiocSet("GO:0000002" = c("TP53", "TNF"), "GO:0000003" = c("IL6"))            
+#' es <- BiocSet("GO:0000002" = c("TP53", "TNF"), "GO:0000003" = c("IL6")) 
 #' url_ref_set(es)
 url_ref_set <- function(es)
 {
