@@ -156,8 +156,8 @@ map_add_element <- function(es, org, from, add)
 #' @examples
 #' library(GO.db)
 #' go <- go_sets(org.Hs.eg.db, "ENSEMBL")
-#' map <- map_add_set(go, GO.db, "GOID", "DEFINTION")
-#' go %>% mutate_set(defintion = map)
+#' map <- map_add_set(go, GO.db, "GOID", "DEFINITION")
+#' go %>% mutate_set(definition = map)
 map_add_set <- function(es, org, from, add)
 {
     stopifnot(from %in% keytypes(org),
