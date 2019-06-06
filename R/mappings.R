@@ -19,7 +19,7 @@
 #' library(org.Hs.eg.db)
 #' go_sets(org.Hs.eg.db, "ENSEMBL")
 go_sets <- function(org, from, go = c("GO", "GOID"), evidence = NULL, 
-    ontology = NULL)
+   ontology = NULL)
 {
     stopifnot(from %in% keytypes(org))
 

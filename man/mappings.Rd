@@ -59,6 +59,6 @@ map <- map_add_element(es, org.Hs.eg.db, "SYMBOL", "ENTREZID")
 es \%>\% mutate_element(entrez = map)
 library(GO.db)
 go <- go_sets(org.Hs.eg.db, "ENSEMBL")
-map <- map_add_set(go, GO.db, "GOID", "DEFINTION")
-go \%>\% mutate_set(defintion = map)
+map <- map_add_set(go, GO.db, "GOID", "DEFINITION")
+go \%>\% mutate_set(definition = map)
 }
