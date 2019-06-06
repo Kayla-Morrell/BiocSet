@@ -21,6 +21,6 @@ Functions to access help for the different identifiers
 \examples{
 es <- BiocSet(set1 = c("TP53", "TNF", "EGFR"), set2 = c("IL6", "VEGFA"))
 url_ref_element(es)
-es <- BiocSet("GO:0000002" = c("TP53", "TNF"), "GO:0000003" = c("IL6"))            
+es <- BiocSet("GO:0000002" = c("TP53", "TNF"), "GO:0000003" = c("IL6")) 
 url_ref_set(es)
 }
