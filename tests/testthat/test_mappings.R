@@ -51,7 +51,6 @@ test_that("'go_sets()' works",
 
 test_that("'es_map()' works",
 {
-    library(org.Hs.eg.db)
     es <- BiocSet(
         set1 = c("BRCA1", "BRCA2", "TGFA", "ERCC2"),
         set2 = c("PRNP", "FMR1", "PAX3")
@@ -92,7 +91,6 @@ test_that("'kegg_sets()' works",
 
 test_that("'map_add_element()' works",
 {
-    library(org.Hs.eg.db)
     es <- BiocSet(set1 = c("PRKACA", "TGFA", "MAP2K1"), set2 = c("FOS", "BRCA1"))
     map <- map_add_element(es, org.Hs.eg.db, "SYMBOL", "ENTREZID")
 
@@ -105,7 +103,6 @@ test_that("'map_add_element()' works",
 
 test_that("'map_add_set()' works",
 {
-    library(org.Hs.eg.db)
     library(GO.db)
     go <- go_sets(org.Hs.eg.db, "ENSEMBL")
     map <- map_add_set(go, GO.db, "GOID", "DEFINITION")
