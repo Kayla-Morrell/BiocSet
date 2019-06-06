@@ -253,16 +253,16 @@ multipaths
 
 # Information look up
 
-A final feature to `BiocSet` is the ability to look up information about the 
-different elements/sets. A user could utilize the function `url_ref()` to get 
-more information about a specific id. Below is an example of looking up 
-information for one of the Ensembl ids (which is an element) and one of the GO 
-ids (which is a set) in the `go` data set we worked with above.
+A final feature to `BiocSet` is the ability to add reference information about 
+all of the elements/sets. A user could utilize the function `url_ref_element()`
+ or `url_ref_set()` to add information to the BiocSet object. If a user has a 
+question about a specific id then they can follow the reference url to get more 
+informtion. Below is an example of using both functions to add reference urls to
+ the `go` data set we worked with above.
 
-```{r url, eval = FALSE}
-go
-url_ref("ENSG00000151729")
-url_ref("GO:0000003")
+```{r url}
+url_ref_element(go)
+url_ref_set(go)
 ```
 
 # Session info
