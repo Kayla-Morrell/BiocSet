@@ -44,7 +44,12 @@ go_sets <- function(org, from, go = c("GO", "GOID"), evidence = NULL,
         ontology <- match.arg(ontology, ontology_choices, several.ok = TRUE)
     
     map <- filter(map, map$ONTOLOGY %in% ontology, map$EVIDENCE %in% evidence)
-    do.call(BiocSet, split(map[[from]], map[[go]]))
+    do.call(BiocSet, split(map[[from]], map[[go]])) ## what if split evidence
+    # and ontology based on go and save information as a list (this would become
+    # the column.
+
+    # only add information that user asked for (if no evidence asked for don't 
+    # provide it)
 
     # want to store the evidence and ontology information somewhere
     # but not sure where the information belongs...

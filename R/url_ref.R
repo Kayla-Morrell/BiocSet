@@ -14,12 +14,14 @@
 url_ref_element <- function(es) 
 {
     elements <- es_element(es)$element
+    # rework this code...get rid of vapply and just create a vector with 
+    # 'startsWith'. That why 'startsWith' and 'paste0' are only called once 
+    # for all entries instead of for each entry
     url <- vapply(elements, function(x) {
         if (startsWith(x, "ENSG")) {
             paste0(
                 "https://www.ensembl.org/Homo_sapiens/Gene/Summary?db=core;g=",
-                x,
-                ";r=19:14091688-14118084"
+                x
             )
         }
         else
@@ -42,12 +44,14 @@ url_ref_element <- function(es)
 url_ref_set <- function(es)
 {
     sets <- as.character(es_set(es)$set)
+    # rework this code...get rid of vapply and just create a vector with
+    # 'startsWith'. That why 'startsWith' and 'paste0' are only called once
+    # for all entries instead of for each entry
     url <- vapply(sets, function(x) {
         if (startsWith(x, "GO")) {
             paste0(
                 "http://amigo.geneontology.org/amigo/medial_search?q=",
-                x,
-                "&searchtype=all"
+                x
             )
         }
         else
@@ -59,3 +63,5 @@ url_ref_set <- function(es)
 
     es %>% mutate_set(url = url)
 }
+
+# make url_ref() that does both url_ref_element() and url_ref_set()
