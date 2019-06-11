@@ -4,8 +4,8 @@ Version: 0.99.0
 Authors@R: c(
     person("Kayla", "Morrell", email = "kayla.morrell@roswellpark.org",
         role = c("aut", "cre")),
-    person("Martin", "Morgan", role = "aut")),
-    person("Kevin", "Rue-Albrecht", role = "ctb")),
+    person("Martin", "Morgan", role = "aut"),
+    person("Kevin", "Rue-Albrecht", role = "ctb"),
     person("Lluís", "Revilla Sancho", role = "ctb"))
 Description: BiocSet displays different biological sets in a triple tibble
     format. These three tibbles are `element`, `set`, and `elementset`. The

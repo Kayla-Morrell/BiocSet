@@ -24,41 +24,38 @@ go_sets <- function(org, from, go = c("GO", "GOID"), evidence = NULL,
     stopifnot(from %in% keytypes(org))
 
     go <- match.arg(go)
+
     map <- AnnotationDbi::select(
         org, keys(org, from), c(from, go), from
     )
     map <- map[!is.na(map),]
-    
-    evidence_choices <- levels(as.factor(map$EVIDENCE))
-    if (is.null(evidence)) {
-        evidence <- evidence_choices
+
+    evidence_choices <- levels(as.factor(map$EVIDENCE))   
+    evid <- match.arg(evidence, evidence_choices, several.ok = TRUE)    
+    ontology_choices <- levels(as.factor(map$ONTOLOGY))    
+    onto <- match.arg(ontology, ontology_choices, several.ok = TRUE)
+
+    if (is.null(evidence) && is.null(ontology)) {
+        do.call(BiocSet, split(map[[from]], map[[go]]))
     }
-    else
-        evidence <- match.arg(evidence, evidence_choices, several.ok = TRUE)
-
-    ontology_choices <- levels(as.factor(map$ONTOLOGY))
-    if (is.null(ontology)) {
-        ontology <- ontology_choices
+    else if (!is.null(evidence) && is.null(ontology)) {
+        ## need to figure out how to split evidence based on go and then store 
+        ## the info as a list and create a new column
+        map <- filter(map, map$EVIDENCE %in% evid)
+        do.call(BiocSet, split(map[[from]], map[[go]]))
     }
-    else
-        ontology <- match.arg(ontology, ontology_choices, several.ok = TRUE)
-    
-    map <- filter(map, map$ONTOLOGY %in% ontology, map$EVIDENCE %in% evidence)
-    do.call(BiocSet, split(map[[from]], map[[go]])) ## what if split evidence
-    # and ontology based on go and save information as a list (this would become
-    # the column.
-
-    # only add information that user asked for (if no evidence asked for don't 
-    # provide it)
-
-    # want to store the evidence and ontology information somewhere
-    # but not sure where the information belongs...
-    # I thought it would go in tbl_elementset, but something strange is 
-    # happening when performing `BiocSet`...
-    # There are the correct number of elements and sets but there seems to be
-    # some missing for elementset... I'm lost
-    #es <- do.call(BiocSet, split(map[[from]], map[[go]]))
-    #es %>% mutate_elementset(evidence = map$EVIDENCE, ontology = map$ONTOLOGY)
+    else if (is.null(evidence) && !is.null(ontology)) {
+        ## need to figure out how to split ontology based on go and then store 
+        ## the info as a list and create a new column
+        map <- fitler(map, map$ONTOLOGY %in% onto)
+        do.call(BiocSet, split(map[[from]], map[[go]]))
+    }
+    else {
+        ## need to figure out how to split evidence and ontology based on go and
+        ## then store the info as a list and create new columns
+        map <- filter(map, map$EVIDENCE %in% evid, map$ONTOLOGY %in% onto)
+        do.call(BiocSet, split(map[[from]], map[[go]]))
+    } 
 }
 
 #' @rdname mappings
