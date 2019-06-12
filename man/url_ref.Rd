@@ -3,11 +3,14 @@
 \name{url_ref_element}
 \alias{url_ref_element}
 \alias{url_ref_set}
+\alias{url_ref}
 \title{Functions to access help for the different identifiers}
 \usage{
 url_ref_element(es)
 
 url_ref_set(es)
+
+url_ref(es)
 }
 \arguments{
 \item{es}{A BiocSet object in which the reference urls should be added to.}
@@ -23,4 +26,6 @@ es <- BiocSet(set1 = c("TP53", "TNF", "EGFR"), set2 = c("IL6", "VEGFA"))
 url_ref_element(es)
 es <- BiocSet("GO:0000002" = c("TP53", "TNF"), "GO:0000003" = c("IL6")) 
 url_ref_set(es)
+es <- BiocSet("GO:0000002" = c("TP53", "TNF"), "GO:0000003" = c("IL6"))
+url_ref(es)
 }

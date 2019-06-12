@@ -32,3 +32,21 @@ test_that("'url_ref_set()' works",
     expect_error(url_ref_set(3))
     expect_error(url_ref_set())
 })
+
+test_that("'url_ref()' works",
+{
+    es <- BiocSet("GO:0000002" = c("abc", "ABC"), "GO:0000010" = c("def", "ghi",
+        "DEF", "GHI"), "hsa00010" = c("jkl", "JKL", "mno", "MNO"), "hsa00020" = 
+        c("pqr", "PQR"))
+    es1 <- url_ref(es)
+
+    expect_s4_class(es1, "BiocSet")
+    expect_identical(dim(es_element(es1)), c(12L, 2L))
+    expect_identical(dim(es_set(es1)), c(4L, 2L))
+    expect_identical(dim(es_elementset(es1)), c(12L, 2L))
+    expect_true(is_tbl_elementset(es_elementset(es1)))
+
+    expect_error(url_ref(3))
+    expect_error(url_ref())
+    expect_error(url_ref("abc"))
+})

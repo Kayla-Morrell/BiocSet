@@ -14,22 +14,17 @@
 url_ref_element <- function(es) 
 {
     elements <- es_element(es)$element
-    # rework this code...get rid of vapply and just create a vector with 
-    # 'startsWith'. That why 'startsWith' and 'paste0' are only called once 
-    # for all entries instead of for each entry
-    url <- vapply(elements, function(x) {
-        if (startsWith(x, "ENSG")) {
-            paste0(
-                "https://www.ensembl.org/Homo_sapiens/Gene/Summary?db=core;g=",
-                x
-            )
-        }
-        else
-            paste0(
-                "https://www.ncbi.nlm.nih.gov/gene/?term=",
-                x
-            )
-    }, character(1))
+    
+    url <- ifelse(startsWith(elements, "ENSG"),
+        paste0(
+            "https://www.ensembl.org/Homo_sapiens/Gene/Summary?db=core;g=",
+            elements
+            ),
+        paste0(
+            "https://www.ncbi.nlm.nih.gov/gene/?term=",
+            elements
+        )
+    )
 
     es %>% mutate_element(url = url)
 }
@@ -44,24 +39,29 @@ url_ref_element <- function(es)
 url_ref_set <- function(es)
 {
     sets <- as.character(es_set(es)$set)
-    # rework this code...get rid of vapply and just create a vector with
-    # 'startsWith'. That why 'startsWith' and 'paste0' are only called once
-    # for all entries instead of for each entry
-    url <- vapply(sets, function(x) {
-        if (startsWith(x, "GO")) {
-            paste0(
-                "http://amigo.geneontology.org/amigo/medial_search?q=",
-                x
+    
+    url <- ifelse(startsWith(sets, "GO"),
+        paste0(
+            "http://amigo.geneontology.org/amigo/medial_search?q=",
+            sets
+            ),
+        paste0(
+            "https://www.genome.jp/dbget-bin/www_bget?pathway:",
+            sets
             )
-        }
-        else
-            paste0(
-                "https://www.genome.jp/dbget-bin/www_bget?pathway:",
-                x
-            )
-        }, character(1))
+    )
 
     es %>% mutate_set(url = url)
 }
 
-# make url_ref() that does both url_ref_element() and url_ref_set()
+#' @rdname url_ref
+#'
+#' @export
+#'
+#' @examples
+#' es <- BiocSet("GO:0000002" = c("TP53", "TNF"), "GO:0000003" = c("IL6"))
+#' url_ref(es)
+url_ref <- function(es)
+{
+    es %>% url_ref_element() %>% url_ref_set()
+}
