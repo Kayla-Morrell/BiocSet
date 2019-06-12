@@ -24,7 +24,6 @@ go_sets <- function(org, from, go = c("GO", "GOID"), evidence = NULL,
     stopifnot(from %in% keytypes(org))
 
     go <- match.arg(go)
-
     map <- AnnotationDbi::select(
         org, keys(org, from), c(from, go), from
     )
@@ -35,25 +34,41 @@ go_sets <- function(org, from, go = c("GO", "GOID"), evidence = NULL,
     ontology_choices <- levels(as.factor(map$ONTOLOGY))    
     onto <- match.arg(ontology, ontology_choices, several.ok = TRUE)
 
-    if (is.null(evidence) && is.null(ontology)) {
-        do.call(BiocSet, split(map[[from]], map[[go]]))
+    if (!is.null(evidence) && !is.null(ontology)) {
+        stopifnot(all(evid %in% evidence_choices),
+            all(onto %in% ontology_choices))
+
+        map <- filter(map, map$EVIDENCE %in% evid, map$ONTOLOGY %in% onto)
+        evidence_split <- split(map$EVIDENCE, map[[go]])
+        ontology_split <- split(map$ONTOLOGY, map[[go]])
+
+        es <- do.call(BiocSet, split(map[[from]], map[[go]]))
+        es %>% mutate_set(
+            evidence = evidence_split,
+            ontology = ontology_split
+        )
     }
     else if (!is.null(evidence) && is.null(ontology)) {
-        ## need to figure out how to split evidence based on go and then store 
-        ## the info as a list and create a new column
+        stopifnot(all(evidence %in% evidence_choices))
+
         map <- filter(map, map$EVIDENCE %in% evid)
-        do.call(BiocSet, split(map[[from]], map[[go]]))
+        evidence_split <- split(map$EVIDENCE, map[[go]])
+        evidence_unique <- lapply(evidence_split, unique)
+
+        es <- do.call(BiocSet, split(map[[from]], map[[go]]))
+        es %>% mutate_set(evidence = evidence_unique)
     }
     else if (is.null(evidence) && !is.null(ontology)) {
-        ## need to figure out how to split ontology based on go and then store 
-        ## the info as a list and create a new column
-        map <- fitler(map, map$ONTOLOGY %in% onto)
-        do.call(BiocSet, split(map[[from]], map[[go]]))
+        stopifnot(all(ontology %in% ontology_choices))
+
+        map <- filter(map, map$ONTOLOGY %in% onto)
+        ontology_split <- split(map$ONTOLOGY, map[[go]])
+        ontology_unique <- lapply(ontology_split, unique)
+
+        es <- do.call(BiocSet, split(map[[from]], map[[go]]))
+        es %>% mutate_set(ontology = ontology_unique)
     }
     else {
-        ## need to figure out how to split evidence and ontology based on go and
-        ## then store the info as a list and create new columns
-        map <- filter(map, map$EVIDENCE %in% evid, map$ONTOLOGY %in% onto)
         do.call(BiocSet, split(map[[from]], map[[go]]))
     } 
 }

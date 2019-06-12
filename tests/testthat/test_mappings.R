@@ -15,7 +15,7 @@ test_that("'go_sets()' works",
 
     expect_s4_class(es1, "BiocSet")
     expect_identical(dim(es_element(es1)), c(13138L, 1L))
-    expect_identical(dim(es_set(es1)), c(11077L, 1L))
+    expect_identical(dim(es_set(es1)), c(11077L, 2L))
     expect_identical(dim(es_elementset(es1)), c(87444L, 2L))
     expect_true(is_tbl_elementset(es_elementset(es1)))
     
@@ -23,7 +23,7 @@ test_that("'go_sets()' works",
 
     expect_s4_class(es2, "BiocSet")
     expect_identical(dim(es_element(es2)), c(16969L, 1L))
-    expect_identical(dim(es_set(es2)), c(3903L, 1L))
+    expect_identical(dim(es_set(es2)), c(3903L, 2L))
     expect_identical(dim(es_elementset(es2)), c(56051L, 2L))
     expect_true(is_tbl_elementset(es_elementset(es2)))
 
@@ -32,7 +32,7 @@ test_that("'go_sets()' works",
 
     expect_s4_class(es3, "BiocSet")
     expect_identical(dim(es_element(es3)), c(0L, 1L))
-    expect_identical(dim(es_set(es3)), c(0L, 1L))
+    expect_identical(dim(es_set(es3)), c(0L, 3L))
     expect_identical(dim(es_elementset(es3)), c(0L, 2L))
     expect_true(is_tbl_elementset(es_elementset(es3)))
 
@@ -79,9 +79,9 @@ test_that("'kegg_sets()' works",
     es <- kegg_sets("hsa")
 
     expect_s4_class(es, "BiocSet")
-    expect_identical(dim(es_element(es)), c(7841L, 1L))
+    expect_identical(dim(es_element(es)), c(7842L, 1L))
     expect_identical(dim(es_set(es)), c(323L, 1L))
-    expect_identical(dim(es_elementset(es)), c(28766L, 2L))
+    expect_identical(dim(es_elementset(es)), c(28789L, 2L))
     expect_true(is_tbl_elementset(es_elementset(es)))
 
     expect_error(kegg_sets(hsa))
