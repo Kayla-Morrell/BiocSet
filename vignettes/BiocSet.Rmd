@@ -28,8 +28,8 @@ knitr::opts_chunk$set(
 `BiocSet` is a package that represents element sets in a tibble format with the
  `BiocSet` class. Element sets are read in and converted into a tibble format. 
 From here, typical `dplyr` operations can be performed on the element set. 
-`BiocSet` also provides functionality for mapping different ID types and being 
-directed to a reference webpage for specific elements/sets.
+`BiocSet` also provides functionality for mapping different ID types and 
+providing reference urls for elements and sets.
 
 # Installation
 Install the most recent version from Bioconductor:
@@ -57,19 +57,19 @@ library(BiocSet)
 
 `BiocSet` can create a `BiocSet` object using two different input methods. The 
 first is to input named character vectors of element sets. `BiocSet` returns 
-three tibbles, `element` which contains the elements, `set` which contains the 
-sets and `elementset` which contains elements and sets together. 
+three tibbles, `es_element` which contains the elements, `es_set` which contains
+ the sets and `es_elementset` which contains elements and sets together. 
 
 ```{r constructor}
 tbl <- BiocSet(set1 = letters, set2 = LETTERS)
 tbl
 ```
 
-The second method of creating a `BiocSet` oject would be to read in a `.gmt` 
+The second method of creating a `BiocSet` object would be to read in a `.gmt` 
 file. Using `import()`, a path to a downloaded `.gmt` file is read in and a 
 `BiocSet` object is returned. The example below uses a hallmark element set 
 downloaded from [GSEA][], which is also included with this package. This 
-`BiocSet` includes a `source` column within the `elementset` tibble for 
+`BiocSet` includes a `source` column within the `es_elementset` tibble for 
 reference as to where the element set came from.
 
 [GSEA]: http://software.broadinstitute.org/esea/index.jsp
@@ -93,23 +93,15 @@ gmt
 
 ## Implemented functions
 
-`BiocSet` adopts the use of many `dplyr` functions such as `filter()`, 
-`select()`, `mutate()`, `summarise()`, `arrange()`, and `tbl_vars()`.
-
-```{r examples}
-tbl <- BiocSet(set1 = letters, set2 = LETTERS)
-tbl
-tbl %>% filter(element == "a" | element == "A")
-tbl %>% mutate(pval = rnorm(1:52))
-```
-
-Another feature available to `BiocSet` is the ability to activate different 
-tibbles. When a `BiocSet` is created, the tibble `elementset` is automatically 
-activated and all functions will be performed on this tibble. With each of the 
-functions the user is able to pick a different tibble to activate and work on 
-by using 'verb_tibble'. After the function is executed than the 'active' tibble
- is returned back to the tibble that was active before the function call. Some 
-examples are shown below of how these functions work.
+A feature available to `BiocSet` is the ability to activate different 
+tibbles to perform certain functions on. When a `BiocSet` is created, the tibble
+ `es_elementset` is automatically activated and all functions will be performed
+ on this tibble. `BiocSet` adopts the use of many common `dplyr` functions such
+ as `filter()`, `select()`, `mutate()`, `summarise()`, and `arrange()`. With 
+each of the functions the user is able to pick a different tibble to activate
+ and work on by using 'verb_tibble'. After the function is executed than the 
+'active' tibble is returned back to the tibble that was active before the 
+function call. Some examples are shown below of how these functions work.
 
 ```{r activate}
 tbl <- BiocSet(set1 = letters, set2 = LETTERS)
@@ -117,6 +109,26 @@ tbl
 tbl %>% filter_element(element == "a" | element == "A")
 tbl %>% mutate_set(pval = rnorm(1:2))
 tbl %>% arrange_elementset(desc(element))
+```
+
+## Set operations
+
+`BiocSet` also allows for common set operations to be performed on the `BiocSet`
+ object. `union()` and `intersection()` are the two se operations available in 
+`BiocSet`. We demonstate how a user can find the union (or intersection) between
+ two `BiocSet` objects or within a single `BiocSet` object.
+
+```{r set_ops}
+# union of two BiocSet objects
+es1 <- BiocSet(set1 = letters[c(1:3)], set2 = LETTERS[c(1:3)])
+es2 <- BiocSet(set1 = letters[c(2:4)], set2 = LETTERS[c(2:4)])
+union(es1, es2)
+
+# union within a single BiocSet object
+es3 <- BiocSet(set1 = letters[c(1:10)], set2 = letters[c(4:20)])
+set1 <- filter_elementset(es3, set == "set1")
+set2 <- filter_elementset(es3, set == "set2")
+union(set1, set2)
 ```
 
 # Case study
@@ -134,21 +146,26 @@ se <- airway
 ```
 
 The function `go_sets()` discovers the keys from the org object and uses 
-`AnnotationDbi::select` to create a mapping to GO ids. We represent these 
-identifieres as a `BiocSet` object. Using the `go_sets` function we are able to
- map the Ensembl ids and GO ids from the genome wide annotation for Human data 
-in the `org.Hs.eg.db` package. The Ensembl ids are treated as elements while 
-the GO ids are treated as sets.
+`AnnotationDbi::select` to create a mapping to GO ids. `go_sets()` also allows 
+the user to indicate which evidence type or ontology type they would like when 
+selecting the GO ids. The default is using all evidence types and all ontology 
+types.  We represent these identifieres as a `BiocSet` object. Using the 
+`go_sets` function we are able to map the Ensembl ids and GO ids from the genome
+ wide annotation for Human data in the `org.Hs.eg.db` package. The Ensembl ids 
+are treated as elements while the GO ids are treated as sets.
 
 ```{r go_sets, message = FALSE}
 library(org.Hs.eg.db)
 go <- go_sets(org.Hs.eg.db, "ENSEMBL")
 go
+
+# an example of subsetting by evidence type
+go_sets(org.Hs.eg.db, "ENSEMBL", evidence = c("IPI", "TAS"))
 ```
 
 Some users may not be interested in reporting the non-descriptive elements. We 
 demonstrate subsetting the `airway` data to include non-zero assays and then 
-filtering out the non-descriptive elements.
+filter out the non-descriptive elements.
 
 ```{r drop_assays}
 se1 = se[rowSums(assay(se)) != 0,]
@@ -197,8 +214,8 @@ go %>% mutate_set(definition = map)
 The library `KEGGREST` is a client interface to the KEGG REST server. 
 KEGG contains pathway maps that represent interaction, reaction and relation 
 networks for various biological processes and diseases. `BiocSet` has a 
-function that utilizes `KEGGREST` to develop a BiocSet that contains the 
-elements for every pathway map in KEGG.
+function that utilizes `KEGGREST` to develop a `BiocSet` object  that contains 
+the elements for every pathway map in KEGG.
 
 ```{r kegg_sets, message = FALSE}
 kegg <- kegg_sets("hsa")
@@ -254,15 +271,14 @@ multipaths
 # Information look up
 
 A final feature to `BiocSet` is the ability to add reference information about 
-all of the elements/sets. A user could utilize the function `url_ref_element()`
- or `url_ref_set()` to add information to the BiocSet object. If a user has a 
-question about a specific id then they can follow the reference url to get more 
-informtion. Below is an example of using both functions to add reference urls to
- the `go` data set we worked with above.
+all of the elements/sets. A user could utilize the function `url_ref()` to add 
+information to the `BiocSet` object. If a user has a question about a specific 
+id then they can follow the reference url to get more informtion. Below is an 
+example of using `url_ref()` to add reference urls to the `go` data set we 
+worked with above.
 
 ```{r url}
-url_ref_element(go)
-url_ref_set(go)
+url_ref(go)
 ```
 
 # Session info

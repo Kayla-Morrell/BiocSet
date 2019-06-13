@@ -16,16 +16,11 @@ url_ref_element <- function(es)
     elements <- es_element(es)$element
     
     url <- ifelse(startsWith(elements, "ENSG"),
-        paste0(
-            "https://www.ensembl.org/Homo_sapiens/Gene/Summary?db=core;g=",
-            elements
-            ),
-        paste0(
-            "https://www.ncbi.nlm.nih.gov/gene/?term=",
-            elements
-        )
+        "https://www.ensembl.org/Homo_sapiens/Gene/Summary?db=core;g=",
+        "https://www.ncbi.nlm.nih.gov/gene/?term="
     )
 
+    url <- paste0(url, elements)
     es %>% mutate_element(url = url)
 }
 
@@ -38,19 +33,14 @@ url_ref_element <- function(es)
 #' url_ref_set(es)
 url_ref_set <- function(es)
 {
-    sets <- as.character(es_set(es)$set)
-    
+    sets <- as.character(es_set(es)$set)    
+
     url <- ifelse(startsWith(sets, "GO"),
-        paste0(
-            "http://amigo.geneontology.org/amigo/medial_search?q=",
-            sets
-            ),
-        paste0(
-            "https://www.genome.jp/dbget-bin/www_bget?pathway:",
-            sets
-            )
+        "http://amigo.geneontology.org/amigo/medial_search?q=",
+        "https://www.genome.jp/dbget-bin/www_bget?pathway:"
     )
 
+    url <- paste0(url, sets)
     es %>% mutate_set(url = url)
 }
 
