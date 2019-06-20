@@ -37,7 +37,7 @@ union.BiocSet <- function(x, y=NULL, ...)
     if (is.null(y))
         union_1arg(x, ...)
     else
-	union_2arg(x, y, ...)
+        union_2arg(x, y, ...)
 }
 
 intersect_1arg <- function(x, ...)
