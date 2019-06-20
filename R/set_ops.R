@@ -12,16 +12,17 @@ union_2arg <- function(x, y, ...)
     elementset <- union(es_elementset(x), es_elementset(y), ...)
     initialize(x, element = element, set = set, elementset = elementset)
 }
+#how should union be imported, or does it even need to be?
 
 #' Set operations for BiocSets
 #'
 #' @rdname set_op
 #'
 #' @param x The first BiocSet to perform operations on
-#' @param y The second BiocSet to perform operations on
+#' @param y Optional. The second BiocSet object used
 #' @param ... other arguments passed on to methods
 #' 
-#' @return For union, a tibble with the results of the union of x and y
+#' @return For union, a tibble with the results of the union of x or x and y.
 #' 
 #' @export
 #'
@@ -53,6 +54,7 @@ intersect_2arg <- function(x, y, ...)
     elementset <- intersect(es_elementset(x), es_elementset(y), ...)
     initialize(x, element = element, set = set, elementset = elementset)
 }
+# how should intersect and duplicate be imported or do they even need to be?
 
 #' @rdname set_op
 #'

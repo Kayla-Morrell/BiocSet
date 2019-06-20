@@ -12,12 +12,12 @@
 \arguments{
 \item{x}{The first BiocSet to perform operations on}
 
-\item{y}{The second BiocSet to perform operations on}
+\item{y}{Optional. The second BiocSet object used}
 
 \item{...}{other arguments passed on to methods}
 }
 \value{
-For union, a tibble with the results of the union of x and y
+For union, a tibble with the results of the union of x or x and y.
 
 For intersect, a tibble with the intersect of x and y
 }

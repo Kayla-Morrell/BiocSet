@@ -114,9 +114,10 @@ tbl %>% arrange_elementset(desc(element))
 ## Set operations
 
 `BiocSet` also allows for common set operations to be performed on the `BiocSet`
- object. `union()` and `intersection()` are the two se operations available in 
-`BiocSet`. We demonstate how a user can find the union (or intersection) between
- two `BiocSet` objects or within a single `BiocSet` object.
+ object. `union()` and `intersection()` are the two set operations available in 
+`BiocSet`. We demonstate how a user can find the union between two `BiocSet` 
+objects or within a single `BiocSet` object. Intersection is used in the same 
+way.
 
 ```{r set_ops}
 # union of two BiocSet objects
@@ -126,9 +127,7 @@ union(es1, es2)
 
 # union within a single BiocSet object
 es3 <- BiocSet(set1 = letters[c(1:10)], set2 = letters[c(4:20)])
-set1 <- filter_elementset(es3, set == "set1")
-set2 <- filter_elementset(es3, set == "set2")
-union(set1, set2)
+union(es3)
 ```
 
 # Case study
