@@ -1,7 +1,7 @@
 union_1arg <- function(x, ...)
 {
-    #unique_list <- unique(es_element(x)$element)
-    #x %>% filter(element %in% unique_list) %>% es_element()
+    #unique_list <- unique(es_elementset(x)$element)
+    #x %>% filter_element(element %in% unique_list) %>% es_element()
     x %>% es_element()
 }
 
@@ -39,6 +39,21 @@ union.BiocSet <- function(x, y=NULL, ...)
 	union_2arg(x, y, ...)
 }
 
+intersect_1arg <- function(x, ...)
+{
+    elements <- es_elementset(x)$element
+    dup_list <- elements[duplicated(elements)]
+    x %>% filter_element(element %in% dup_list) %>% es_element()
+}
+
+intersect_2arg <- function(x, y, ...)
+{
+    element <- intersect(es_element(x), es_element(y), ...)
+    set <- intersect(es_set(x), es_set(y), ...)
+    elementset <- intersect(es_elementset(x), es_elementset(y), ...)
+    initialize(x, element = element, set = set, elementset = elementset)
+}
+
 #' @rdname set_op
 #'
 #' 
@@ -50,24 +65,12 @@ union.BiocSet <- function(x, y=NULL, ...)
 #' es2 <- BiocSet(set1 = letters[c(3:8)], set2 = LETTERS[c(3:8)])
 #' intersect(es1, es2)
 #' es3 <- BiocSet(set1 = letters[c(1:10)], set2 = letters[c(4:20)])
-#' set1 <- filter_elementset(es3, set == "set1")
-#' set2 <- filter_elementset(es3, set == "set2")
-#' intersect(set1, set2)
-intersect.BiocSet <- function(x, y, ...)
+#' intersect(es3)
+intersect.BiocSet <- function(x, y=NULL, ...)
 {
-    element <- intersect(es_element(x), es_element(y), ...)
-    set <- intersect(es_set(x), es_set(y), ...)
-    elementset <- intersect(es_elementset(x), es_elementset(y), ...)
-    initialize(x, element = element, set = set, elementset = elementset)
+    if (is.null(y))
+        intersect_1arg(x, ...)
+    else
+        intersect_2arg(x, y, ...)
 }
 
-intersect_1arg <- function(x, ...)
-{
-    dup_list <- duplicated(es_element(x)$element)
-    x %>% filter(element %in% unique_list) %>% es_element()
-}
-
-intersect_2arg <- function(x, y, ...)
-{
-
-}

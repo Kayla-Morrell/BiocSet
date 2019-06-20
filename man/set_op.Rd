@@ -5,9 +5,9 @@
 \alias{intersect.BiocSet}
 \title{Set operations for BiocSets}
 \usage{
-\method{union}{BiocSet}(x, y, ...)
+\method{union}{BiocSet}(x, y = NULL, ...)
 
-\method{intersect}{BiocSet}(x, y, ...)
+\method{intersect}{BiocSet}(x, y = NULL, ...)
 }
 \arguments{
 \item{x}{The first BiocSet to perform operations on}
@@ -29,14 +29,10 @@ es1 <- BiocSet(set1 = letters[c(1:3)], set2 = LETTERS[c(1:3)])
 es2 <- BiocSet(set1 = letters[c(2:4)], set2 = LETTERS[c(2:4)])
 union(es1, es2)
 es3 <- BiocSet(set1 = letters[c(1:10)], set2 = letters[c(4:20)])
-set1 <- filter_elementset(es3, set == "set1")
-set2 <- filter_elementset(es3, set == "set2")
-union(set1, set2)
+union(es3)
 es1 <- BiocSet(set1 = letters[c(1:4)], set2 = LETTERS[c(1:4)])
 es2 <- BiocSet(set1 = letters[c(3:8)], set2 = LETTERS[c(3:8)])
 intersect(es1, es2)
 es3 <- BiocSet(set1 = letters[c(1:10)], set2 = letters[c(4:20)])
-set1 <- filter_elementset(es3, set == "set1")
-set2 <- filter_elementset(es3, set == "set2")
-intersect(set1, set2)
+intersect(es3)
 }
