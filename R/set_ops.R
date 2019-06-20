@@ -1,3 +1,18 @@
+union_1arg <- function(x, ...)
+{
+    #unique_list <- unique(es_element(x)$element)
+    #x %>% filter(element %in% unique_list) %>% es_element()
+    x %>% es_element()
+}
+
+union_2arg <- function(x, y, ...)
+{
+    element <- union(es_element(x), es_element(y), ...)
+    set <- union(es_set(x), es_set(y), ...)
+    elementset <- union(es_elementset(x), es_elementset(y), ...)
+    initialize(x, element = element, set = set, elementset = elementset)
+}
+
 #' Set operations for BiocSets
 #'
 #' @rdname set_op
@@ -15,15 +30,13 @@
 #' es2 <- BiocSet(set1 = letters[c(2:4)], set2 = LETTERS[c(2:4)])
 #' union(es1, es2)
 #' es3 <- BiocSet(set1 = letters[c(1:10)], set2 = letters[c(4:20)])
-#' set1 <- filter_elementset(es3, set == "set1")
-#' set2 <- filter_elementset(es3, set == "set2")
-#' union(set1, set2)
-union.BiocSet <- function(x, y, ...)
+#' union(es3)
+union.BiocSet <- function(x, y=NULL, ...)
 {
-    element <- union(es_element(x), es_element(y), ...)
-    set <- union(es_set(x), es_set(y), ...)
-    elementset <- union(es_elementset(x), es_elementset(y), ...)
-    initialize(x, element = element, set = set, elementset = elementset)    
+    if (is.null(y))
+        union_1arg(x, ...)
+    else
+	union_2arg(x, y, ...)
 }
 
 #' @rdname set_op
@@ -48,3 +61,13 @@ intersect.BiocSet <- function(x, y, ...)
     initialize(x, element = element, set = set, elementset = elementset)
 }
 
+intersect_1arg <- function(x, ...)
+{
+    dup_list <- duplicated(es_element(x)$element)
+    x %>% filter(element %in% unique_list) %>% es_element()
+}
+
+intersect_2arg <- function(x, y, ...)
+{
+
+}
