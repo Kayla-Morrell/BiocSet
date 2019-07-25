@@ -127,7 +127,7 @@ union(es1, es2)
 
 # union within a single BiocSet object
 es3 <- BiocSet(set1 = letters[c(1:10)], set2 = letters[c(4:20)])
-union(es3)
+union_single(es3)
 ```
 
 # Case study

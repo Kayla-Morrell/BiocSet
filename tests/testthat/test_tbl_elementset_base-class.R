@@ -89,23 +89,23 @@ test_that("'mutate.tbl_elementset_base()' works", {
     expect_error(tbl_set(es) %>% mutate(pval = rnorm(1:23)))
 })
 
-test_that("'tbl_vars.tbl_elementset_base()' works", {
+test_that("'tbl_nongroup_vars.tbl_elementset_base()' works", {
     es <- tbl_elementset(set1 = letters, set2 = LETTERS)
 
-    es1 <- es %>% tbl_vars()
+    es1 <- es %>% tbl_nongroup_vars()
     expect_is(es1, "character")
     expect_length(es1, 2)
-    expect_error(es %>% tbl_vars(set))
+    expect_error(es %>% tbl_nongroup_vars(set))
 
-    es2 <- tbl_element(es) %>% tbl_vars()
+    es2 <- tbl_element(es) %>% tbl_nongroup_vars()
     expect_is(es2, "character")
     expect_length(es2, 1)
-    expect_error(es %>% tbl_vars(element))
+    expect_error(es %>% tbl_nongroup_vars(element))
 
-    es3 <- tbl_set(es) %>% tbl_vars()
+    es3 <- tbl_set(es) %>% tbl_nongroup_vars()
     expect_is(es3, "character")
     expect_length(es3, 1)
-    expect_error(es %>% tbl_vars(element))
+    expect_error(es %>% tbl_nongroup_vars(element))
 })
 
 test_that("'summarise.tbl_elementset_base()' works", {

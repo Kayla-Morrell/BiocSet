@@ -33,7 +33,7 @@ union.BiocSet <- function(x, y, ...)
 #' @examples
 #' es1 <- BiocSet(set1 = letters[c(1:10)], set2 = letters[c(4:20)])
 #' union_single(es1) 
-union_single.BiocSet <- function(x, ...)
+union_single <- function(x, ...)
 {
     unique_elements <- x %>% es_element() %>% pull(element)
 
@@ -68,8 +68,8 @@ intersect.BiocSet <- function(x, y, ...)
 #'
 #' @examples
 #' es1 <- BiocSet(set1 = letters[c(1:10)], set2 = letters[c(4:20)])
-#' intersect(es1) 
-intersect_single.BiocSet <- function(x, ...)
+#' intersect_single(es1) 
+intersect_single <- function(x, ...)
 {
     elements <- es_elementset(x)$element
     dup_list <- elements[duplicated(elements)]

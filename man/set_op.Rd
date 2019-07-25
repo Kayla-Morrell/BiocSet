@@ -2,14 +2,14 @@
 % Please edit documentation in R/set_ops.R
 \name{union.BiocSet}
 \alias{union.BiocSet}
-\alias{union_single.BiocSet}
+\alias{union_single}
 \alias{intersect.BiocSet}
 \alias{intersect_single}
 \title{Set operations for BiocSets}
 \usage{
 \method{union}{BiocSet}(x, y, ...)
 
-union_single.BiocSet(x, ...)
+union_single(x, ...)
 
 \method{intersect}{BiocSet}(x, y, ...)
 
@@ -46,5 +46,5 @@ es1 <- BiocSet(set1 = letters[c(1:4)], set2 = LETTERS[c(1:4)])
 es2 <- BiocSet(set1 = letters[c(3:8)], set2 = LETTERS[c(3:8)])
 intersect(es1, es2)
 es1 <- BiocSet(set1 = letters[c(1:10)], set2 = letters[c(4:20)])
-intersect(es1) 
+intersect_single(es1) 
 }

@@ -43,15 +43,15 @@ mutate.tbl_elementset_base <-
     tbl
 }
 
-#' @importFrom dplyr tbl_vars
+#' @importFrom dplyr tbl_nongroup_vars
 #'
 #' @export
-tbl_vars.tbl_elementset_base <-
+tbl_nongroup_vars.tbl_elementset_base <-
     function(x)
 {
     class = class(x)
     class(x) = setdiff(class, .subclasses)
-    tbl_vars(x)
+    tbl_nongroup_vars(x)
 }
 
 #' @importFrom dplyr summarise

@@ -6,7 +6,7 @@
 \alias{mutate.BiocSet}
 \alias{summarise.BiocSet}
 \alias{arrange.BiocSet}
-\alias{tbl_vars.BiocSet}
+\alias{tbl_nongroup_vars.BiocSet}
 \alias{group_by.BiocSet}
 \title{Major dplyr functions adapted into BiocSet}
 \usage{
@@ -20,7 +20,7 @@
 
 \method{arrange}{BiocSet}(.data, ...)
 
-\method{tbl_vars}{BiocSet}(x)
+tbl_nongroup_vars.BiocSet(x)
 
 \method{group_by}{BiocSet}(.data, ..., add = FALSE)
 }
@@ -51,7 +51,7 @@ es \%>\% es_activate(set) \%>\% summarise(n = n())
 es <- BiocSet(set1 = letters, set2 = LETTERS)
 es \%>\% es_activate(element) \%>\% arrange(desc(element))
 es <- BiocSet(set1 = letters, set2 = LETTERS)
-es \%>\% mutate(pval = rnorm(1:52)) \%>\% tbl_vars()
+es \%>\% mutate(pval = rnorm(1:52)) \%>\% tbl_nongroup_vars()
 es <- BiocSet(set1 = letters, set2 = LETTERS)
 es \%>\% group_by(element, set)
 }

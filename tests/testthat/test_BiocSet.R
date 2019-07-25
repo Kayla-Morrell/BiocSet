@@ -205,15 +205,15 @@ test_that("'arrange.BiocSet()' works", {
     expect_identical(dim(es_elementset(es5)), c(52L,2L))
 })
 
-test_that("'tbl_vars.BiocSet()' works", {
+test_that("'tbl_nongroup_vars.BiocSet()' works", {
     es <- BiocSet(set1 = letters, set2 = LETTERS)
 
-    es1 <- es %>% tbl_vars()
+    es1 <- es %>% tbl_nongroup_vars()
     expect_identical(es1, c("element", "set"))
     expect_length(es1, 2L)
     expect_identical(class(es1), "character")
 
-    es2 <- es %>% es_activate(element) %>% tbl_vars()
+    es2 <- es %>% es_activate(element) %>% tbl_nongroup_vars()
     expect_identical(es2, "element")
     expect_length(es2, 1L)
     expect_identical(class(es2), "character")

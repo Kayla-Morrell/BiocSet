@@ -536,7 +536,7 @@ arrange_elementset <- function(.data, ...) {
 
 #' @rdname major_func
 #'
-#' @importFrom dplyr tbl_vars
+#' @importFrom dplyr tbl_nongroup_vars
 #'
 #' @param x A 'BiocSet' object.
 #'
@@ -544,12 +544,12 @@ arrange_elementset <- function(.data, ...) {
 #'
 #' @examples
 #' es <- BiocSet(set1 = letters, set2 = LETTERS)
-#' es %>% mutate(pval = rnorm(1:52)) %>% tbl_vars()
-tbl_vars.BiocSet <- function(x)
+#' es %>% mutate(pval = rnorm(1:52)) %>% tbl_nongroup_vars()
+tbl_nongroup_vars.BiocSet <- function(x)
 {
     active <- .active(x)
     sub <- slot(x, active)
-    tbl_vars(sub)
+    tbl_nongroup_vars(sub)
 }
 
 #' @rdname major_func
