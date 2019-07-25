@@ -568,3 +568,34 @@ group_by.BiocSet <- function(.data, ..., add = FALSE)
     sub <- .active_value(.data)
     group_by(sub, ..., add = FALSE)
 }
+
+#' @rdname major_func
+#'
+#' @importFrom dplyr left_join
+#'
+#' @param x
+#' @param y
+#' @param by
+#' @param copy
+#' @param suffix
+#' 
+#' @export
+#' 
+#' @examples
+#' es1 <- BiocSet(set1 = letters, set2 = LETTERS)
+#' es1 <- es1 %>% mutate_element(pval = c(1:52)) %>% es_activate(element)
+#' es2 <- BiocSet(set1 = as.character(c(1:26)), set2 = as.character(c(27:52)))
+#' es2 <- es2 %>% mutate_element(pval = c(1:52))
+#' es2 %>% es_activate(element) %>% left_join(es1, by = "pval")
+left_join.BiocSet <- 
+    function(x, y, by = NULL, copy = FALSE, suffix = c(".x", ".y"), ...)
+{
+    sub1 <- .active_value(x)
+    sub2 <- .active_value(y)
+    tbl <- left_join(sub1,
+        sub2,
+        by = NULL,
+        copy = FALSE,
+        suffix = c(".x", ".y"), ...)
+    .update(x, tbl)
+}
