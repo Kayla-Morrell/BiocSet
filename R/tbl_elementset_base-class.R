@@ -99,15 +99,3 @@ intersect.tbl_elementset_base <- function(x, y, ...)
     class(tbl) <- class(x)
     tbl
 }
-
-#' @importFrom dplyr left_join
-#'
-#' @export
-left_join.tbl_elementset_base <- 
-    function(x, y, by = NULL, copy = FALSE, suffix = c(".x", ".y"), ...)
-{
-    stopifnot(is(x) == is(y))
-    tbl <- NextMethod()
-    class(tbl) <- class(x)
-    tbl
-}
