@@ -569,7 +569,7 @@ group_by.BiocSet <- function(.data, ..., add = FALSE)
     group_by(sub, ..., add = FALSE)
 }
 
-#' @rdname major_func
+#' @rdname biocset
 #'
 #' @importFrom dplyr left_join
 #'
@@ -585,7 +585,7 @@ left_join_element <- function(.data, ...)
     initialize(.data, element = tbl)
 }
 
-#' @rdname major_func
+#' @rdname biocset
 #'
 #' @export
 #'
@@ -597,4 +597,22 @@ left_join_set <- function(.data, ...)
 {
     tbl <- es_set(.data) %>% left_join(...)
     initialize(.data, set = tbl)
+}
+
+#' @rdname biocset
+#'
+#' @param es A BiocSet object that should be split into a list of element sets
+#'
+#' @export
+#'
+#' @examples
+#' es <- go_sets(org.Hs.eg.db, "ENSEMBL")
+#' as_list(es)
+as_list <- function(es)
+{
+    lens <- es_elementset(es) %>% group_by(set) %>% dplyr::count() %>% pull("n")
+    elements <- unlist(es_elementset(es)$element)
+    elements <- split(elements, rep(seq_along(lens), lens))
+    names(elements) <- unique(es_elementset(es)$set)
+    elements
 }
