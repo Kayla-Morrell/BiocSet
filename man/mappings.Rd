@@ -2,7 +2,8 @@
 % Please edit documentation in R/mappings.R
 \name{go_sets}
 \alias{go_sets}
-\alias{es_map}
+\alias{es_map_unique}
+\alias{es_map_multiple}
 \alias{kegg_sets}
 \alias{map_add_element}
 \alias{map_add_set}
@@ -11,7 +12,10 @@
 go_sets(org, from, go = c("GO", "GOID"), evidence = NULL,
   ontology = NULL)
 
-es_map(es, org, from, to)
+es_map_unique(es, org, from, to)
+
+es_map_multiple(es, org, from, to, multi = c("list", "filter", "asNA",
+  "CharacterList", "FUN"))
 
 kegg_sets(species)
 
@@ -31,9 +35,19 @@ a gene of interest. Default is all possible evidence codes.}
 
 \item{ontology}{Character, which Gene Ontology. Default is BP, CC, and MF}
 
-\item{es}{The BiocSet object to map the elements on}
+\item{es}{The BiocSet objec to map the elements on}
 
 \item{to}{A character to indicate which identifier to map to}
+
+\item{multi}{How should multiple values be returned? Options include:
+list: This will just return a list object to the end user
+filter: This will remove all elements that contain multiple matches and will
+therefore return a shorter vector than what came in whenever some of the keys
+match more than one value
+asNA: This will return an NA value whenever there are multiple matches
+CharacterList: This just returns a SimpleCharacterList object
+FUN: You can also supply a function to the 'multiVals' argument for custom
+behaviours.}
 
 \item{species}{Which species the pathways are from}
 
@@ -52,7 +66,9 @@ Functions for mapping elements and sets to different ids
 library(org.Hs.eg.db)
 go_sets(org.Hs.eg.db, "ENSEMBL")
 es <- BiocSet(set1 = c("PRKACA", "TGFA", "MAP2K1"), set2 = c("CREB3", "FOS"))
-es_map(es, org.Hs.eg.db, "SYMBOL", "ENTREZID") 
+es_map_unique(es, org.Hs.eg.db, "SYMBOL", "ENTREZID")
+es <- BiocSet(set1 = c("PRKACA", "TGFA", "MAP2K1"), set2 = c("CREB3", "FOS"))
+es_map_mulitple(es, org.Hs.eg.db, "SYMBOL", "ENTREZID")
 kegg_sets("hsa")
 es <- BiocSet(set1 = c("PRKACA", "TGFA", "MAP2K1"), set2 = c("FOS", "BRCA1"))
 map <- map_add_element(es, org.Hs.eg.db, "SYMBOL", "ENTREZID")

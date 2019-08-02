@@ -73,20 +73,9 @@ go_sets <- function(org, from, go = c("GO", "GOID"), evidence = NULL,
     } 
 }
 
-#' @rdname mappings
-#'
-#' @param es The BiocSet object to map the elements on
-#' @param to A character to indicate which identifier to map to
-#'
 #' @importFrom AnnotationDbi mapIds keytypes
 #' @importFrom tibble enframe
-#'
-#' @export
-#'
-#' @examples
-#' es <- BiocSet(set1 = c("PRKACA", "TGFA", "MAP2K1"), set2 = c("CREB3", "FOS"))
-#' es_map(es, org.Hs.eg.db, "SYMBOL", "ENTREZID") 
-es_map <- function(es, org, from, to)
+.es_map <- function(es, org, from, to, multi)
 {
     stopifnot(
         all(es_element(es)$element %in%
@@ -95,9 +84,48 @@ es_map <- function(es, org, from, to)
         to %in% keytypes(org)
     )
 
-    map <- mapIds(org, keys(org, from), to, from)
+    map <- mapIds(org, keys(org, from), to, from, multiVal = multi)
     tbl <- enframe(map, name = from, value = to)
     es %>% map_element(tbl[[from]], tbl[[to]])
+}
+
+#' @rdname mappings
+#'
+#' @param es The BiocSet objec to map the elements on
+#' @param to A character to indicate which identifier to map to
+#'
+#' @export
+#'
+#' @examples
+#' es <- BiocSet(set1 = c("PRKACA", "TGFA", "MAP2K1"), set2 = c("CREB3", "FOS"))
+#' es_map_unique(es, org.Hs.eg.db, "SYMBOL", "ENTREZID")
+es_map_unique <- function(es, org, from, to)
+{
+    .es_map(es, org, from, to, multi = first)
+}
+
+#' @rdname mappings
+#'
+#' @param multi How should multiple values be returned? Options include:
+#' list: This will just return a list object to the end user
+#' filter: This will remove all elements that contain multiple matches and will
+#' therefore return a shorter vector than what came in whenever some of the keys
+#' match more than one value
+#' asNA: This will return an NA value whenever there are multiple matches
+#' CharacterList: This just returns a SimpleCharacterList object
+#' FUN: You can also supply a function to the 'multiVals' argument for custom
+#' behaviours.
+#' 
+#' @export
+#'
+#' @examples
+#' es <- BiocSet(set1 = c("PRKACA", "TGFA", "MAP2K1"), set2 = c("CREB3", "FOS"))
+#' es_map_mulitple(es, org.Hs.eg.db, "SYMBOL", "ENTREZID")
+es_map_multiple <- function(es, org, from, to, multi = 
+    c('list', 'filter', 'asNA', 'CharacterList', 'FUN'))
+{
+    multi <- match.arg(multi)
+    .es_map(es, org, from, to, multi)
 }
 
 #' @rdname mappings
