@@ -196,7 +196,7 @@ returns a `BiocSet` object. In the example below we show how to use this
 function to map the Ensembl ids from `go` to gene symbols.
 
 ```{r es_map}
-go %>% es_map(org.Hs.eg.db, "ENSEMBL", "SYMBOL")
+go %>% es_map_unique(org.Hs.eg.db, "ENSEMBL", "SYMBOL")
 ```
 
 Another functionality of `BiocSet` is the ability to add information to the 
