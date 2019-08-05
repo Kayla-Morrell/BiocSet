@@ -671,6 +671,13 @@ BiocSet_from_elementset <- function(elementset, element, set)
     with(es_elementset(from), split(element, set))
 }
 
+#' @rdname biocset
+#' 
+#' @export
+#'
+#' @examples
+#' es <- go_sets(org.Hs.eg.db, "ENSEMBL")
+#' as.list(es)
 as.list.BiocSet <- function(x)
     .as.list.BiocSet(x)
 

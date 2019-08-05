@@ -2,6 +2,7 @@
 
 S3method(arrange,BiocSet)
 S3method(arrange,tbl_elementset_base)
+S3method(as.list,BiocSet)
 S3method(es_activate,BiocSet)
 S3method(filter,BiocSet)
 S3method(filter,tbl_elementset_base)

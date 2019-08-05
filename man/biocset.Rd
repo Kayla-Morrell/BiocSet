@@ -42,6 +42,7 @@
 \alias{left_join_set}
 \alias{left_join_elementset}
 \alias{BiocSet_from_elementset}
+\alias{as.list.BiocSet}
 \title{An element set representation as a tripple tibble}
 \usage{
 BiocSet(..., active = c("elementset", "element", "set"))
@@ -119,6 +120,8 @@ left_join_set(.data, ...)
 left_join_elementset(.data, ...)
 
 BiocSet_from_elementset(elementset, element, set)
+
+\method{as.list}{BiocSet}(x)
 }
 \arguments{
 \item{...}{For `BiocSet()`, named character() vectors of element
@@ -231,4 +234,6 @@ elementset <-
        element = letters[1:10],
        set = sample(LETTERS[1:2], 10, TRUE)
 BiocSet_from_elementset(elementset, element, set) 
+es <- go_sets(org.Hs.eg.db, "ENSEMBL")
+as.list(es)
 }
