@@ -39,7 +39,7 @@ tbl_elementset <- function(...) {
 
 is_tbl_elementset <- function(x) {
     all(c("element", "set") %in% names(x)) &&
-        is.character(x$element) && is.factor(x$set)
+        is.character(x$element) && is.character(x$set)
 }
 
 #' @rdname tblelementset

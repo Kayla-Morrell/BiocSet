@@ -25,9 +25,9 @@ test_that("'tbl_elementset()' works", {
 
 test_that("'is_tbl_elementset()' works", {
     expect_true(is_tbl_elementset(tibble(element = character(),
-                                         set = factor())))
+                                         set = character())))
     expect_true(is_tbl_elementset(tibble(element = character(),
-                                         set = factor(),
+                                         set = character(),
                                          x = integer())))
     expect_false(is_tbl_elementset(tibble(element = integer(),
                                           set = factor())))
