@@ -29,11 +29,7 @@ tbl_elementset <- function(...) {
 
     tbl <- tibble(
         element = as.character(unlist(args, use.names=FALSE)),
-        set = factor(
-            rep(names(args), lengths(args)),
-            levels = names(args)
-
-        )
+        set = as.character(rep(names(args), lengths(args)))
     )
 
     tbl <- tbl %>% distinct(.data$element, .data$set)
