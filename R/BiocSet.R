@@ -600,19 +600,78 @@ left_join_set <- function(.data, ...)
 }
 
 #' @rdname biocset
-#'
-#' @param es A BiocSet object that should be split into a list of element sets
-#'
+#' 
 #' @export
-#'
+#' 
 #' @examples
-#' es <- go_sets(org.Hs.eg.db, "ENSEMBL")
-#' as_list(es)
-as_list <- function(es)
+#' es <- BiocSet(set1 = letters, set2 = LETTERS)
+#' tbl <- tibble(x = 5:6, y = c("set1", "set2"))
+#' es %>% left_join_elementset(tbl, by = c(set = "y"))
+left_join_elementset <- function(.data, ...)
 {
-    lens <- es_elementset(es) %>% group_by(set) %>% dplyr::count() %>% pull("n")
-    elements <- unlist(es_elementset(es)$element)
-    elements <- split(elements, rep(seq_along(lens), lens))
-    names(elements) <- unique(es_elementset(es)$set)
-    elements
+    tbl <- es_elementset(.data) %>% left_join(...)
+    initialize(.data, elementset = tbl)
 }
+
+#' @rdname biocset
+#' 
+#' @param elementset A tibble with element set information
+#' @param element A tibble with element information
+#' @param set A tibble with set information
+#' 
+#' @export
+#' 
+#' @examples
+#' set.seed(123)
+#' element <- 
+#'    tibble(
+#'        element = letters[1:10],
+#'        v1 = sample(10),
+#'        v2 = sample(10)
+#'    )
+#' set <- 
+#'    tibble(
+#'        set = LETTERS[1:2],
+#'        v1 = sample(2),
+#'        v2 = sample(2)
+#'    )
+#' elementset <- 
+#'    tibble(
+#'        element = letters[1:10],
+#'        set = sample(LETTERS[1:2], 10, TRUE)
+#' BiocSet_from_elementset(elementset, element, set) 
+BiocSet_from_elementset <- function(elementset, element, set)
+{
+    if (missing(element))
+        element <- tibble(element = character())
+    if (missing(set))
+        set <- tibble(set = character())
+    stopifnot(
+        "element" %in% names(elementset), is.character(elementset$element),
+        "set" %in% names(elementset),
+        "element" %in% names(element), is.character(element$element),
+        "set" %in% names(set)
+    )
+
+    es <- do.call(BiocSet, split(elementset$element, elementset$set))
+    es <- left_join_element(es, element)
+    es <- left_join_set(es, set)
+    es <- left_join_elementset(es, elementset)
+
+    if (nrow(element) > nrow(es_element(es)))
+        message("more elements in 'element' than in 'elementset'")
+    if (nrow(set) > nrow(es_set(es)))
+        message("more elements in 'set' than in 'elementset'")
+
+    es
+}
+
+.as.list.BiocSet <- function(from)
+{
+    with(es_elementset(from), split(element, set))
+}
+
+as.list.BiocSet <- function(x)
+    .as.list.BiocSet(x)
+
+setAs("BiocSet", "list", .as.list.BiocSet)

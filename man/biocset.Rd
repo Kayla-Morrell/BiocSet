@@ -40,7 +40,8 @@
 \alias{arrange_elementset}
 \alias{left_join_element}
 \alias{left_join_set}
-\alias{as_list}
+\alias{left_join_elementset}
+\alias{BiocSet_from_elementset}
 \title{An element set representation as a tripple tibble}
 \usage{
 BiocSet(..., active = c("elementset", "element", "set"))
@@ -115,7 +116,9 @@ left_join_element(.data, ...)
 
 left_join_set(.data, ...)
 
-as_list(es)
+left_join_elementset(.data, ...)
+
+BiocSet_from_elementset(elementset, element, set)
 }
 \arguments{
 \item{...}{For `BiocSet()`, named character() vectors of element
@@ -138,7 +141,11 @@ character vector is the name of the element set.}
 
 \item{to}{a vector of the replacement values}
 
-\item{es}{A BiocSet object that should be split into a list of element sets}
+\item{elementset}{A tibble with element set information}
+
+\item{element}{A tibble with element information}
+
+\item{set}{A tibble with set information}
 }
 \value{
 For `BiocSet()`, an S4 'BiocSet' object in a tripple
@@ -203,6 +210,25 @@ es \%>\% left_join_element(tbl, by = c(element = "y"))
 tbl <- tibble(x = 10:11, y = c("set1", "set2"))
 es <- BiocSet(set1 = letters[c(1,3,5)], set2 = letters[c(2,4)])
 es \%>\% left_join_set(tbl, by = c(set = "y"))
-es <- go_sets(org.Hs.eg.db, "ENSEMBL")
-as_list(es)
+es <- BiocSet(set1 = letters, set2 = LETTERS)
+tbl <- tibble(x = 5:6, y = c("set1", "set2"))
+es \%>\% left_join_elementset(tbl, by = c(set = "y"))
+set.seed(123)
+element <- 
+   tibble(
+       element = letters[1:10],
+       v1 = sample(10),
+       v2 = sample(10)
+   )
+set <- 
+   tibble(
+       set = LETTERS[1:2],
+       v1 = sample(2),
+       v2 = sample(2)
+   )
+elementset <- 
+   tibble(
+       element = letters[1:10],
+       set = sample(LETTERS[1:2], 10, TRUE)
+BiocSet_from_elementset(elementset, element, set) 
 }
