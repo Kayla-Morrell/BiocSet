@@ -20,8 +20,7 @@ test_that("'BiocSet()' works",
     expect_s4_class(es, "BiocSet")
     expect_identical(dim(es_elementset(es)), c(26L,2L))
     expect_true(is_tbl_elementset(es_elementset(es)))
-    expect_identical(levels(es_elementset(es)$set), c("set1", "set2"))
-
+    
     expect_error(BiocSet(set1 = 1:10, set2 = LETTERS))
     expect_error(BiocSet(set1 = 1:10))
     expect_error(BiocSet(LETTERS))
@@ -208,14 +207,14 @@ test_that("'arrange.BiocSet()' works", {
 test_that("'tbl_nongroup_vars.BiocSet()' works", {
     es <- BiocSet(set1 = letters, set2 = LETTERS)
 
-    es1 <- es %>% tbl_nongroup_vars()
+    es1 <- es_elementset(es) %>% tbl_nongroup_vars()
     expect_identical(es1, c("element", "set"))
-    expect_length(es1, 2L)
+    expect_identical(length(es1), 2L)
     expect_identical(class(es1), "character")
 
-    es2 <- es %>% es_activate(element) %>% tbl_nongroup_vars()
+    es2 <- es_element(es) %>% tbl_nongroup_vars()
     expect_identical(es2, "element")
-    expect_length(es2, 1L)
+    expect_identical(length(es2), 1L)
     expect_identical(class(es2), "character")
 })
 
@@ -263,7 +262,7 @@ test_that("'as.list.BiocSet()' works", {
     es <- go_sets(org.Hs.eg.db, "ENSEMBL")
 
     es1 <- as.list(es)
-    expect_identical(is(es1), "list")
+    expect_identical(class(es1), "list")
     expect_identical(length(es1), 17495L)
     expect_identical(names(es1), es_set(es)$set)
 })

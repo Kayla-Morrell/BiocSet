@@ -15,7 +15,7 @@ test_that("'import()' works", {
     es <- import.gmt(gmtFile)
     fl <- tempfile(fileext = ".gmt")
     export(es, fl)
-    expect_identical(es, import(fl))
+    expect_equal(es, import(fl))
 
     es <- BiocSet() %>% mutate(source = character(0))
     fl <- tempfile(fileext = ".gmt")
