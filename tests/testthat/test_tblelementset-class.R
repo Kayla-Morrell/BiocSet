@@ -15,6 +15,7 @@ test_that("'tbl_elementset()' works", {
     expect_s3_class(es, "tbl_elementset")
     expect_identical(dim(es), c(26L,2L))
     expect_true(is_tbl_elementset(es))
+    expect_identical(es$set, rep("b", 26))
 
     expect_error(tbl_elementset(a = 1:5, B = LETTERS))
     expect_error(tbl_elementset(a = 1:5))

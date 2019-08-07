@@ -20,6 +20,7 @@ test_that("'BiocSet()' works",
     expect_s4_class(es, "BiocSet")
     expect_identical(dim(es_elementset(es)), c(26L,2L))
     expect_true(is_tbl_elementset(es_elementset(es)))
+    expect_identical(es_elementset(es)$set, rep("set2", 26))
     
     expect_error(BiocSet(set1 = 1:10, set2 = LETTERS))
     expect_error(BiocSet(set1 = 1:10))
@@ -259,6 +260,7 @@ test_that("'BiocSet_from_elementset()' works", {
 })
 
 test_that("'as.list.BiocSet()' works", {
+    library(org.Hs.eg.db) 
     es <- go_sets(org.Hs.eg.db, "ENSEMBL")
 
     es1 <- as.list(es)
