@@ -219,7 +219,20 @@ test_that("'tbl_nongroup_vars.BiocSet()' works", {
     expect_identical(class(es2), "character")
 })
 
-## Should add tests for left_join_*()
+test_that("'left_join.BiocSet()' works", {
+    es <- BiocSet(set1 = letters, set2 = LETTERS)
+    tbl <- tibble(x = rnorm(1:52), y = c(letters, LETTERS))
+
+    es1 <- es %>% left_join(tbl, by = c(element = "y"))
+    expect_true(is_tbl_elementset(es_elementset(es1)))
+    expect_identical(dim(es_elementset(es1)), c(52L, 3L))
+
+    expect_error(es %>% left_join())
+    expect_error(es %>% left_join(tbl))
+    expect_error(es %>% left_join(tbl, by = 1:4))
+    expect_error(es %>% left_join(tbl, by = "element")
+    expect_error(es %>% left_join(tbl, by = c("y" = element))
+})
 
 test_that("'BiocSet_from_elementset()' works", {
     set.seed(123)
