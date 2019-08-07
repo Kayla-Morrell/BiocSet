@@ -656,6 +656,7 @@ left_join_elementset <- function(.data, ...)
 #'    tibble(
 #'        element = letters[1:10],
 #'        set = sample(LETTERS[1:2], 10, TRUE)
+#'    )
 #' BiocSet_from_elementset(elementset, element, set) 
 BiocSet_from_elementset <- function(elementset, element, set)
 {
