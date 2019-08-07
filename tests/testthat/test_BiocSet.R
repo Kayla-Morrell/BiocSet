@@ -230,8 +230,8 @@ test_that("'left_join.BiocSet()' works", {
     expect_error(es %>% left_join())
     expect_error(es %>% left_join(tbl))
     expect_error(es %>% left_join(tbl, by = 1:4))
-    expect_error(es %>% left_join(tbl, by = "element")
-    expect_error(es %>% left_join(tbl, by = c("y" = element))
+    expect_error(es %>% left_join(tbl, by = "element"))
+    expect_error(es %>% left_join(tbl, by = c("y" = element)))
 })
 
 test_that("'BiocSet_from_elementset()' works", {
