@@ -694,6 +694,7 @@ BiocSet_from_elementset <- function(elementset, element, set)
 #' @export
 #'
 #' @examples
+#' library(org.Hs.eg.db)
 #' es <- go_sets(org.Hs.eg.db, "ENSEMBL")
 #' as.list(es)
 as.list.BiocSet <- function(x)
