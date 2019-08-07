@@ -99,3 +99,13 @@ intersect.tbl_elementset_base <- function(x, y, ...)
     class(tbl) <- class(x)
     tbl
 }
+
+#' @importFrom dplyr left_join
+#'
+#' @export
+left_join.tbl_elementset_base <- function(.data, ...)
+{
+    tbl <- NextMethod()
+    class(tbl) <- class(.data)
+    tbl
+}

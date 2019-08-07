@@ -569,6 +569,23 @@ group_by.BiocSet <- function(.data, ..., add = FALSE)
     group_by(sub, ..., add = FALSE)
 }
 
+#' @rdname major_func
+#'
+#' @importFrom dplyr left_join
+#' 
+#' @export
+#' 
+#' @examples
+#' es <- BiocSet(set1 = letters[1:5], set2 = LETTERS[1:5])
+#' tbl <- tibble(x = 1:10, y = c(letters[1:5], LETTERS[1:5]))
+#' es %>% left_join(tbl, by = c(element = "y"))
+left_join.BiocSet <- function(.data, ...)
+{
+    sub <- .active_value(.data)
+    tbl <- left_join(sub, ...)
+    .update(.data, tbl)
+}
+
 #' @rdname biocset
 #'
 #' @importFrom dplyr left_join
@@ -578,7 +595,7 @@ group_by.BiocSet <- function(.data, ..., add = FALSE)
 #' @examples
 #' tbl <- tibble(x = 1:5, y = letters[1:5])
 #' es <- BiocSet(set1 = letters[c(1,3,5)], set2 = letters[c(2,4)])
-#' es %>% left_join_element(tbl, by = c(element = "y"))
+#' left_join_element(es, tbl, by = c(element = "y"))
 left_join_element <- function(.data, ...)
 {
     tbl <- es_element(.data) %>% left_join(...)
@@ -592,7 +609,7 @@ left_join_element <- function(.data, ...)
 #' @examples
 #' tbl <- tibble(x = 10:11, y = c("set1", "set2"))
 #' es <- BiocSet(set1 = letters[c(1,3,5)], set2 = letters[c(2,4)])
-#' es %>% left_join_set(tbl, by = c(set = "y"))
+#' left_join_set(es, tbl, by = c(set = "y"))
 left_join_set <- function(.data, ...)
 {
     tbl <- es_set(.data) %>% left_join(...)
