@@ -209,10 +209,10 @@ es <- BiocSet(set1 = letters, set2 = LETTERS)
 es \%>\% arrange_elementset(desc(element))
 tbl <- tibble(x = 1:5, y = letters[1:5])
 es <- BiocSet(set1 = letters[c(1,3,5)], set2 = letters[c(2,4)])
-es \%>\% left_join_element(tbl, by = c(element = "y"))
+left_join_element(es, tbl, by = c(element = "y"))
 tbl <- tibble(x = 10:11, y = c("set1", "set2"))
 es <- BiocSet(set1 = letters[c(1,3,5)], set2 = letters[c(2,4)])
-es \%>\% left_join_set(tbl, by = c(set = "y"))
+left_join_set(es, tbl, by = c(set = "y"))
 es <- BiocSet(set1 = letters, set2 = LETTERS)
 tbl <- tibble(x = 5:6, y = c("set1", "set2"))
 es \%>\% left_join_elementset(tbl, by = c(set = "y"))
@@ -233,7 +233,9 @@ elementset <-
    tibble(
        element = letters[1:10],
        set = sample(LETTERS[1:2], 10, TRUE)
+   )
 BiocSet_from_elementset(elementset, element, set) 
+library(org.Hs.eg.db)
 es <- go_sets(org.Hs.eg.db, "ENSEMBL")
 as.list(es)
 }

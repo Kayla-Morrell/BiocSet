@@ -8,6 +8,7 @@
 \alias{arrange.BiocSet}
 \alias{tbl_nongroup_vars.BiocSet}
 \alias{group_by.BiocSet}
+\alias{left_join.BiocSet}
 \title{Major dplyr functions adapted into BiocSet}
 \usage{
 \method{filter}{BiocSet}(.data, ...)
@@ -23,6 +24,8 @@
 tbl_nongroup_vars.BiocSet(x)
 
 \method{group_by}{BiocSet}(.data, ..., add = FALSE)
+
+\method{left_join}{BiocSet}(.data, ...)
 }
 \arguments{
 \item{.data}{The 'BiocSet' tibble}
@@ -54,4 +57,7 @@ es <- BiocSet(set1 = letters, set2 = LETTERS)
 es \%>\% mutate(pval = rnorm(1:52)) \%>\% tbl_nongroup_vars()
 es <- BiocSet(set1 = letters, set2 = LETTERS)
 es \%>\% group_by(element, set)
+es <- BiocSet(set1 = letters[1:5], set2 = LETTERS[1:5])
+tbl <- tibble(x = 1:10, y = c(letters[1:5], LETTERS[1:5]))
+es \%>\% left_join(tbl, by = c(element = "y"))
 }
