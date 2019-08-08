@@ -100,7 +100,7 @@ go_sets <- function(org, from, go = c("GO", "GOID"), evidence = NULL,
 #' es <- BiocSet(set1 = c("PRKACA", "TGFA", "MAP2K1"), set2 = c("CREB3", "FOS"))
 #' es_map_unique(es, org.Hs.eg.db, "SYMBOL", "ENTREZID")
 es_map_unique <- function(es, org, from, to)
-    .es_map(es, org, from, to, multi = first)
+    .es_map(es, org, from, to, multi = "first")
 
 #' @rdname mappings
 #'
@@ -118,7 +118,7 @@ es_map_unique <- function(es, org, from, to)
 #'
 #' @examples
 #' es <- BiocSet(set1 = c("PRKACA", "TGFA", "MAP2K1"), set2 = c("CREB3", "FOS"))
-#' es_map_mulitple(es, org.Hs.eg.db, "SYMBOL", "ENTREZID")
+#' es_map_multiple(es, org.Hs.eg.db, "SYMBOL", "ENTREZID")
 es_map_multiple <- function(es, org, from, to, multi = 
     c('list', 'filter', 'asNA', 'CharacterList', 'FUN'))
 {

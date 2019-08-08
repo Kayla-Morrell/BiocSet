@@ -544,7 +544,7 @@ arrange_elementset <- function(.data, ...) {
 #'
 #' @examples
 #' es <- BiocSet(set1 = letters, set2 = LETTERS)
-#' es %>% mutate(pval = rnorm(1:52)) %>% tbl_nongroup_vars()
+#' es %>% mutate(pval = rnorm(1:52)) %>% es_elementset() %>% tbl_nongroup_vars()
 tbl_nongroup_vars.BiocSet <- function(x)
 {
     active <- .active(x)
@@ -697,7 +697,7 @@ BiocSet_from_elementset <- function(elementset, element, set)
 #' library(org.Hs.eg.db)
 #' es <- go_sets(org.Hs.eg.db, "ENSEMBL")
 #' as.list(es)
-as.list.BiocSet <- function(x)
+as.list.BiocSet <- function(x, ...)
     .as.list.BiocSet(x)
 
 setAs("BiocSet", "list", .as.list.BiocSet)

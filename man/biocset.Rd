@@ -121,7 +121,7 @@ left_join_elementset(.data, ...)
 
 BiocSet_from_elementset(elementset, element, set)
 
-\method{as.list}{BiocSet}(x)
+\method{as.list}{BiocSet}(x, ...)
 }
 \arguments{
 \item{...}{For `BiocSet()`, named character() vectors of element

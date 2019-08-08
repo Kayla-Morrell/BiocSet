@@ -30,8 +30,6 @@ A BiocSet object with a single set and unioned elements
 For intersect, a tibble with the intersect of x and y
 
 A BiocSet object with a single set and interesected elements
-
-
 }
 \description{
 Set operations for BiocSets

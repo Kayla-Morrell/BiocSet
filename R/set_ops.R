@@ -26,6 +26,8 @@ union.BiocSet <- function(x, y, ...)
 
 #' @rdname set_op
 #'
+#' @importFrom dplyr pull
+#'
 #' @return A BiocSet object with a single set and unioned elements
 #'
 #' @export
@@ -63,8 +65,6 @@ intersect.BiocSet <- function(x, y, ...)
 #' @rdname set_op
 #'
 #' @return A BiocSet object with a single set and interesected elements
-#'
-#' @return
 #'
 #' @examples
 #' es1 <- BiocSet(set1 = letters[c(1:10)], set2 = letters[c(4:20)])
