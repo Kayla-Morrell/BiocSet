@@ -665,9 +665,11 @@ BiocSet_from_elementset <- function(elementset, element, set)
     if (missing(set))
         set <- tibble(set = character())
     stopifnot(
-        "element" %in% names(elementset), is.character(elementset$element),
+        "element" %in% names(elementset), 
+        is.character(elementset$element),
         "set" %in% names(elementset),
-        "element" %in% names(element), is.character(element$element),
+        "element" %in% names(element),
+        is.character(element$element),
         "set" %in% names(set)
     )
 

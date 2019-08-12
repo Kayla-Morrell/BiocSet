@@ -285,6 +285,7 @@ tibble.
 
 ```{r DE}
 library(DESeq2)
+library(tibble)
 des <- DESeqDataSet(airway, design = ~ cell + dex)
 des <- DESeq(des)
 res <- results(des)
@@ -316,11 +317,11 @@ the results into a tibble. This tibble will be considered our 'set' tibble.
 
 ```{r goana}
 library(limma)
-go <- goana(tbl$ENTREZID[tbl$padj < 0.05], tbl$ENTREZID, "Hs") %>%
+go_ids <- goana(tbl$ENTREZID[tbl$padj < 0.05], tbl$ENTREZID, "Hs") %>%
     as.data.frame() %>%
-    rownames_to_column("GOID") %>%
+    rownames_to_column("GOALL") %>%
     as_tibble()
-go
+go_ids
 ```
 
 The last thing we need to do is create a tibble that we will consider our 
@@ -341,8 +342,10 @@ Using our function `BiocSet_from_elementset()` we can now create a `BiocSet`
 object that contains all the necessary information from the 'element' tibble, 
 the 'set' tibble, and the 'elementset' tibble. 
 
-```{r BiocSet_from_elementset}
-es <- BiocSet_from_elementset(foo, tbl, go)
+<!-- NEED TO DEBUG THIS STILL... -->
+
+```{r BiocSet_from_elementset, eval = FALSE}
+es <- BiocSet_from_elementset(foo, tbl, go_ids)
 es
 ```
 
