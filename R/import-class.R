@@ -39,7 +39,7 @@ import.gmt <- function(path) {
     source <- vapply(sets, function(set) set[[2]], character(1))
     source[source=="NA" | !nzchar(source)] <- NA
     tbl <- do.call(BiocSet, elements)
-    tbl <- tbl %>% mutate(source = rep(source, lengths(elements)))
+    tbl <- tbl %>% mutate_set(source = source)
     tbl
 }
 
