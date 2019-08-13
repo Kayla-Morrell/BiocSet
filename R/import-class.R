@@ -74,20 +74,23 @@ setMethod(
 #' @export
 
 export.BiocSet <- function(tbl, path = tempfile(fileext = ".gmt")) {
-    stopifnot(is_tbl_elementset(.elementset(tbl)))
-    tbl <- .elementset(tbl)
-    if(!"source" %in% names(tbl))
-        tbl <- mutate(tbl, source = rep(NA_character_, nrow(tbl)))
-    ## bug in dplyr
-    if(nrow(tbl)==0L){
-        sets <- tibble(source = character(0), element = character(0))
-    } else {
-        sets <- group_by(tbl, .data$set) %>%
-            summarise(source = unique(source),
-                element = paste(.data$element, collapse = "\t"))
-    }
+    stopifnot(is_tbl_elementset(es_elementset(tbl)))
+    
+    if(!"source" %in% names(es_set(tbl)))
+        tbl <- mutate_set(tbl, source = rep(NA_character_, nrow(es_set(tbl))))
 
-    write.table(sets, path, sep = "\t",
+    es <- es_elementset(tbl)
+    ## bug in dplyr
+    if(nrow(es)==0L){
+        sets <- tibble(element = character(0))
+    } else {
+        sets <- group_by(es, .data$set) %>%
+            summarise(element = paste(.data$element, collapse = "\t"))
+    }
+    
+    tbl <- left_join_set(tbl, sets, by = c(set = "set"))
+
+    write.table(es_set(tbl), path, sep = "\t",
                 col.names = FALSE, row.names = FALSE, quote = FALSE)
 }
 
