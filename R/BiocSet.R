@@ -390,7 +390,10 @@ map_element <- function(.data, from, to) UseMethod("map_element")
 #' es %>% map_element(letters, LETTERS)
 map_element.BiocSet <- function(.data, from, to)
 {
-    stopifnot(is.character(from), is.character(to), length(from) == length(to))
+#    stopifnot(is.character(from), 
+#        is.character(to) || is.list(to), 
+#        length(from) == length(to)
+#    )
 
     element <- .element(.data)
     idx <- element$element %in% from

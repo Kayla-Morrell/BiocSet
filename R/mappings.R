@@ -84,7 +84,8 @@ go_sets <- function(org, from, go = c("GO", "GOID"), evidence = NULL,
         to %in% keytypes(org)
     )
 
-    map <- mapIds(org, keys(org, from), to, from, multiVal = multi)
+    keys <- es_element(es)$element
+    map <- mapIds(org, keys, to, from, multiVals = multi)
     tbl <- enframe(map, name = from, value = to)
     es %>% map_element(tbl[[from]], tbl[[to]])
 }
@@ -117,8 +118,9 @@ es_map_unique <- function(es, org, from, to)
 #' @export
 #'
 #' @examples
-#' es <- BiocSet(set1 = c("PRKACA", "TGFA", "MAP2K1"), set2 = c("CREB3", "FOS"))
-#' es_map_multiple(es, org.Hs.eg.db, "SYMBOL", "ENTREZID")
+#' library(EnsDb.Hsapiens.v86)
+#' es <- BiocSet(set1 = c("BCL2", "BCL2L11"), set2 = c("7SK", "AAAS", "A1CF"))
+#' es_map_multiple(es, EnsDb.Hsapiens.v86, "GENENAME", "TXID", "list")
 es_map_multiple <- function(es, org, from, to, multi = 
     c('list', 'filter', 'asNA', 'CharacterList', 'FUN'))
 {
