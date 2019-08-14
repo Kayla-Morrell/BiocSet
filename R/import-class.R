@@ -82,7 +82,7 @@ export.BiocSet <- function(tbl, path = tempfile(fileext = ".gmt")) {
     es <- es_elementset(tbl)
     ## bug in dplyr
     if(nrow(es)==0L){
-        sets <- tibble(element = character(0))
+        sets <- tibble(set = character(0), element = character(0))
     } else {
         sets <- group_by(es, .data$set) %>%
             summarise(element = paste(.data$element, collapse = "\t"))
