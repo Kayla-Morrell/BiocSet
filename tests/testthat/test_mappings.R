@@ -50,30 +50,94 @@ test_that("'go_sets()' works",
 })
 
 ## Need to change these tests to include es_map_unique and es_map_multiple ##
-#test_that("'es_map()' works",
-#{
-#    es <- BiocSet(
-#        set1 = c("BRCA1", "BRCA2", "TGFA", "ERCC2"),
-#        set2 = c("PRNP", "FMR1", "PAX3")
-#    )
-#    es1 <- es %>% es_map(org.Hs.eg.db, "SYMBOL", "ENTREZID")
-#
-#    expect_s4_class(es1, "BiocSet")
-#    expect_identical(dim(es_element(es1)), c(7L, 1L))
-#    expect_identical(dim(es_set(es1)), c(2L, 1L))
-#    expect_identical(dim(es_elementset(es1)), c(7L, 2L))
-#    expect_true(is_tbl_elementset(es_elementset(es1)))
-#
-#    expect_true(all(es_element(es1)$element %in%
-#        keys(org.Hs.eg.db, keytype="ENTREZID")))
-#    
-#    expect_error(es_map(es, org.Hs.eg.db))
-#    expect_error(es_map(es, org.Hs.eg.db, "SYMBOL"))
-#    expect_error(es_map(es, org.Hs.eg.db, SYMBOL, "ENTREZID"))
-#    expect_error(es_map(es, org.Hs.eg.db, "SYMBOL", 10))
-#    expect_error(es_map(es, org.Hs.eg.db, "SYMBOL", "IDS"))
-#    expect_error(es_map(es, species, "SYMBOL", "ENTREZID"))
-#})
+test_that("'.es_map()' works",
+{
+    es <- BiocSet(
+        set1 = c("BRCA1", "BRCA2", "TGFA", "ERCC2"),
+        set2 = c("PRNP", "FMR1", "PAX3")
+    )
+    es1 <- es %>% .es_map(org.Hs.eg.db, "SYMBOL", "ENTREZID")
+
+    expect_s4_class(es1, "BiocSet")
+    expect_identical(dim(es_element(es1)), c(7L, 1L))
+    expect_identical(dim(es_set(es1)), c(2L, 1L))
+    expect_identical(dim(es_elementset(es1)), c(7L, 2L))
+    expect_true(is_tbl_elementset(es_elementset(es1)))
+
+    expect_true(all(es_element(es1)$element %in%
+        keys(org.Hs.eg.db, keytype="ENTREZID")))
+    
+    expect_error(es_map(es, org.Hs.eg.db))
+    expect_error(es_map(es, org.Hs.eg.db, "SYMBOL"))
+    expect_error(es_map(es, org.Hs.eg.db, SYMBOL, "ENTREZID"))
+    expect_error(es_map(es, org.Hs.eg.db, "SYMBOL", 10))
+    expect_error(es_map(es, org.Hs.eg.db, "SYMBOL", "IDS"))
+    expect_error(es_map(es, species, "SYMBOL", "ENTREZID"))
+})
+
+test_that("'es_map_unique' works",
+{
+    es <- BiocSet(
+        set1 = c("PRKACA", "TGFA", "MAP2K1"), 
+        set2 = c("CREB3", "FOS")
+    )
+
+    es1 <- es %>% es_map_unique(org.Hs.eg.db, "SYMBOL", "ENSEMBL")
+
+    expect_s4_class(es1, "BiocSet")
+    expect_identical(dim(es_element(es1)), c(5L, 1L))
+    expect_identical(dim(es_set(es1)), c(2L, 1L))
+    expect_identical(dim(es_elementset(es1)), c(5L, 2L))
+    expect_true(is_tbl_elementset(es_elementset(es1)))
+
+    expect_error(es_map_unique(es, org.Hs.eg.db, "SYMBOL", "ENTREZID", "first"))
+})
+
+test_that("'es_map_multiple' works",
+{
+    library(EnsDb.Hsapiens.v86)
+    es <- BiocSet(set1 = c("BCL2", "BCL2L11"), set2 = c("AAAS", "A1CF", "7SK"))
+
+    es1 <- es %>% es_map_multiple(EnsDb.Hsapiens.v86, "GENENAME", "TXID", "list")
+
+    expect_s4_class(es1, "BiocSet")
+    expect_identical(dim(es_element(es1)), c(5L, 1L))
+    expect_identical(dim(es_set(es1)), c(2L, 1L))
+    expect_identical(dim(es_elementset(es1)), c(5L, 2L))
+    expect_false(is_tbl_elementset(es_elementset(es1)))
+    expect_true(is.list(es_element(es1)$element))
+    expect_true(is.list(es_elementset(es1)$element))
+
+    es2 <- es %>% es_map_multiple(EnsDb.Hsapiens.v86, "GENENAME", "TXID", "filter")
+
+    expect_s4_class(es2, "BiocSet")
+    expect_identical(dim(es_element(es2)), c(5L, 1L))
+    expect_identical(dim(es_set(es2)), c(2L, 1L))
+    expect_identical(dim(es_elementset(es2)), c(5L, 2L))
+    expect_true(is_tbl_elementset(es_elementset(es2)))
+    
+    es3 <- es %>% es_map_multiple(EnsDb.Hsapiens.v86, "GENENAME", "TXID", "asNA")
+
+    expect_s4_class(es3, "BiocSet")
+    expect_identical(dim(es_element(es3)), c(5L, 1L))
+    expect_identical(dim(es_set(es3)), c(2L, 1L))
+    expect_identical(dim(es_elementset(es3)), c(5L, 2L))
+    expect_true(is_tbl_elementset(es_elementset(es3)))
+    expect_true(all(is.na(es_element(es3)$element)))
+    expect_true(all(is.na(es_elementset(es3)$element)))
+
+    es4 <- es %>% es_map_multiple(EnsDb.Hsapiens.v86, "GENENAME", "TXID", "CharacterList")
+
+    expect_s4_class(es4, "BiocSet")
+    expect_identical(dim(es_element(es4)), c(5L, 1L))
+    expect_identical(dim(es_set(es4)), c(2L, 1L))
+    expect_identical(dim(es_elementset(es4)), c(5L, 2L))
+    expect_false(is_tbl_elementset(es_elementset(es4)))
+
+    expect_error(es_map_multiple(es, EnsDb.Hsapiens.v86, "GENENAME", "TXID", "first"))
+    expect_error(es_map_multiple(es, EnsDb.Hsapiens.v86, "TXID", "GENENAME", "list"))
+    expect_error(es_map_multiple(es, EnsDb.Hsapiens.v86, "GENENAME", "TXID", filter))
+})
 
 test_that("'kegg_sets()' works",
 {
