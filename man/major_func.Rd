@@ -25,7 +25,7 @@ tbl_nongroup_vars.BiocSet(x)
 
 \method{group_by}{BiocSet}(.data, ..., add = FALSE)
 
-\method{left_join}{BiocSet}(.data, ...)
+\method{left_join}{BiocSet}(x, y, by, copy, suffix, ...)
 }
 \arguments{
 \item{.data}{The 'BiocSet' tibble}

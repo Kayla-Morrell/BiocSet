@@ -582,11 +582,11 @@ group_by.BiocSet <- function(.data, ..., add = FALSE)
 #' es <- BiocSet(set1 = letters[1:5], set2 = LETTERS[1:5])
 #' tbl <- tibble(x = 1:10, y = c(letters[1:5], LETTERS[1:5]))
 #' es %>% left_join(tbl, by = c(element = "y"))
-left_join.BiocSet <- function(.data, ...)
+left_join.BiocSet <- function(x, y, by, copy, suffix, ...)
 {
-    sub <- .active_value(.data)
+    sub <- .active_value(x)
     tbl <- left_join(sub, ...)
-    .update(.data, tbl)
+    .update(x, tbl)
 }
 
 #' @rdname biocset

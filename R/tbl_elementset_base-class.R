@@ -103,9 +103,9 @@ intersect.tbl_elementset_base <- function(x, y, ...)
 #' @importFrom dplyr left_join
 #'
 #' @export
-left_join.tbl_elementset_base <- function(.data, ...)
+left_join.tbl_elementset_base <- function(x, y, by, copy, suffix, ...)
 {
     tbl <- NextMethod()
-    class(tbl) <- class(.data)
+    class(tbl) <- class(x)
     tbl
 }
