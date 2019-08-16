@@ -122,9 +122,10 @@ es_map_unique <- function(es, org, from, to)
 #' es <- BiocSet(set1 = c("BCL2", "BCL2L11"), set2 = c("7SK", "AAAS", "A1CF"))
 #' es_map_multiple(es, EnsDb.Hsapiens.v86, "GENENAME", "TXID", "list")
 es_map_multiple <- function(es, org, from, to, multi = 
-    c('list', 'filter', 'asNA', 'CharacterList', 'FUN'))
+    c('list', 'filter', 'asNA', 'CharacterList'))
 {
-    multi <- match.arg(multi)
+    if(!is.function(multi))
+        multi <- match.arg(multi)
     .es_map(es, org, from, to, multi)
 }
 

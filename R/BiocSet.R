@@ -390,11 +390,22 @@ map_element <- function(.data, from, to) UseMethod("map_element")
 #' es %>% map_element(letters, LETTERS)
 map_element.BiocSet <- function(.data, from, to)
 {
-#    stopifnot(is.character(from), 
-#        is.character(to) || is.list(to), 
-#        length(from) == length(to)
-#    )
+    stopifnot(is.character(from), 
+        is.character(to) || is.list(to) || is(to, "CharacterList"), 
+        length(from) == length(to)
+    )
+    ## make from, to parallel (same length)
+    ## lens = lengths(to)
+    ## from = rep(from, lens)
+    ## to = unlist(to)
+    
+    ## map elements
 
+    ## map elementsets
+
+    ## many:0
+    ## 1:many
+    ## many:1
     element <- .element(.data)
     idx <- element$element %in% from
     element$element[idx] <- unname(setNames(to, from)[element$element[idx]])
