@@ -267,7 +267,7 @@ multipaths <- kegg %>% filter_set(set %in% pathways)
 multipaths
 ```
 
-# Case Study II
+# Case study II
 
 This example will start out the same way that Case Study I started, by loading 
 in the `airway` dataset, but we will also do some reformating of the data. The 
@@ -292,8 +292,7 @@ res <- results(des)
 
 tbl <- res %>% 
     as.data.frame() %>%
-    rownames_to_column("ENSEMBL") %>%
-    as_tibble() 
+    as_tibble(rownames = "ENSEMBL") 
 ```
 
 Since we want to use `limma::goana()` to perform the GSEA we will need to have 
@@ -319,8 +318,7 @@ the results into a tibble. This tibble will be considered our 'set' tibble.
 library(limma)
 go_ids <- goana(tbl$ENTREZID[tbl$padj < 0.05], tbl$ENTREZID, "Hs") %>%
     as.data.frame() %>%
-    rownames_to_column("GOALL") %>%
-    as_tibble()
+    as_tibble(rownames = "GOALL")
 go_ids
 ```
 
@@ -338,13 +336,19 @@ foo <- foo %>% filter(ONTOLOGYALL == "BP") %>% dplyr::select(-ONTOLOGYALL)
 foo
 ```
 
-Using our function `BiocSet_from_elementset()` we can now create a `BiocSet` 
-object that contains all the necessary information from the 'element' tibble, 
-the 'set' tibble, and the 'elementset' tibble. 
+The function `BiocSet_from_elementset()` allows for users to create a BiocSet 
+object from tibbles. This function is helpful when there is metadata contained 
+in the tibble that should be in the BiocSet object. For this function to work 
+properly, the columns that are being joined on need to be named correctly. For 
+instance, in order to use this function on the tibbles we created we need to 
+change the column in the 'element' tibble to 'element', the column in the 'set' 
+tibble to 'set' and the same will be for the 'elementset' tibble. We demonstrate
+ this below and then create the BiocSet object with the simple function.
 
-<!-- NEED TO DEBUG THIS STILL... -->
-
-```{r BiocSet_from_elementset, eval = FALSE}
+```{r BiocSet_from_elementset}
+foo <- foo %>% dplyr::rename(element = ENTREZID, set = GOALL)
+tbl <- tbl %>% dplyr::rename(element = ENTREZID)
+go_ids <- go_ids %>% dplyr::rename(set = GOALL)
 es <- BiocSet_from_elementset(foo, tbl, go_ids)
 es
 ```

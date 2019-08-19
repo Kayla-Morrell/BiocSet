@@ -596,7 +596,7 @@ group_by.BiocSet <- function(.data, ..., add = FALSE)
 left_join.BiocSet <- function(x, y, by, copy, suffix, ...)
 {
     sub <- .active_value(x)
-    tbl <- left_join(sub, ...)
+        tbl <- left_join(sub, y = y, by = by, ...)
     .update(x, tbl)
 }
 
