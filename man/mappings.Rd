@@ -15,7 +15,7 @@ go_sets(org, from, go = c("GO", "GOID"), evidence = NULL,
 es_map_unique(es, org, from, to)
 
 es_map_multiple(es, org, from, to, multi = c("list", "filter", "asNA",
-  "CharacterList", "FUN"))
+  "CharacterList"))
 
 kegg_sets(species)
 
