@@ -43,6 +43,12 @@
 \alias{left_join_elementset}
 \alias{BiocSet_from_elementset}
 \alias{as.list.BiocSet}
+\alias{tibble_by_elementset}
+\alias{tibble_by_element}
+\alias{tibble_by_set}
+\alias{data.frame_by_elementset}
+\alias{data.frame_by_element}
+\alias{data.frame_by_set}
 \title{An element set representation as a tripple tibble}
 \usage{
 BiocSet(..., active = c("elementset", "element", "set"))
@@ -122,6 +128,18 @@ left_join_elementset(.data, ...)
 BiocSet_from_elementset(elementset, element, set)
 
 \method{as.list}{BiocSet}(x, ...)
+
+tibble_by_elementset(es)
+
+tibble_by_element(es, how = .list)
+
+tibble_by_set(es, how = .list)
+
+data.frame_by_elementset(es)
+
+data.frame_by_element(es, how = .list)
+
+data.frame_by_set(es, how = .list)
 }
 \arguments{
 \item{...}{For `BiocSet()`, named character() vectors of element
@@ -149,10 +167,26 @@ character vector is the name of the element set.}
 \item{element}{A tibble with element information}
 
 \item{set}{A tibble with set information}
+
+\item{how}{Multiple entries will become a list.}
+
+\item{es}{A BiocSet object}
 }
 \value{
 For `BiocSet()`, an S4 'BiocSet' object in a tripple
     tibble representation.
+
+A tibble
+
+A tibble
+
+A tibble
+
+A data.frame
+
+A data.frame
+
+A data.frame
 }
 \description{
 An element set representation as a tripple tibble
@@ -238,4 +272,11 @@ BiocSet_from_elementset(elementset, element, set)
 library(org.Hs.eg.db)
 es <- go_sets(org.Hs.eg.db, "ENSEMBL")
 as.list(es)
+es <- BiocSet(set1 = letters, set2 = LETTERS)
+tibble_by_elementset(es)
+tibble_by_element(es)
+tibble_by_set(es)
+data.frame_by_elementset(es)
+data.frame_by_element(es)
+data.frame_by_set(es)
 }

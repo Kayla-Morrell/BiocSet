@@ -390,9 +390,9 @@ map_element <- function(.data, from, to) UseMethod("map_element")
 #' es %>% map_element(letters, LETTERS)
 map_element.BiocSet <- function(.data, from, to)
 {
-    stopifnot(is.character(from), 
-        is.character(to) || is.list(to) || is(to, "CharacterList"), 
-        length(from) == length(to)
+    stopifnot(is.character(from) || is.integer(from), 
+        is.character(to) || is.list(to) || is(to, "CharacterList")
+        #length(from) == length(to) # this one might not be true anymore...
     )
     ## make from, to parallel (same length)
     ## lens = lengths(to)
@@ -717,3 +717,111 @@ as.list.BiocSet <- function(x, ...)
     .as.list.BiocSet(x)
 
 setAs("BiocSet", "list", .as.list.BiocSet)
+
+.list <- 
+    function(x)
+{
+    if (all(lengths(x) == 1L))
+        fun <- unlist
+    else fun <- list
+    fun(x)
+}
+
+#' @rdname biocset
+#'
+#' @param es A BiocSet object
+#' 
+#' @return A tibble
+#' 
+#' @export
+#' 
+#' @examples
+#' es <- BiocSet(set1 = letters, set2 = LETTERS)
+#' tibble_by_elementset(es)
+tibble_by_elementset <- 
+    function(es)
+{
+    stopifnot(is(es, "BiocSet"))
+    es_elementset(es) %>%
+        left_join(es_set(es)) %>%
+        left_join(es_element(es))
+}
+
+#' @rdname biocset
+#' 
+#' @param how Multiple entries will become a list.
+#'
+#' @return A tibble
+#' 
+#' @export
+#' 
+#' @examples
+#' tibble_by_element(es)
+tibble_by_element <-
+    function(es, how = .list)
+{
+    tibble_by_elementset(es) %>%
+        group_by(element) %>%
+        summarize_all(how)
+}
+
+#' @rdname biocset
+#'
+#' @return A tibble
+#' 
+#' @export
+#' 
+#' @examples
+#' tibble_by_set(es)
+tibble_by_set <- 
+    function(es, how = .list)
+{
+    tibble_by_elementset(es) %>%
+        group_by(set) %>%
+        summarize_all(how)
+}
+
+#' @rdname biocset
+#'
+#' @return A data.frame
+#' 
+#' @export
+#' 
+#' @examples
+#' data.frame_by_elementset(es)
+data.frame_by_elementset <- 
+    function(es)
+{
+    tbl <- tibble_by_elementset(es)
+    data.frame(tbl)
+}
+
+#' @rdname biocset
+#'
+#' @return A data.frame
+#'
+#' @export
+#'
+#' @examples
+#' data.frame_by_element(es)
+data.frame_by_element <-
+    function(es, how = .list)
+{
+    tbl <- tibble_by_element(es, how)
+    data.frame(tbl, row.names = "element")
+}
+
+#' @rdname biocset
+#'
+#' @return A data.frame
+#'
+#' @export
+#' 
+#' @examples
+#' data.frame_by_set(es)
+data.frame_by_set <-
+    function(es, how = .list)
+{
+    tbl <- tibble_by_set(es, how)
+    data.frame(tbl, row.names = "set")
+}
