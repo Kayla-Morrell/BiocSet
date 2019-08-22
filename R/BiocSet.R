@@ -394,18 +394,26 @@ map_element.BiocSet <- function(.data, from, to)
         is.character(to) || is.list(to) || is(to, "CharacterList")
         #length(from) == length(to) # this one might not be true anymore...
     )
-    ## make from, to parallel (same length)
-    ## lens = lengths(to)
-    ## from = rep(from, lens)
-    ## to = unlist(to)
-    
+
+    if (length(from) > length(to)) {            ## many:1 mapping
+    ## collapse/combine/merge rows...
+
     ## map elements
 
     ## map elementsets
 
-    ## many:0
-    ## 1:many
-    ## many:1
+    }
+
+    else if (length(from) < length(to)) {       ## 1:many mapping
+    ## expand/create/add rows...
+
+    ## map elements
+
+    ## map elementsets
+
+    }
+
+    else if (length(from) == length(to)) {      ## 1:1 mapping
     element <- .element(.data)
     idx <- element$element %in% from
     element$element[idx] <- unname(setNames(to, from)[element$element[idx]])
@@ -413,6 +421,21 @@ map_element.BiocSet <- function(.data, from, to)
     es <- .elementset(.data)
     idx <- es$element %in% from
     es$element[idx] <- unname(setNames(to, from)[es$element[idx]])
+    }
+
+    else {                                      ## 1:0 mapping
+    ## remove rows...
+
+    ## map elements
+
+    ## map elementsets
+
+    }
+
+    ## make from, to parallel (same length)
+    ## lens = lengths(to)
+    ## from = rep(from, lens)
+    ## to = unlist(to) 
 
     initialize(.data, element = element, elementset = es)
 }
