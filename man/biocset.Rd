@@ -271,7 +271,7 @@ elementset <-
 BiocSet_from_elementset(elementset, element, set) 
 library(org.Hs.eg.db)
 es <- go_sets(org.Hs.eg.db, "ENSEMBL")
-as.list(es)
+head(as.list(es))
 es <- BiocSet(set1 = letters, set2 = LETTERS)
 tibble_by_elementset(es)
 tibble_by_element(es)

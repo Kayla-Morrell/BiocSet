@@ -390,7 +390,7 @@ map_element <- function(.data, from, to) UseMethod("map_element")
 #' es %>% map_element(letters, LETTERS)
 map_element.BiocSet <- function(.data, from, to)
 {
-    stopifnot(is.character(from) || is.integer(from), 
+    stopifnot(is.character(from), 
         is.character(to) || is.list(to) || is(to, "CharacterList")
         #length(from) == length(to) # this one might not be true anymore...
     )
@@ -735,19 +735,17 @@ BiocSet_from_elementset <- function(elementset, element, set)
 #' @examples
 #' library(org.Hs.eg.db)
 #' es <- go_sets(org.Hs.eg.db, "ENSEMBL")
-#' as.list(es)
+#' head(as.list(es))
 as.list.BiocSet <- function(x, ...)
     .as.list.BiocSet(x)
 
 setAs("BiocSet", "list", .as.list.BiocSet)
 
-.list <- 
+.test <- 
     function(x)
 {
-    if (all(lengths(x) == 1L))
-        fun <- unlist
-    else fun <- list
-    fun(x)
+    all(lengths(x) == 1L) && 
+        length(unique(sapply(x, typeof))) == 1L
 }
 
 #' @rdname biocset
@@ -781,11 +779,12 @@ tibble_by_elementset <-
 #' @examples
 #' tibble_by_element(es)
 tibble_by_element <-
-    function(es, how = .list)
+    function(es, how = unlist)
 {
     tibble_by_elementset(es) %>%
         group_by(element) %>%
-        summarize_all(how)
+        summarize_all(list) %>%
+        mutate_if(.test, how)
 }
 
 #' @rdname biocset
@@ -797,11 +796,12 @@ tibble_by_element <-
 #' @examples
 #' tibble_by_set(es)
 tibble_by_set <- 
-    function(es, how = .list)
+    function(es, how = unlist)
 {
     tibble_by_elementset(es) %>%
         group_by(set) %>%
-        summarize_all(how)
+        summarize_all(list) %>%
+        mutate_if(.test, how)
 }
 
 #' @rdname biocset
