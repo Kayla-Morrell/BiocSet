@@ -141,8 +141,9 @@ test_that("'map_element.BiocSet()' works", {
 
     es1 <- es %>% map_element(letters, LETTERS)
     expect_true(is_tbl_elementset(es_elementset(es1)))
+    expect_identical(dim(es_element(es1)), c(26L, 1L))
+    expect_identical(dim(es_set(es1)), c(2L, 1L))
     expect_identical(dim(es_elementset(es1)), c(52L,2L))
-    expect_identical(es_elementset(es1)$element, es_element(es1)$element)
 
     expect_error(es %>% map_element())
 })

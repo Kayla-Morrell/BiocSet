@@ -101,7 +101,7 @@ mutate_elementset(.data, ...)
 
 map_element(.data, from, to)
 
-\method{map_element}{BiocSet}(.data, from, to)
+\method{map_element}{BiocSet}(.data, from, to, keep_unmapped = TRUE)
 
 map_set(.data, from, to)
 
@@ -131,15 +131,15 @@ BiocSet_from_elementset(elementset, element, set)
 
 tibble_by_elementset(es)
 
-tibble_by_element(es, how = .list)
+tibble_by_element(es, how = unlist)
 
-tibble_by_set(es, how = .list)
+tibble_by_set(es, how = unlist)
 
 data.frame_by_elementset(es)
 
-data.frame_by_element(es, how = .list)
+data.frame_by_element(es, how = unlist)
 
-data.frame_by_set(es, how = .list)
+data.frame_by_set(es, how = unlist)
 }
 \arguments{
 \item{...}{For `BiocSet()`, named character() vectors of element
@@ -169,6 +169,9 @@ character vector is the name of the element set.}
 \item{set}{A tibble with set information}
 
 \item{how}{Multiple entries will become a list.}
+
+\item{keep_updated}{logical, whether unmapped elements should be kept.
+Default is TRUE.}
 
 \item{es}{A BiocSet object}
 }

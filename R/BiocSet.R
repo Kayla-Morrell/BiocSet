@@ -381,6 +381,8 @@ map_element <- function(.data, from, to) UseMethod("map_element")
 #'
 #' @param from a vector of the values to be replaced
 #' @param to a vector of the replacement values
+#' @param keep_updated logical, whether unmapped elements should be kept.
+#'    Default is TRUE.
 #'
 #' @importFrom stats setNames
 #'
@@ -388,56 +390,44 @@ map_element <- function(.data, from, to) UseMethod("map_element")
 #' @examples
 #' es <- BiocSet(set1 = letters, set2 = LETTERS)
 #' es %>% map_element(letters, LETTERS)
-map_element.BiocSet <- function(.data, from, to)
+map_element.BiocSet <- function(.data, from, to, keep_unmapped = TRUE)
 {
     stopifnot(is.character(from), 
-        is.character(to) || is.list(to) || is(to, "CharacterList")
-        #length(from) == length(to) # this one might not be true anymore...
+        is.character(to) || is.list(to) || is(to, "CharacterList"),
+        length(from) == length(to)
     )
+    es <- es_elementset(.data)
 
-    if (length(from) > length(to)) {            ## many:1 mapping
-    ## collapse/combine/merge rows...
-
-    ## map elements
-
-    ## map elementsets
-
+    mapping <- tibble(element = from, to)
+    if (keep_unmapped) {
+        aux <- as_tibble(es) %>%	# un-mapped elements
+            select(element) %>%
+            mutate(to = element) %>%
+            filter(!element %in% from)
+        mapping <- bind_rows(mapping, aux)
     }
 
-    else if (length(from) < length(to)) {       ## 1:many mapping
-    ## expand/create/add rows...
+    es <-				# map
+        left_join(mapping, es) %>%
+        select(-element, element = to)
+    es <- es %>% 			# de-duplicate
+        group_by(element, set) %>%
+        summarize_all(list) %>%
+        mutate_if(.test, unlist)
 
-    ## map elements
+    sets <- es_set(.data) %>%
+        filter(set %in% es$set)
 
-    ## map elementsets
+    elements <- es_element(.data)
+    elements <-				# map
+        left_join(mapping, elements) %>%
+        select(-element, element = to)
+    elements <- elements %>%
+        group_by(element) %>%
+        summarize_all(list) %>%
+        mutate_if(.test, unlist)
 
-    }
-
-    else if (length(from) == length(to)) {      ## 1:1 mapping
-    element <- .element(.data)
-    idx <- element$element %in% from
-    element$element[idx] <- unname(setNames(to, from)[element$element[idx]])
-
-    es <- .elementset(.data)
-    idx <- es$element %in% from
-    es$element[idx] <- unname(setNames(to, from)[es$element[idx]])
-    }
-
-    else {                                      ## 1:0 mapping
-    ## remove rows...
-
-    ## map elements
-
-    ## map elementsets
-
-    }
-
-    ## make from, to parallel (same length)
-    ## lens = lengths(to)
-    ## from = rep(from, lens)
-    ## to = unlist(to) 
-
-    initialize(.data, element = element, elementset = es)
+    BiocSet_from_elementset(es, elements, sets)
 }
 
 #' @rdname biocset
@@ -828,7 +818,7 @@ data.frame_by_elementset <-
 #' @examples
 #' data.frame_by_element(es)
 data.frame_by_element <-
-    function(es, how = .list)
+    function(es, how = unlist)
 {
     tbl <- tibble_by_element(es, how)
     data.frame(tbl, row.names = "element")
@@ -843,7 +833,7 @@ data.frame_by_element <-
 #' @examples
 #' data.frame_by_set(es)
 data.frame_by_set <-
-    function(es, how = .list)
+    function(es, how = unlist)
 {
     tbl <- tibble_by_set(es, how)
     data.frame(tbl, row.names = "set")
