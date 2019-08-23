@@ -413,7 +413,7 @@ map_element.BiocSet <- function(.data, from, to, keep_unmapped = TRUE)
         left_join(mapping, es) %>%
         select(-element, element = to)
     es <- es %>% 			# de-duplicate
-        group_by(element, set) %>%
+        group_by(element, set) %>%	## CAN'T GROUP_BY A LIST!!!!
         summarise_all(list) %>%
         mutate_if(.test, unlist)
 
@@ -425,7 +425,7 @@ map_element.BiocSet <- function(.data, from, to, keep_unmapped = TRUE)
         left_join(mapping, elements) %>%
         select(-element, element = to)
     elements <- elements %>%
-        group_by(element) %>%
+        group_by(element) %>%		## CAN'T GROUP_BY A LIST!!!!
         summarise_all(list) %>%
         mutate_if(.test, unlist)
 
