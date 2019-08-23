@@ -139,11 +139,122 @@ test_that("'mutate.BiocSet()' works", {
 test_that("'map_element.BiocSet()' works", {
     es <- BiocSet(set1 = letters, set2 = LETTERS)
 
+    # 1:1 mapping
     es1 <- es %>% map_element(letters, LETTERS)
     expect_true(is_tbl_elementset(es_elementset(es1)))
     expect_identical(dim(es_element(es1)), c(26L, 1L))
     expect_identical(dim(es_set(es1)), c(2L, 1L))
     expect_identical(dim(es_elementset(es1)), c(52L,2L))
+
+    # A single set example with metadata in each tibble
+    element <- tibble(element = letters[1:5], foo = 1:5)
+    set <- tibble(set = "set1", bar = 1)
+    elementset <- tibble(element = letters[1:5], set = rep("set1", 5), baz = 1:5)
+    .data = BiocSet_from_elementset(elementset, element, set)
+
+    from = c("a", "b", "b", "c", "d")
+    to = c("A", "B", "C", "D", "D")
+    # 1:1 mapping, 1:many mapping, many:1 mapping
+    es2 <- map_element(.data, from, to)
+    expect_s4_class(es2, "BiocSet")
+    expect_identical(dim(es_element(es2)), c(5L, 2L))
+    expect_identical(dim(es_set(es2)), c(1L, 2L))
+    expect_identical(dim(es_elementset(es2)), c(5L, 3L))
+    expect_true(is_tbl_elementset(es_elementset(es2)))
+    expect_true(is.list(es_element(es2)$foo))
+    expect_true(is.double(es_set(es2)$bar))
+    expect_true(is.list(es_elementset(es2)$baz))
+ 
+    # 1:1 mapping, 1:many mapping, many:1 mapping, dropping unmapped element(s)
+    es3 <- map_element(.data, from, to, keep_unmapped = FALSE)
+    expect_s4_class(es3, "BiocSet")
+    expect_identical(dim(es_element(es3)), c(4L, 2L))
+    expect_identical(dim(es_set(es3)), c(1L, 2L))
+    expect_identical(dim(es_elementset(es3)), c(4L, 3L))
+    expect_true(is_tbl_elementset(es_elementset(es3)))
+    expect_true(is.list(es_element(es3)$foo))
+    expect_true(is.double(es_set(es3)$bar))
+    expect_true(is.list(es_elementset(es3)$baz))
+
+    # multiple sets with metadata in element and elementset tibble
+    elementset <- tibble(
+        element = c("a", "b", "c"),
+        set = c("set1", "set1", "set2")
+    )
+    .data = BiocSet_from_elementset(elementset) %>%
+        mutate_element(foo = 1:3) %>%
+        mutate_elementset(bar = 1:3)
+
+    # 1:1 mapping, but in different sets
+    from <- c("b", "c")
+    to <- c("D", "E")
+    es4 <- map_element(.data, from, to)
+    expect_s4_class(es4, "BiocSet")
+    expect_identical(dim(es_element(es4)), c(3L, 2L))
+    expect_identical(dim(es_set(es4)), c(2L, 1L))
+    expect_identical(dim(es_elementset(es4)), c(3L, 3L))
+    expect_true(is_tbl_elementset(es_elementset(es4)))
+    expect_true(is.integer(es_element(es4)$foo))
+    expect_true(is.integer(es_elementset(es4)$bar))
+
+    # 1:1 mappping, in different sets, dropping unmapped element(s)
+    es5 <- map_element(.data, from, to, keep_unmapped = FALSE)
+    expect_s4_class(es5, "BiocSet")
+    expect_identical(dim(es_element(es5)), c(2L, 2L))
+    expect_identical(dim(es_set(es5)), c(2L, 1L))
+    expect_identical(dim(es_elementset(es5)), c(2L, 3L))
+    expect_true(is_tbl_elementset(es_elementset(es5)))
+    expect_true(is.integer(es_element(es5)$foo))
+    expect_true(is.integer(es_elementset(es5)$bar))
+    expect_identical(to, es_element(es5)$element)
+    expect_identical(to, es_elementset(es5)$element)
+
+    # many:1 mapping, in different sets
+    from <- c("b", "c")
+    to <- c("D", "D")
+    es6 <- map_element(.data, from, to)
+    expect_s4_class(es6, "BiocSet")
+    expect_identical(dim(es_element(es6)), c(2L, 2L))
+    expect_identical(dim(es_set(es6)), c(2L, 1L))
+    expect_identical(dim(es_elementset(es6)), c(3L, 3L))
+    expect_true(is_tbl_elementset(es_elementset(es6)))
+    expect_true(is.list(es_element(es6)$foo))
+    expect_true(is.integer(es_elementset(es6)$bar))
+
+    # many:1 mapping, in different sets, dropping unmapped element(s)
+    es7 <- map_element(.data, from, to, keep_unmapped = FALSE)
+    expect_s4_class(es7, "BiocSet")
+    expect_identical(dim(es_element(es7)), c(1L, 2L))
+    expect_identical(dim(es_set(es7)), c(2L, 1L))
+    expect_identical(dim(es_elementset(es7)), c(2L, 3L))
+    expect_true(is_tbl_elementset(es_elementset(es7)))
+    expect_true(is.list(es_element(es7)$foo))
+    expect_true(is.integer(es_elementset(es7)$bar))
+    expect_identical(to, es_elementset(es7)$element)
+
+    # 1:many mapping, in different sets
+    from <- c("b", "b", "c", "c")
+    to <- c("D", "E", "F", "G")
+    es8 <- map_element(.data, from, to)
+    expect_s4_class(es8, "BiocSet")
+    expect_identical(dim(es_element(es8)), c(5L, 2L))
+    expect_identical(dim(es_set(es8)), c(2L, 1L))
+    expect_identical(dim(es_elementset(es8)), c(5L, 3L))
+    expect_true(is_tbl_elementset(es_elementset(es8)))
+    expect_true(is.integer(es_element(es8)$foo))
+    expect_true(is.integer(es_elementset(es8)$bar))
+
+    # 1:many mapping, in different sets, dropping unmapped element(s)
+    es9 <- map_element(.data, from, to, keep_unmapped = FALSE)
+    expect_s4_class(es9, "BiocSet")
+    expect_identical(dim(es_element(es9)), c(4L, 2L))
+    expect_identical(dim(es_set(es9)), c(2L, 1L))
+    expect_identical(dim(es_elementset(es9)), c(4L, 3L))
+    expect_true(is_tbl_elementset(es_elementset(es9)))
+    expect_true(is.integer(es_element(es9)$foo))
+    expect_true(is.integer(es_elementset(es9)$bar))
+    expect_identical(to, es_element(es9)$element)
+    expect_identical(to, es_elementset(es9)$element)
 
     expect_error(es %>% map_element())
 })

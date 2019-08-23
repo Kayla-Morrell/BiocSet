@@ -32,9 +32,18 @@ tbl_nongroup_vars.BiocSet(x)
 
 \item{...}{Additional arguments passed to function.}
 
-\item{x}{A 'BiocSet' object.}
+\item{x}{A BiocSet object.}
 
 \item{add}{logical, whether to add to the existing groups.}
+
+\item{y}{A tibble to join}
+
+\item{by}{A character vector of variables to join by}
+
+\item{copy}{logical, allow syou to join tables across srcs}
+
+\item{suffix}{Character vector of length 2, if there are non-joined duplicate
+variables in 'x' and 'y' these suffixes will be added to the output}
 }
 \value{
 A 'BiocSet' object

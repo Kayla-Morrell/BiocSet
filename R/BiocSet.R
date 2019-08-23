@@ -375,16 +375,18 @@ mutate_elementset <- function(.data, ...) {
 #' @rdname biocset
 #'
 #' @export
-map_element <- function(.data, from, to) UseMethod("map_element")
+map_element <- function(.data, from, to, keep_unmapped) UseMethod("map_element")
 
 #' @rdname biocset
 #'
 #' @param from a vector of the values to be replaced
 #' @param to a vector of the replacement values
-#' @param keep_updated logical, whether unmapped elements should be kept.
+#' @param keep_unmapped logical, whether unmapped elements should be kept.
 #'    Default is TRUE.
 #'
 #' @importFrom stats setNames
+#' @importFrom tibble as_tibble
+#' @importFrom dplyr bind_rows summarise_all mutate_if
 #'
 #' @export
 #' @examples
@@ -412,7 +414,7 @@ map_element.BiocSet <- function(.data, from, to, keep_unmapped = TRUE)
         select(-element, element = to)
     es <- es %>% 			# de-duplicate
         group_by(element, set) %>%
-        summarize_all(list) %>%
+        summarise_all(list) %>%
         mutate_if(.test, unlist)
 
     sets <- es_set(.data) %>%
@@ -424,7 +426,7 @@ map_element.BiocSet <- function(.data, from, to, keep_unmapped = TRUE)
         select(-element, element = to)
     elements <- elements %>%
         group_by(element) %>%
-        summarize_all(list) %>%
+        summarise_all(list) %>%
         mutate_if(.test, unlist)
 
     BiocSet_from_elementset(es, elements, sets)
@@ -565,7 +567,7 @@ arrange_elementset <- function(.data, ...) {
 #'
 #' @importFrom dplyr tbl_nongroup_vars
 #'
-#' @param x A 'BiocSet' object.
+#' @param x A BiocSet object.
 #'
 #' @export
 #'
@@ -599,6 +601,12 @@ group_by.BiocSet <- function(.data, ..., add = FALSE)
 #' @rdname major_func
 #'
 #' @importFrom dplyr left_join
+#'
+#' @param y A tibble to join
+#' @param by A character vector of variables to join by
+#' @param copy logical, allow syou to join tables across srcs
+#' @param suffix Character vector of length 2, if there are non-joined duplicate
+#'    variables in 'x' and 'y' these suffixes will be added to the output
 #' 
 #' @export
 #' 
@@ -740,8 +748,6 @@ setAs("BiocSet", "list", .as.list.BiocSet)
 
 #' @rdname biocset
 #'
-#' @param es A BiocSet object
-#' 
 #' @return A tibble
 #' 
 #' @export
@@ -773,7 +779,7 @@ tibble_by_element <-
 {
     tibble_by_elementset(es) %>%
         group_by(element) %>%
-        summarize_all(list) %>%
+        summarise_all(list) %>%
         mutate_if(.test, how)
 }
 
@@ -790,7 +796,7 @@ tibble_by_set <-
 {
     tibble_by_elementset(es) %>%
         group_by(set) %>%
-        summarize_all(list) %>%
+        summarise_all(list) %>%
         mutate_if(.test, how)
 }
 

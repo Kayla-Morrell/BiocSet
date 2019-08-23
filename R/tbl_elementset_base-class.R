@@ -11,8 +11,6 @@ subclass_tbl_elementset_base <-
 }
 
 #' @importFrom dplyr filter
-#'
-#' @export
 filter.tbl_elementset_base <-
     function(.data, ...)
 {
@@ -22,8 +20,6 @@ filter.tbl_elementset_base <-
 }
 
 #' @importFrom dplyr select
-#'
-#' @export
 select.tbl_elementset_base <-
     function(.data, ...)
 {
@@ -33,8 +29,6 @@ select.tbl_elementset_base <-
 }
 
 #' @importFrom dplyr mutate
-#'
-#' @export
 mutate.tbl_elementset_base <-
     function(.data, ...)
 {
@@ -44,8 +38,6 @@ mutate.tbl_elementset_base <-
 }
 
 #' @importFrom dplyr tbl_nongroup_vars
-#'
-#' @export
 tbl_nongroup_vars.tbl_elementset_base <-
     function(x)
 {
@@ -55,8 +47,6 @@ tbl_nongroup_vars.tbl_elementset_base <-
 }
 
 #' @importFrom dplyr summarise
-#'
-#' @export
 summarise.tbl_elementset_base <-
     function(.data, ...)
 {
@@ -68,8 +58,6 @@ summarise.tbl_elementset_base <-
 summarize.tbl_elementset_base <- summarise.tbl_elementset_base
 
 #' @importFrom dplyr arrange
-#'
-#' @export
 arrange.tbl_elementset_base <-
     function(.data, ...)
 {
@@ -79,8 +67,6 @@ arrange.tbl_elementset_base <-
 }
 
 #' @importFrom dplyr union
-#'
-#' @export
 union.tbl_elementset_base <- function(x, y, ...)
 {
     stopifnot(is(x) == is(y))
@@ -90,8 +76,6 @@ union.tbl_elementset_base <- function(x, y, ...)
 }
 
 #' @importFrom dplyr intersect
-#' 
-#' @export
 intersect.tbl_elementset_base <- function(x, y, ...)
 {
     stopifnot(is(x) == is(y))
@@ -101,8 +85,6 @@ intersect.tbl_elementset_base <- function(x, y, ...)
 }
 
 #' @importFrom dplyr left_join
-#'
-#' @export
 left_join.tbl_elementset_base <- function(x, y, by, copy, suffix, ...)
 {
     tbl <- NextMethod()

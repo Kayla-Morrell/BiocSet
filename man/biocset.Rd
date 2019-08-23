@@ -99,7 +99,7 @@ mutate_set(.data, ...)
 
 mutate_elementset(.data, ...)
 
-map_element(.data, from, to)
+map_element(.data, from, to, keep_unmapped)
 
 \method{map_element}{BiocSet}(.data, from, to, keep_unmapped = TRUE)
 
@@ -162,6 +162,9 @@ character vector is the name of the element set.}
 
 \item{to}{a vector of the replacement values}
 
+\item{keep_unmapped}{logical, whether unmapped elements should be kept.
+Default is TRUE.}
+
 \item{elementset}{A tibble with element set information}
 
 \item{element}{A tibble with element information}
@@ -169,11 +172,6 @@ character vector is the name of the element set.}
 \item{set}{A tibble with set information}
 
 \item{how}{Multiple entries will become a list.}
-
-\item{keep_updated}{logical, whether unmapped elements should be kept.
-Default is TRUE.}
-
-\item{es}{A BiocSet object}
 }
 \value{
 For `BiocSet()`, an S4 'BiocSet' object in a tripple

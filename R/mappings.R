@@ -120,7 +120,7 @@ es_map_unique <- function(es, org, from, to)
 #' @examples
 #' library(EnsDb.Hsapiens.v86)
 #' es <- BiocSet(set1 = c("BCL2", "BCL2L11"), set2 = c("7SK", "AAAS", "A1CF"))
-#' es_map_multiple(es, EnsDb.Hsapiens.v86, "GENENAME", "TXID", "list")
+#' es_map_multiple(es, EnsDb.Hsapiens.v86, "GENENAME", "TXID", "asNA")
 es_map_multiple <- function(es, org, from, to, multi = 
     c('list', 'filter', 'asNA', 'CharacterList'))
 {
