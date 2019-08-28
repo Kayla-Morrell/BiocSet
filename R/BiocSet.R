@@ -372,6 +372,23 @@ mutate_elementset <- function(.data, ...) {
     initialize(tbl, active = act)
 }
 
+.normalize_mapping <-
+    function(from, to)
+{
+    stopifnot(
+        length(from) == length(to),
+        is.null(names(from)), is.null(names(to))
+    )
+
+    to <- rep(to, lengths(from))
+    from <- unlist(from)
+
+    from <- rep(from, lengths(to))
+    to <- unlist(to)
+
+    tibble(element = unname(from), to = unname(to))
+}
+
 #' @rdname biocset
 #'
 #' @export
@@ -392,15 +409,18 @@ map_element <- function(.data, from, to, keep_unmapped) UseMethod("map_element")
 #' @examples
 #' es <- BiocSet(set1 = letters, set2 = LETTERS)
 #' es %>% map_element(letters, LETTERS)
-map_element.BiocSet <- function(.data, from, to, keep_unmapped = TRUE)
+map_element.BiocSet <- 
+    function(.data, from, to, keep_unmapped = TRUE)
 {
     stopifnot(is.character(from), 
         is.character(to) || is.list(to) || is(to, "CharacterList"),
         length(from) == length(to)
     )
+
     es <- es_elementset(.data)
 
-    mapping <- tibble(element = from, to)
+    ## mapping <- tibble(element = from, to)
+    mapping <- .normalize_mapping(from, to)
     if (keep_unmapped) {
         aux <- as_tibble(es) %>%	# un-mapped elements
             select(element) %>%
@@ -413,7 +433,7 @@ map_element.BiocSet <- function(.data, from, to, keep_unmapped = TRUE)
         left_join(mapping, es) %>%
         select(-element, element = to)
     es <- es %>% 			# de-duplicate
-        group_by(element, set) %>%	## CAN'T GROUP_BY A LIST!!!!
+        group_by(element, set) %>%
         summarise_all(list) %>%
         mutate_if(.test, unlist)
 
@@ -425,7 +445,7 @@ map_element.BiocSet <- function(.data, from, to, keep_unmapped = TRUE)
         left_join(mapping, elements) %>%
         select(-element, element = to)
     elements <- elements %>%
-        group_by(element) %>%		## CAN'T GROUP_BY A LIST!!!!
+        group_by(element) %>%
         summarise_all(list) %>%
         mutate_if(.test, unlist)
 

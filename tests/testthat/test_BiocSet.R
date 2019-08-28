@@ -136,6 +136,45 @@ test_that("'mutate.BiocSet()' works", {
     expect_error(es %>% mutate(a))
 })
 
+test_that("'.normalize_mapping()' works", {
+    es <- .normalize_mapping(letters, LETTERS)
+    expect_s3_class(es, "tbl_df")
+    expect_false(is_tbl_elementset(es))
+    expect_identical(dim(es), c(26L, 2L))
+    expect_true(is.character(es$element))
+    expect_true(is.character(es$to))
+
+    es1 <- .normalize_mapping(
+        list(letters[1], letters[2:3], character()),
+        LETTERS[1:3]
+    )
+    expect_s3_class(es1, "tbl_df")
+    expect_false(is_tbl_elementset(es1))
+    expect_identical(dim(es1), c(3L, 2L))
+    expect_true(is.character(es$element))
+    expect_true(is.character(es$to))
+
+    es2 <- .normalize_mapping(
+        letters[1:3],
+        list(LETTERS[1], LETTERS[2:3], character())
+    )
+    expect_s3_class(es2, "tbl_df")
+    expect_false(is_tbl_elementset(es2))
+    expect_identical(dim(es2), c(3L, 2L))
+    expect_true(is.character(es$element))
+    expect_true(is.character(es$to))
+
+    es3 <- .normalize_mapping(
+        list(letters[1:2], letters[3], character()),
+        list(LETTERS[1], LETTERS[2:3], character())
+    )
+    expect_s3_class(es3, "tbl_df")
+    expect_false(is_tbl_elementset(es3))
+    expect_identical(dim(es3), c(4L, 2L))
+    expect_true(is.character(es$element))
+    expect_true(is.character(es$to))
+})
+
 test_that("'map_element.BiocSet()' works", {
     es <- BiocSet(set1 = letters, set2 = LETTERS)
 
