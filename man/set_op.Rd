@@ -2,16 +2,16 @@
 % Please edit documentation in R/set_ops.R
 \name{union.BiocSet}
 \alias{union.BiocSet}
-\alias{union_single}
 \alias{intersect.BiocSet}
+\alias{union_single}
 \alias{intersect_single}
 \title{Set operations for BiocSets}
 \usage{
 \method{union}{BiocSet}(x, y, ...)
 
-union_single(x, ...)
-
 \method{intersect}{BiocSet}(x, y, ...)
+
+union_single(x, ...)
 
 intersect_single(x, ...)
 }
@@ -23,26 +23,31 @@ intersect_single(x, ...)
 \item{...}{other arguments passed on to methods}
 }
 \value{
-For union, a tibble with the results of the union of x or x and y.
+For `union()`, a BiocSet object with the results of the union of x 
+    and y.
 
-A BiocSet object with a single set and unioned elements
+For `intersect()`, a BiocSet with the intersect of x and y.
 
-For intersect, a tibble with the intersect of x and y
+For `union_single()`, a BiocSet object with a single set and unioned 
+    elements from x.
 
-A BiocSet object with a single set and interesected elements
+For `intersect_single()`, a BiocSet object with a single set and 
+    interesected elements from x.
 }
 \description{
 Set operations for BiocSets
 }
 \examples{
-es1 <- BiocSet(set1 = letters[c(1:3)], set2 = LETTERS[c(1:3)])
-es2 <- BiocSet(set1 = letters[c(2:4)], set2 = LETTERS[c(2:4)])
-union(es1, es2)
-es1 <- BiocSet(set1 = letters[c(1:10)], set2 = letters[c(4:20)])
-union_single(es1) 
 es1 <- BiocSet(set1 = letters[c(1:4)], set2 = LETTERS[c(1:4)])
 es2 <- BiocSet(set1 = letters[c(3:8)], set2 = LETTERS[c(3:8)])
+
+union(es1, es2)
+
 intersect(es1, es2)
+
+es3 <- BiocSet(set1 = letters[c(1:10)], set2 = letters[c(4:20)])
+
+union_single(es3) 
 \dontrun{
 es1 <- BiocSet(set1 = letters[c(1:10)], set2 = letters[c(4:20)])
 intersect_single(es1)

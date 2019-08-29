@@ -16,8 +16,7 @@
 #' @export
 #'
 #' @examples
-#' tbl_elementset(set1 = letters, set2 = LETTERS)
-
+#' es <- tbl_elementset(set1 = letters, set2 = LETTERS)
 tbl_elementset <- function(...) {
     args <- list(...)
 
@@ -37,17 +36,22 @@ tbl_elementset <- function(...) {
     subclass_tbl_elementset_base(tbl, "tbl_elementset")
 }
 
+#' @rdname tblelementset
+#'
+#' @param x A tibble that may or may not be an elementset
+#'
+#' @return For `is_tbl_elementset()`, a logical indicating if the tibble is an
+#'     elementset.
+#'
+#' @export
+#'
+#' @examples
+#' is_tbl_elementset(es)
 is_tbl_elementset <- function(x) {
     all(c("element", "set") %in% names(x)) &&
         is.character(x$element) && is.character(x$set)
 }
 
-#' @rdname tblelementset
-#'
-#' @param x An object of class trunc_mat_tbl_elementset, used during
-#'     printing of tbl_elementset
-#'
-#' @export
 format.trunc_mat_tbl_elementset <- function(x, ...) {
     class <- sub("trunc_mat_", "", class(x)[1])
     names(x$summary) <- paste("A", class)

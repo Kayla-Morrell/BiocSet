@@ -28,10 +28,6 @@
 \alias{mutate_element}
 \alias{mutate_set}
 \alias{mutate_elementset}
-\alias{map_element}
-\alias{map_element.BiocSet}
-\alias{map_set}
-\alias{map_set.BiocSet}
 \alias{summarise_element}
 \alias{summarise_set}
 \alias{summarise_elementset}
@@ -99,14 +95,6 @@ mutate_set(.data, ...)
 
 mutate_elementset(.data, ...)
 
-map_element(.data, from, to, keep_unmapped)
-
-\method{map_element}{BiocSet}(.data, from, to, keep_unmapped = TRUE)
-
-map_set(.data, from, to)
-
-\method{map_set}{BiocSet}(.data, from, to)
-
 summarise_element(.data, ...)
 
 summarise_set(.data, ...)
@@ -157,13 +145,6 @@ character vector is the name of the element set.}
 \item{value}{What it is being updated to}
 
 \item{x}{The active tibble}
-
-\item{from}{a vector of the values to be replaced}
-
-\item{to}{a vector of the replacement values}
-
-\item{keep_unmapped}{logical, whether unmapped elements should be kept.
-Default is TRUE.}
 
 \item{elementset}{A tibble with element set information}
 
@@ -226,10 +207,6 @@ es <- BiocSet(set1 = letters, set2 = LETTERS)
 es \%>\% mutate_set(pval = rnorm(1:2))
 es <- BiocSet(set1 = letters, set2 = LETTERS)
 es \%>\% mutate_elementset(pval = rnorm(1:52))
-es <- BiocSet(set1 = letters, set2 = LETTERS)
-es \%>\% map_element(letters, LETTERS)
-es <- BiocSet(set1 = letters, set2 = LETTERS)
-es \%>\% map_set("set1", "foo")
 es <- BiocSet(set1 = letters, set2 = LETTERS)
 es \%>\% summarise_element(n = n())
 es <- BiocSet(set1 = letters, set2 = LETTERS)

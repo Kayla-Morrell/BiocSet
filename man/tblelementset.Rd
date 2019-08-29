@@ -2,28 +2,31 @@
 % Please edit documentation in R/tblelementset-class.R
 \name{tbl_elementset}
 \alias{tbl_elementset}
-\alias{format.trunc_mat_tbl_elementset}
+\alias{is_tbl_elementset}
 \title{Element set representation as an S3 class tibble}
 \usage{
 tbl_elementset(...)
 
-\method{format}{trunc_mat_tbl_elementset}(x, ...)
+is_tbl_elementset(x)
 }
 \arguments{
 \item{...}{For `tbl_elementset()`, named character() vectors of gene
 sets. Each character vector is a element set. The name of the
 character vector is the name of the element set.}
 
-\item{x}{An object of class trunc_mat_tbl_elementset, used during
-printing of tbl_elementset}
+\item{x}{A tibble that may or may not be an elementset}
 }
 \value{
 For `tbl_elementset()`, an S3 'elementset' object in a tibble
     representation.
+
+For `is_tbl_elementset()`, a logical indicating if the tibble is an
+    elementset.
 }
 \description{
 Element set representation as an S3 class tibble
 }
 \examples{
-tbl_elementset(set1 = letters, set2 = LETTERS)
+es <- tbl_elementset(set1 = letters, set2 = LETTERS)
+is_tbl_elementset(es)
 }

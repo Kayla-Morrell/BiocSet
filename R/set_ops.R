@@ -8,13 +8,15 @@
 #'
 #' @importFrom dplyr union
 #' 
-#' @return For union, a tibble with the results of the union of x or x and y.
+#' @return For `union()`, a BiocSet object with the results of the union of x 
+#'     and y.
 #' 
 #' @export
 #'
 #' @examples
-#' es1 <- BiocSet(set1 = letters[c(1:3)], set2 = LETTERS[c(1:3)])
-#' es2 <- BiocSet(set1 = letters[c(2:4)], set2 = LETTERS[c(2:4)])
+#' es1 <- BiocSet(set1 = letters[c(1:4)], set2 = LETTERS[c(1:4)])
+#' es2 <- BiocSet(set1 = letters[c(3:8)], set2 = LETTERS[c(3:8)])
+#'
 #' union(es1, es2)
 union.BiocSet <- function(x, y, ...)
 {
@@ -26,33 +28,14 @@ union.BiocSet <- function(x, y, ...)
 
 #' @rdname set_op
 #'
-#' @importFrom dplyr pull
-#'
-#' @return A BiocSet object with a single set and unioned elements
-#'
-#' @export
-#'
-#' @examples
-#' es1 <- BiocSet(set1 = letters[c(1:10)], set2 = letters[c(4:20)])
-#' union_single(es1) 
-union_single <- function(x, ...)
-{
-    unique_elements <- x %>% es_element() %>% pull(element)
-
-    BiocSet(union = unique_elements)
-}
-
-#' @rdname set_op
-#'
 #' @importFrom dplyr intersect
-#' 
-#' @return For intersect, a tibble with the intersect of x and y 
+#'
+#' @return For `intersect()`, a BiocSet with the intersect of x and y.
 #'
 #' @export
 #'
 #' @examples
-#' es1 <- BiocSet(set1 = letters[c(1:4)], set2 = LETTERS[c(1:4)])
-#' es2 <- BiocSet(set1 = letters[c(3:8)], set2 = LETTERS[c(3:8)])
+#'
 #' intersect(es1, es2)
 intersect.BiocSet <- function(x, y, ...)
 {
@@ -64,7 +47,29 @@ intersect.BiocSet <- function(x, y, ...)
 
 #' @rdname set_op
 #'
-#' @return A BiocSet object with a single set and interesected elements
+#' @importFrom dplyr pull
+#'
+#' @return For `union_single()`, a BiocSet object with a single set and unioned 
+#'     elements from x.
+#'
+#' @export
+#'
+#' @examples
+#'
+#' es3 <- BiocSet(set1 = letters[c(1:10)], set2 = letters[c(4:20)])
+#'
+#' union_single(es3) 
+union_single <- function(x, ...)
+{
+    unique_elements <- x %>% es_element() %>% pull(element)
+
+    BiocSet(union = unique_elements)
+}
+
+#' @rdname set_op
+#'
+#' @return For `intersect_single()`, a BiocSet object with a single set and 
+#'     interesected elements from x.
 #'
 #' @examples
 #' \dontrun{
