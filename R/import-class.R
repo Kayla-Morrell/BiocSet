@@ -1,34 +1,11 @@
-#' Importing and formating of element sets as an S3 class tibble
-#' @rdname import
-#'
-#' @export
 .GMTFile = setClass("GMTFile", contains = "RTLFile")
 
-#' @rdname import
-#'
-#' @param resource For `GMTFile()`, the .gmt file that will be imported in.
-#'
-#' @return For `GMTFile()`, an object representing the path to a .gmt file.
-#'
-#' @export
 GMTFile = function(resource, ...)
     .GMTFile(resource = resource)
 
-#' @rdname import
-#'
-#' @param path For `import.gmt()`, a file name or URL containing element sets.
-#'
 #' @importFrom rtracklayer import export resource
 #' @importFrom methods new
 #' @importFrom utils write.table
-#'
-#' @export
-#'
-#' @examples
-#' gmtFile <- system.file(package = "BiocSet", "extdata",
-#'     "hallmark.gene.symbol.gmt")
-#' import(gmtFile)
-
 import.gmt <- function(path) {
     sets <- readLines(path)
     sets <- strsplit(sets, "\t")
@@ -44,19 +21,26 @@ import.gmt <- function(path) {
 }
 
 
+#' Importing/exporting and formating of element sets as a BiocSet object
 #' @rdname import
 #'
+#' @aliases GMTFile, ANY, ANY-method
+#'
 #' @param con For `import()`, the file name or URL the element set is
-#'     loaded from. For `export()`, the file name or URL the element set
-#'     is to be saved to.
+#'     loaded from.
 #' @param format For `import()`, the format of the output.
 #' @param text For `import()`, if con is missing this is a character
 #'     vector directly providing the element set that should be imported.
 #' @param ... Parameters to pass to the format-specific method
 #'
-#' @return For `import()`, tbl_elementset
+#' @return For `import()`, a BiocSet object
 #'
 #' @export
+#'
+#' @examples
+#' gmtFile <- system.file(package = "BiocSet", "extdata",
+#'     "hallmark.gene.symbol.gmt")
+#' tbl <- import(gmtFile)
 setMethod(
     "import", c("GMTFile", "ANY", "ANY"),
     function(con, format, text, ...)
@@ -64,15 +48,7 @@ setMethod(
     import.gmt(resource(con))
 })
 
-#' @rdname import
-#'
-#' @param tbl For `export.BiocSet()`, a BiocSet that
-#'     should be exported to a gmt file.
-#'
 #' @importFrom rlang .data
-#'
-#' @export
-
 export.BiocSet <- function(tbl, path = tempfile(fileext = ".gmt")) {
     stopifnot(is_tbl_elementset(es_elementset(tbl)))
     
@@ -96,12 +72,19 @@ export.BiocSet <- function(tbl, path = tempfile(fileext = ".gmt")) {
 
 #' @rdname import
 #'
+#' @aliases BiocSet, GMTFile, ANY, ANY-method
+#' 
 #' @param object For `export()`, the object to be exported.
 #'
 #' @return For `export()`, a GMTFile object representing the location
-#'     where the element set was written
+#'     where the BiocSet object was written to
 #'
 #' @export
+#'
+#' @examples
+#'
+#' fl <- tempfile(fileext = ".gmt")
+#' gmt <- export(tbl2, fl)
 setMethod(
     "export", c("BiocSet", "GMTFile", "ANY"),
     function(object, con, format, ...)
