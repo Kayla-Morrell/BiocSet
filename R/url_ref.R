@@ -1,14 +1,10 @@
 #' Functions to access reference urls for different identifiers
-#'
 #' @rdname url_ref
-#'
-#' @param es A BiocSet object in which the reference urls should be added to.
-#'
-#' @return For `url_ref_element()`, a BiocSet object with the url column added 
-#'     to the element tibble.
-#'
+#' @name url_ref
+#' @param es A \code{BiocSet} object that the reference urls should be added to.
+#' @return For \code{url_ref_element}, a \code{BiocSet} object with the url 
+#'     column added to the element tibble.
 #' @export
-#'
 #' @examples
 #' es <- BiocSet("GO:0000002" = c("TP53", "TNF"), "GO:0000003" = c("IL6"))
 #' url_ref_element(es) 
@@ -26,14 +22,12 @@ url_ref_element <- function(es)
 }
 
 #' @rdname url_ref
-#' 
-#' @return For `url_ref_set()`, a BiocSet object with the url column added to 
-#'     the set tibble.
-#' 
+#' @name url_ref 
+#' @return For \code{url_ref_set}, a \code{BiocSet} object with the url column 
+#'     added to the set tibble.
 #' @export
-#'
 #' @examples
-#'
+#' 
 #' url_ref_set(es)
 url_ref_set <- function(es)
 {
@@ -49,12 +43,10 @@ url_ref_set <- function(es)
 }
 
 #' @rdname url_ref
-#'
-#' @return For `url_ref()`, a BiocSet object with the url column added to both 
-#'     the element and set tibbles.
-#'
+#' @name url_ref
+#' @return For \code{url_ref}, a \code{BiocSet} object with the url column 
+#'     added to both the element and set tibbles.
 #' @export
-#'
 #' @examples
 #'
 #' url_ref(es)

@@ -21,22 +21,22 @@ import.gmt <- function(path) {
 }
 
 
-#' Importing/exporting and formating of element sets as a BiocSet object
+#' Importing/exporting
 #' @rdname import
-#'
+#' @name import
 #' @aliases GMTFile, ANY, ANY-method
-#'
-#' @param con For `import()`, the file name or URL the element set is
-#'     loaded from.
-#' @param format For `import()`, the format of the output.
-#' @param text For `import()`, if con is missing this is a character
-#'     vector directly providing the element set that should be imported.
+#' @description Importing/exporting and formating of element sets as a 
+#'     \code{BiocSet} object.
+#' @param con For \code{import}, the file name or URL the element set is
+#'     loaded from. For \code{export}, the file name or URL the element set is
+#'     written to.
+#' @param format For \code{import}, the format of the input. For 
+#'     \code{export}, the format of the output.
+#' @param text If con is missing this is a character vector directly providing 
+#'     the element set that should be imported.
 #' @param ... Parameters to pass to the format-specific method
-#'
 #' @return For `import()`, a BiocSet object
-#'
 #' @export
-#'
 #' @examples
 #' gmtFile <- system.file(package = "BiocSet", "extdata",
 #'     "hallmark.gene.symbol.gmt")
@@ -82,7 +82,8 @@ export.BiocSet <- function(tbl, path = tempfile(fileext = ".gmt")) {
 #' @export
 #'
 #' @examples
-#'
+#' 
+#' tbl2 <- BiocSet(set1 = letters, set2 = LETTERS)
 #' fl <- tempfile(fileext = ".gmt")
 #' gmt <- export(tbl2, fl)
 setMethod(

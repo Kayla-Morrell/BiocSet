@@ -1,8 +1,12 @@
-#' @rdname set_op
-#'
-#' @return For `intersect_single()`, a BiocSet object with a single set and
+#' Intersect on a single \code{BiocSet} object
+#' @rdname intersect_single
+#' @name intersect_single
+#' @description This function performs an intersection within a single 
+#'     \code{BiocSet} object.
+#' @param x A \code{BiocSet} object.
+#' @param ... Additional arguments passed to function.
+#' @return A \code{BiocSet} object with a single set  'intersect' and 
 #'     interesected elements from x.
-#'
 #' @examples
 #' \dontrun{
 #' es1 <- BiocSet(set1 = letters[c(1:10)], set2 = letters[c(4:20)])

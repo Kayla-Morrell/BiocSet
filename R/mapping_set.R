@@ -1,23 +1,23 @@
 #' Functions for mapping sets in the set tibble to different id types
-#'
 #' @rdname mapping_set
-#'
-#' @param org The AnnotationDbi object to identify keys/mappings from
-#' @param from A character to indicate which identifier to map from
+#' @name mapping_set
+#' @description Functions for creating \code{BiocSet} objects from GO sets and
+#'     KEGG sets, and creating a new set mapping from a current \code{BiocSet} 
+#'     object. \code{map_add_set} will add the mapping as a new column instead 
+#'     of overwriting the current one used for the mapping.
+#' @param org The AnnotationDbi object to identify keys/mappings from.
+#' @param from A character to indicate which identifier to map from.
 #' @param go A character to indicate the column name for the GO ids. 
 #'     Default is "GO".
 #' @param evidence A character to indicate the evidence codes for GO 
 #'     associations with a gene of interest. Default is all possible evidence 
 #'     codes.
 #' @param ontology A character to indicate which Gene Ontology to use. 
-#'     Default is BP, CC, and MF
-#'
+#'     Default is BP, CC, and MF.
 #' @importFrom AnnotationDbi keytypes keys
-#'
-#' @return For `go_sets()`, a BiocSet object with GO ids as the set ids
-#'
+#' @return For \code{go_sets}, a \code{BiocSet} object with GO ids as the set 
+#'     ids.
 #' @export
-#'
 #' @examples
 #' library(org.Hs.eg.db)
 #' go <- go_sets(org.Hs.eg.db, "ENSEMBL")
@@ -74,16 +74,12 @@ go_sets <- function(org, from, go = c("GO", "GOID"), evidence = NULL,
 }
 
 #' @rdname mapping_set
-#'
-#' @param species Which species the pathways are from
-#'
+#' @name mapping_set
+#' @param species Which species the pathways are from.
 #' @importFrom KEGGREST keggList keggGet
-#'
-#' @return For kegg_sets(), a BiocSet object with Entrez IDs reported as
-#'     elements (default from KEGGREST) and KEGG pathways as sets.
-#'
+#' @return For \code{kegg_sets}, a \code{BiocSet} object with Entrez IDs 
+#'     reported as elements (default from KEGGREST) and KEGG pathways as sets.
 #' @export
-#'
 #' @examples
 #'
 #' kegg_sets("hsa")
@@ -117,14 +113,11 @@ kegg_sets <- function(species)
 }
 
 #' @rdname mapping_set
-#'
-#' @param .data The BiocSet object that contains the set tibble being mapped
-#'
-#' @return For `map_set()`, a BiocSet object with the mapped set present in the
-#'     set tibble.
-#'
+#' @name mapping_set
+#' @param .data The BiocSet object that contains the set tibble being mapped.
+#' @return For \code{map_set}, a BiocSet object with the mapped set present in 
+#'     the set tibble.
 #' @export
-#'
 #' @examples
 #'
 #' es <- BiocSet(set1 = letters, set2 = LETTERS)
@@ -148,12 +141,10 @@ map_set.BiocSet <- function(.data, from, to)
 }
 
 #' @rdname mapping_set
-#'
-#' @return For `map_add_set()`, a BiocSet object with a new column in the set 
-#'     tibble with the mapping of the new id type
-#'
+#' @name mapping_set
+#' @return For \code{map_add_set}, a \code{BiocSet} object with a new column in
+#'     the set tibble with the mapping of the new id type.
 #' @export
-#'
 #' @examples
 #'
 #' library(GO.db)

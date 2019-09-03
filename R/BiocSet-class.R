@@ -1,14 +1,14 @@
-setOldClass(c("tbl_element", "tbl_set", "tbl_elementset"))
-
-#' @rdname biocset
-#'
+#' BiocSet class
+#' @name BiocSet
+#' @rdname BiocSet-class
+#' @description NULL
+#' @importFrom methods setOldClass
 #' @slot element The element tibble from `tbl_elementset`
 #' @slot set The set tibble from `tbl_elementset`
 #' @slot elementset The elementset tibble created from user input
 #' @slot active Character, indicates which tibble is active
-#'
 #' @exportClass BiocSet
-
+setOldClass(c("tbl_element", "tbl_set", "tbl_elementset"))
 .BiocSet <- setClass(
     "BiocSet",
     slots = c(
@@ -20,20 +20,18 @@ setOldClass(c("tbl_element", "tbl_set", "tbl_elementset"))
 )
 
 ## Constructor
-#' An element set representation as a tripple tibble
-#'
-#' @rdname biocset
-#'
-#' @param ... For `BiocSet()`, named character() vectors of element
-#'     sets. Each character vector is an element set. The name of the
-#'     character vector is the name of the element set.
-#' @param active A character to indicate which tibble is active.
-#'
-#' @return For `BiocSet()`, an S4 'BiocSet' object in a tripple
-#'     tibble representation.
-#'
+#' @description The \code{BiocSet} constructor, the show method, the slot 
+#'     accessors, and creating a \code{BiocSet} object from an element set 
+#'     tibble rather than character vector(s).
+#' @rdname BiocSet-class
+#' @param ... Named character() vectors of element sets. Each character vector 
+#'     is an element set. The name of the character vectors are the name of the 
+#'     sets.
+#' @param active A character to indicate which tibble is active. The default is
+#'     "elementset".
+#' @return An S4 \code{BiocSet} object shown as a tripple tibble, where each 
+#'     slot is a tibble.
 #' @export
-#'
 #' @examples
 #' BiocSet(set1 = letters, set2 = LETTERS)
 BiocSet <- function(..., active = c("elementset", "element", "set"))
@@ -49,6 +47,9 @@ BiocSet <- function(..., active = c("elementset", "element", "set"))
                 active = active)
 }
 
+#' @rdname BiocSet-class
+#' @param object A \code{BiocSet} object.
+#' @export
 setMethod(
     "show", "BiocSet",
     function(object)
@@ -68,34 +69,6 @@ setMethod(
             )
         print(.elementset(object), n = 3)
     })
-
-#' @rdname biocset
-#'
-#' @export
-es_activate <- function(.data, what)
-{
-    UseMethod("es_activate")
-}
-
-#' @rdname biocset
-#'
-#' @param .data The 'BiocSet' tibble.
-#' @param what Which of the three tibbles to activate
-#'
-#' @importFrom rlang quo_text enquo
-#' @importFrom methods initialize
-#'
-#' @export
-#'
-#' @examples
-#' es <- BiocSet(set1 = letters, set2 = LETTERS)
-#' es_activate(es, element)
-es_activate.BiocSet <- function(.data, what)
-{
-    what <- quo_text(enquo(what))
-    .active(.data) <- what
-    .data
-}
 
 setGeneric(
     ".update",
@@ -135,83 +108,51 @@ setMethod(
     initialize(x, element = element, set = set, elementset = value)
 })
 
-#' @rdname biocset
-#'
-#' @param es The active tibble
-#' @param value What it is being updated to
-#'
-#' @export
 update_es_element <- function(es, value)
     .update(es, value)
 
-#' @rdname biocset
-#'
-#' @export
 update_es_set <- function(es, value)
     .update(es, value)
 
-#' @rdname biocset
-#'
-#' @export
 update_es_elementset <- function(es, value)
     .update(es, value)
 
-#' @rdname biocset
-#'
-#' @param x The active tibble
-#'
-#' @export
 setGeneric("es_element", function(x) standardGeneric("es_element"))
 
-#' @rdname biocset
-#' @docType methods
+#' @rdname BiocSet-class
+#' @return For \code{es_element}, the element tibble from the \code{BiocSet} 
+#'     object.
 #' @export
 setMethod("es_element", "BiocSet", .element)
 
-#' @rdname biocset
-#'
-#' @export
 setGeneric("es_set", function(x) standardGeneric("es_set"))
 
-#' @rdname biocset
-#' @docType methods
+#' @rdname BiocSet-class
+#' @return For \code{es_set}, the set tibble from the \code{BiocSet} object.
 #' @export
 setMethod("es_set", "BiocSet", .set)
 
-#' @rdname biocset
-#'
-#' @export
 setGeneric("es_elementset", function(x) standardGeneric("es_elementset"))
 
-#' @rdname biocset
-#' @docType methods
+#' @rdname BiocSet-class
+#' @return For \code{es_elementset}, the elementset tibble from the 
+#'     \code{BiocSet} object.
 #' @export
 setMethod("es_elementset", "BiocSet", .elementset)
 
-#' @rdname biocset
-#'
-#' @export
 `es_element<-` <- update_es_element
 
-#' @rdname biocset
-#'
-#' @export
 `es_set<-` <- update_es_set
 
-#' @rdname biocset
-#'
-#' @export
 `es_elementset<-` <- update_es_elementset
 
-#' @rdname biocset
-#'
-#' @param elementset A tibble with element set information
-#' @param element A tibble with element information
-#' @param set A tibble with set information
-#'
+#' @rdname BiocSet-class
+#' @param elementset A tibble with element set information.
+#' @param element A tibble with element information.
+#' @param set A tibble with set information.
 #' @export
-#'
 #' @examples
+#'
 #' set.seed(123)
 #' element <-
 #'    tibble(

@@ -1,20 +1,16 @@
 #' Element set representation as an S3 class tibble
 #' @rdname tblelementset
-#'
-#' @param ... For `tbl_elementset()`, named character() vectors of gene
-#'     sets. Each character vector is a element set. The name of the
-#'     character vector is the name of the element set.
-#'
-#' @return For `tbl_elementset()`, an S3 'elementset' object in a tibble
+#' @name tblelementset
+#' @param ... For \code{tbl_elementset}, named character vectors of gene sets. 
+#'     Each character vector is a element set. The name of the character vector
+#'     is the name of the element set.
+#' @return For \code{tbl_elementset}, an S3 \code{elementset} object in a tibble
 #'     representation.
-#'
 #' @importFrom methods is
 #' @importFrom tibble tibble
 #' @importFrom dplyr distinct '%>%' select mutate group_by ungroup
 #'     summarise arrange
-#'
 #' @export
-#'
 #' @examples
 #' es <- tbl_elementset(set1 = letters, set2 = LETTERS)
 tbl_elementset <- function(...) {
@@ -37,15 +33,13 @@ tbl_elementset <- function(...) {
 }
 
 #' @rdname tblelementset
-#'
+#' @name tblelementset
 #' @param x A tibble that may or may not be an elementset
-#'
-#' @return For `is_tbl_elementset()`, a logical indicating if the tibble is an
-#'     elementset.
-#'
+#' @return For \code{is_tbl_elementset}, a logical indicating if the tibble is 
+#'     an elementset.
 #' @export
-#'
 #' @examples
+#' 
 #' is_tbl_elementset(es)
 is_tbl_elementset <- function(x) {
     all(c("element", "set") %in% names(x)) &&

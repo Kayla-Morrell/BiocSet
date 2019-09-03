@@ -1,16 +1,36 @@
-#' Major dplyr functions adapted into BiocSet
-#'
-#' @rdname major_func
-#'
-#' @param .data The 'BiocSet' tibble
-#' @param ... Additional arguments passed to function.
-#'
-#' @return A 'BiocSet' object
-#'
+es_activate <- function(.data, what)
+{
+    UseMethod("es_activate")
+}
+
+#' BiocSet methods
+#' @name BiocSet-methods
+#' @rdname BiocSet-methods
+#' @description \code{es_activate}: which of the three tibbles in the 
+#'     \code{BiocSet} object should be activated and have the chosen 
+#'     functionality applied to it.
+#' @param .data The \code{BiocSet} object.
+#' @param what Which of the three tibbles from \code{BiocSet} to activate.
+#' @importFrom rlang quo_text enquo
+#' @importFrom methods initialize
+#' @return A \code{BiocSet} object.
 #' @export
-#'
 #' @examples
-#' es <- BiocSet(set1 = letters, set2 = LETTERS)
+#' es <- BiocSet(set1 = letters, set1 = LETTERS)
+#' es_activate(es, element)
+es_activate.BiocSet <- function(.data, what)
+{
+    what <- quo_text(enquo(what))
+    .active(.data) <- what
+    .data
+}
+
+#' @rdname BiocSet-methods
+#' @description \code{filter}: choose rows where conditions are true.
+#' @param ... Additional arguments passed to function.
+#' @export
+#' @examples
+#' 
 #' es %>% es_activate(element) %>% filter(element == "a")
 filter.BiocSet <- function(.data, ...)
 {
@@ -19,12 +39,11 @@ filter.BiocSet <- function(.data, ...)
     .update(.data, tbl)
 }
 
-#' @rdname major_func
-#'
+#' @rdname BiocSet-methods
+#' @description \code{select}: keep only the variables listed. 
 #' @export
-#'
 #' @examples
-#' es <- BiocSet(set1 = letters, set2 = LETTERS)
+#' 
 #' es %>% select(element)
 select.BiocSet <- function(.data, ...)
 {
@@ -33,12 +52,12 @@ select.BiocSet <- function(.data, ...)
     .update(.data, tbl)
 }
 
-#' @rdname major_func
-#'
+#' @rdname BiocSet-methods
+#' @description \code{mutate}: add new variable and preserve the existing 
+#'     variables.
 #' @export
-#'
 #' @examples
-#' es <- BiocSet(set1 = letters, set2 = LETTERS)
+#'
 #' es %>% es_activate(set) %>% mutate(pval = rnorm(1:2))
 mutate.BiocSet <- function(.data, ...)
 {
@@ -49,12 +68,12 @@ mutate.BiocSet <- function(.data, ...)
     .update(.data, tbl)
 }
 
-#' @rdname major_func
-#'
+#' @rdname BiocSet-methods
+#' @description \code{summarise}: usually used with \code{group_by()}, output 
+#'     will have one row for each group.
 #' @export
-#'
 #' @examples
-#' es <- BiocSet(set1 = letters, set2 = LETTERS)
+#' 
 #' es %>% es_activate(set) %>% summarise(n = n())
 summarise.BiocSet <- function(.data, ...)
 {
@@ -62,12 +81,12 @@ summarise.BiocSet <- function(.data, ...)
     summarise(sub, ...)
 }
 
-#' @rdname major_func
-#'
+#' @rdname BiocSet-methods
+#' @description \code{arrange}: order rows by an expression involving its 
+#'     variables.
 #' @export
-#'
 #' @examples
-#' es <- BiocSet(set1 = letters, set2 = LETTERS)
+#' 
 #' es %>% es_activate(element) %>% arrange(desc(element))
 arrange.BiocSet <- function(.data, ...)
 {
@@ -76,16 +95,15 @@ arrange.BiocSet <- function(.data, ...)
     .update(.data, tbl)
 }
 
-#' @rdname major_func
-#'
+#' @rdname BiocSet-methods
+#' @description \code{tbl_nongroup_vars}: returns only non-grouping variables.
 #' @importFrom dplyr tbl_nongroup_vars
-#'
-#' @param x A BiocSet object.
-#'
+#' @param x For \code{tbl_nongroup_vars}, a \code{BiocSet} object. For 
+#'     \code{union} and \code{intersect} the first \code{BiocSet} object to 
+#'     perform the operations on.
 #' @export
-#'
 #' @examples
-#' es <- BiocSet(set1 = letters, set2 = LETTERS)
+#' 
 #' es %>% mutate(pval = rnorm(1:52)) %>% es_elementset() %>% tbl_nongroup_vars()
 tbl_nongroup_vars.BiocSet <- function(x)
 {
@@ -94,16 +112,13 @@ tbl_nongroup_vars.BiocSet <- function(x)
     tbl_nongroup_vars(sub)
 }
 
-#' @rdname major_func
-#'
+#' @rdname BiocSet-methods
+#' @description \code{group_by}: converts an existing tbl into a grouped tbl. 
 #' @importFrom dplyr group_by
-#'
 #' @param add logical, whether to add to the existing groups.
-#'
 #' @export
-#'
 #' @examples
-#' es <- BiocSet(set1 = letters, set2 = LETTERS)
+#' 
 #' es %>% group_by(element, set)
 group_by.BiocSet <- function(.data, ..., add = FALSE)
 {
@@ -111,19 +126,21 @@ group_by.BiocSet <- function(.data, ..., add = FALSE)
     group_by(sub, ..., add = FALSE)
 }
 
-#' @rdname major_func
-#'
+#' @rdname BiocSet-methods
+#' @description \code{left_join}: returns all rows from \code{x}, and all 
+#'     columns from \code{x} and \code{y}. If no rows in \code{x} match with 
+#'     \code{y} there will be \code{NA}s in the new column. If there are 
+#'     multiple matches then all combinations are returned.
 #' @importFrom dplyr left_join
-#'
-#' @param y A tibble to join
-#' @param by A character vector of variables to join by
-#' @param copy logical, allow syou to join tables across srcs
+#' @param y For \code{left_join}, a tibble to join. For \code{union} and 
+#'     \code{intersect} the second \code{BiocSet} object used.
+#' @param by A character vector of variables to join by.
+#' @param copy logical, allows you to join tables across srcs.
 #' @param suffix Character vector of length 2, if there are non-joined duplicate
-#'    variables in 'x' and 'y' these suffixes will be added to the output
-#'
+#'    variables in 'x' and 'y' these suffixes will be added to the output.
 #' @export
-#'
 #' @examples
+#' 
 #' es <- BiocSet(set1 = letters[1:5], set2 = LETTERS[1:5])
 #' tbl <- tibble(x = 1:10, y = c(letters[1:5], LETTERS[1:5]))
 #' es %>% left_join(tbl, by = c(element = "y"))
@@ -139,11 +156,11 @@ left_join.BiocSet <- function(x, y, by, copy, suffix, ...)
     with(es_elementset(from), split(element, set))
 }
 
-#' @rdname biocset
-#'
+#' @rdname BiocSet-methods
+#' @description \code{as.list}: coerces argument into a list.
 #' @export
-#'
 #' @examples
+#' 
 #' library(org.Hs.eg.db)
 #' es <- go_sets(org.Hs.eg.db, "ENSEMBL")
 #' head(as.list(es))
@@ -152,22 +169,13 @@ as.list.BiocSet <- function(x, ...)
 
 setAs("BiocSet", "list", .as.list.BiocSet)
 
-#' Set operations for BiocSets
-#'
-#' @rdname set_op
-#'
-#' @param x The first BiocSet to perform operations on
-#' @param y The second BiocSet object used
-#' @param ... other arguments passed on to methods
-#'
+#' @rdname BiocSet-methods
+#' @description \code{union}: combines all rows from two \code{BiocSet} objects
+#'     and removes duplicate records from the combined \code{BiocSet} object.
 #' @importFrom dplyr union
-#'
-#' @return For `union()`, a BiocSet object with the results of the union of x
-#'     and y.
-#'
 #' @export
-#'
 #' @examples
+#' 
 #' es1 <- BiocSet(set1 = letters[c(1:4)], set2 = LETTERS[c(1:4)])
 #' es2 <- BiocSet(set1 = letters[c(3:8)], set2 = LETTERS[c(3:8)])
 #'
@@ -180,14 +188,11 @@ union.BiocSet <- function(x, y, ...)
     initialize(x, element = element, set = set, elementset = elementset)
 }
 
-#' @rdname set_op
-#'
+#' @rdname BiocSet-methods
+#' @description \code{intersect}: combines all rows from two \code{BiocSet} 
+#'     objects and returns rows that appear in both \code{BiocSet} objects.
 #' @importFrom dplyr intersect
-#'
-#' @return For `intersect()`, a BiocSet with the intersect of x and y.
-#'
 #' @export
-#'
 #' @examples
 #'
 #' intersect(es1, es2)
