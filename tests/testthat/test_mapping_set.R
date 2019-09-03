@@ -54,9 +54,11 @@ test_that("'kegg_sets()' works",
     es <- kegg_sets("hsa")
 
     expect_s4_class(es, "BiocSet")
-    expect_identical(dim(es_element(es)), c(7896L, 1L))
+    expect_identical(dim(es_element(es))[2], c(1L))
+    expect_gt(dim(es_element(es))[1], c(7896L))
     expect_identical(dim(es_set(es)), c(326L, 1L))
-    expect_identical(dim(es_elementset(es)), c(29296L, 2L))
+    expect_identical(dim(es_elementset(es))[2], c(2L))
+    expect_gt(dim(es_elementset(es))[1], c(29296L))
     expect_true(is_tbl_elementset(es_elementset(es)))
 
     expect_error(kegg_sets(hsa))

@@ -1,13 +1,8 @@
-es_activate <- function(.data, what)
-{
-    UseMethod("es_activate")
-}
-
 #' BiocSet methods
 #' @name BiocSet-methods
 #' @rdname BiocSet-methods
-#' @description \code{es_activate}: which of the three tibbles in the 
-#'     \code{BiocSet} object should be activated and have the chosen 
+#' @description \code{es_activate}: which of the three tibbles in the
+#'     \code{BiocSet} object should be activated and have the chosen
 #'     functionality applied to it.
 #' @param .data The \code{BiocSet} object.
 #' @param what Which of the three tibbles from \code{BiocSet} to activate.
@@ -16,8 +11,15 @@ es_activate <- function(.data, what)
 #' @return A \code{BiocSet} object.
 #' @export
 #' @examples
-#' es <- BiocSet(set1 = letters, set1 = LETTERS)
+#' es <- BiocSet(set1 = letters, set2 = LETTERS)
 #' es_activate(es, element)
+es_activate <- function(.data, what)
+{
+    UseMethod("es_activate")
+}
+
+#' @export
+#' @method es_activate BiocSet
 es_activate.BiocSet <- function(.data, what)
 {
     what <- quo_text(enquo(what))

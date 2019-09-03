@@ -49,7 +49,7 @@ BiocSet <- function(..., active = c("elementset", "element", "set"))
 
 #' @rdname BiocSet-class
 #' @param object A \code{BiocSet} object.
-#' @export
+#' @docType methods
 setMethod(
     "show", "BiocSet",
     function(object)
@@ -117,27 +117,26 @@ update_es_set <- function(es, value)
 update_es_elementset <- function(es, value)
     .update(es, value)
 
+#' @rdname BiocSet-class
+#' @param x A \code{BiocSet} object. 
+#' @exportMethod es_element
 setGeneric("es_element", function(x) standardGeneric("es_element"))
 
 #' @rdname BiocSet-class
-#' @return For \code{es_element}, the element tibble from the \code{BiocSet} 
-#'     object.
-#' @export
 setMethod("es_element", "BiocSet", .element)
 
+#' @rdname BiocSet-class
+#' @exportMethod es_set
 setGeneric("es_set", function(x) standardGeneric("es_set"))
 
 #' @rdname BiocSet-class
-#' @return For \code{es_set}, the set tibble from the \code{BiocSet} object.
-#' @export
 setMethod("es_set", "BiocSet", .set)
 
+#' @rdname BiocSet-class
+#' @exportMethod es_elementset
 setGeneric("es_elementset", function(x) standardGeneric("es_elementset"))
 
 #' @rdname BiocSet-class
-#' @return For \code{es_elementset}, the elementset tibble from the 
-#'     \code{BiocSet} object.
-#' @export
 setMethod("es_elementset", "BiocSet", .elementset)
 
 `es_element<-` <- update_es_element

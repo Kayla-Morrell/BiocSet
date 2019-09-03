@@ -2,7 +2,7 @@
 % Please edit documentation in R/BiocSet-methods.R
 \name{BiocSet-methods}
 \alias{BiocSet-methods}
-\alias{es_activate.BiocSet}
+\alias{es_activate}
 \alias{filter.BiocSet}
 \alias{select.BiocSet}
 \alias{mutate.BiocSet}
@@ -16,7 +16,7 @@
 \alias{intersect.BiocSet}
 \title{BiocSet methods}
 \usage{
-\method{es_activate}{BiocSet}(.data, what)
+es_activate(.data, what)
 
 \method{filter}{BiocSet}(.data, ...)
 
@@ -67,8 +67,8 @@ variables in 'x' and 'y' these suffixes will be added to the output.}
 A \code{BiocSet} object.
 }
 \description{
-\code{es_activate}: which of the three tibbles in the 
-    \code{BiocSet} object should be activated and have the chosen 
+\code{es_activate}: which of the three tibbles in the
+    \code{BiocSet} object should be activated and have the chosen
     functionality applied to it.
 
 \code{filter}: choose rows where conditions are true.

@@ -20,7 +20,6 @@ Imports: methods,
     rlang, 
     plyr, 
     rtracklayer, 
-    stats,
     AnnotationDbi,
     KEGGREST
 Suggests:
@@ -29,7 +28,6 @@ Suggests:
     DESeq2,
     limma,
     BiocFileCache,
-    EnsDb.Hsapiens.v86,
     GO.db,
     testthat,
     knitr,

@@ -83,6 +83,11 @@ test_that("'summarise.BiocSet()' works", {
     expect_identical(dim(es3), c(2L,2L))
     expect_equal(es3$n, c(26L, 26L))
 
+    es4 <- es %>% group_by(set) %>% summarize(n = n())
+    expect_false(is_tbl_elementset(es4))
+    expect_identical(dim(es4), c(2L, 2L))
+    expect_equal(es4$n, c(26L, 26L))
+
     expect_error(es %>% summarise(a))
 })
 

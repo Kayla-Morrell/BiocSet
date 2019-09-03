@@ -67,6 +67,9 @@ go_sets <- function(org, from, go = c("GO", "GOID"), evidence = NULL,
         map <- filter(map, map$ONTOLOGY %in% onto)
         ontology_split <- split(map$ONTOLOGY, map[[go]])
         ontology_unique <- lapply(ontology_split, unique)
+
+        es <- do.call(BiocSet, split(map[[from]], map[[go]]))
+        es %>% mutate_set(ontology = ontology_unique)
     }
     else {
         do.call(BiocSet, split(map[[from]], map[[go]]))
@@ -115,6 +118,7 @@ kegg_sets <- function(species)
 #' @rdname mapping_set
 #' @name mapping_set
 #' @param .data The BiocSet object that contains the set tibble being mapped.
+#' @param to A character to indicate which identifier to map to.
 #' @return For \code{map_set}, a BiocSet object with the mapped set present in 
 #'     the set tibble.
 #' @export
@@ -142,6 +146,7 @@ map_set.BiocSet <- function(.data, from, to)
 
 #' @rdname mapping_set
 #' @name mapping_set
+#' @param add The id to add to the \code{BiocSet} object.
 #' @return For \code{map_add_set}, a \code{BiocSet} object with a new column in
 #'     the set tibble with the mapping of the new id type.
 #' @export

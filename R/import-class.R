@@ -24,7 +24,6 @@ import.gmt <- function(path) {
 #' Importing/exporting
 #' @rdname import
 #' @name import
-#' @aliases GMTFile, ANY, ANY-method
 #' @description Importing/exporting and formating of element sets as a 
 #'     \code{BiocSet} object.
 #' @param con For \code{import}, the file name or URL the element set is
