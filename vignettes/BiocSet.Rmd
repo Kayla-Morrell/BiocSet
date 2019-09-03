@@ -353,6 +353,17 @@ es <- BiocSet_from_elementset(foo, tbl, go_ids)
 es
 ```
 
+For those users that may need to put this metadata filled BiocSet object back 
+into an object similar to GRanges or SummarizedExperiment, we have created 
+functions that allow for the BiocSet object to be created into a tibble or 
+data.frame.
+
+```{r tibble_or_data.frame}
+tibble_by_element(es)
+
+data.frame_by_elementset(es)
+```
+
 # Information look up
 
 A final feature to `BiocSet` is the ability to add reference information about 
