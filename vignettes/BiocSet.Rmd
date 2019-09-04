@@ -216,11 +216,6 @@ networks for various biological processes and diseases. `BiocSet` has a
 function that utilizes `KEGGREST` to develop a `BiocSet` object  that contains 
 the elements for every pathway map in KEGG.
 
-```{r kegg_sets, message = FALSE}
-kegg <- kegg_sets("hsa")
-kegg
-```
-
 Due to limiations of the KEGGREST package, `kegg_sets` can take some time to 
 run depending on the amount of pathways for the species of interest. Therefore 
 we demonstrate using `BiocFileCache` to make the data available to the user.
@@ -231,6 +226,7 @@ rname <- "kegg_hsa"
 exists <- NROW(bfcquery(query=rname, field="rname")) != 0L
 if (!exists)
 {
+    kegg <- kegg_sets("hsa")
     fl <- bfcnew(rname = rname, ext = ".gmt")
     export(kegg_sets("hsa"), fl)
 }
