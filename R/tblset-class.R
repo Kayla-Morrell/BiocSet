@@ -10,7 +10,7 @@
 #' tbl <- BiocSet:::.tbl_elementset(set1 = letters, set2 = LETTERS)
 #' BiocSet:::.tbl_set(tbl)
 
-tbl_set <-
+.tbl_set <-
     function(tbl_elementset)
 {
     stopifnot(

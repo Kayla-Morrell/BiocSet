@@ -13,7 +13,7 @@
 #' @keywords internal
 #' @examples
 #' es <- BiocSet:::.tbl_elementset(set1 = letters, set2 = LETTERS)
-tbl_elementset <- function(...) {
+.tbl_elementset <- function(...) {
     args <- list(...)
 
     stopifnot(
