@@ -3,6 +3,7 @@
 \docType{methods}
 \name{BiocSet}
 \alias{BiocSet}
+\alias{BiocSet-class}
 \alias{show,BiocSet-method}
 \alias{es_element}
 \alias{es_element,BiocSet-method}

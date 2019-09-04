@@ -1,14 +1,18 @@
+#' @importFrom methods setOldClass
+setOldClass(c("tbl_element", "tbl_set", "tbl_elementset"))
+
 #' BiocSet class
 #' @name BiocSet
 #' @rdname BiocSet-class
+#' @aliases BiocSet-class
 #' @description NULL
-#' @importFrom methods setOldClass
 #' @slot element The element tibble from `tbl_elementset`
 #' @slot set The set tibble from `tbl_elementset`
 #' @slot elementset The elementset tibble created from user input
 #' @slot active Character, indicates which tibble is active
 #' @exportClass BiocSet
-setOldClass(c("tbl_element", "tbl_set", "tbl_elementset"))
+NULL
+
 .BiocSet <- setClass(
     "BiocSet",
     slots = c(
