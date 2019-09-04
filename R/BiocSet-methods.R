@@ -158,6 +158,7 @@ left_join.BiocSet <- function(x, y, by, copy, suffix, ...)
 
 .as.list.BiocSet <- function(from)
 {
+    element <- set <- NULL
     with(es_elementset(from), split(element, set))
 }
 
