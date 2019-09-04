@@ -207,51 +207,52 @@ test_that("'map_unique()' works",
 
 test_that("'map_multiple()' works",
 {
-    library(EnsDb.Hsapiens.v86)
-    es <- BiocSet(set1 = c("BCL2", "BCL2L11"), set2 = c("AAAS", "A1CF", "7SK"))
+    library(org.Hs.eg.db)
+    es <- BiocSet(set1 = c("CFB", "DDR1"), 
+        set2 = c("CLIC1", "DEFB4A", "A2M"))
 
-    es1 <- es %>% map_multiple(EnsDb.Hsapiens.v86, "GENENAME", "TXID", "list")
+    es1 <- es %>% map_multiple(org.Hs.eg.db, "SYMBOL", "ENSEMBL", "list")
 
     expect_s4_class(es1, "BiocSet")
-    expect_identical(dim(es_element(es1)), c(75L, 1L))
+    expect_identical(dim(es_element(es1)), c(27L, 1L))
     expect_identical(dim(es_set(es1)), c(2L, 1L))
-    expect_identical(dim(es_elementset(es1)), c(75L, 2L))
+    expect_identical(dim(es_elementset(es1)), c(27L, 2L))
     expect_true(.is_tbl_elementset(es_elementset(es1)))
     expect_true(is.character(es_element(es1)$element))
     expect_true(is.character(es_elementset(es1)$element))
 
-    es2 <- es %>% map_multiple(EnsDb.Hsapiens.v86, "GENENAME", "TXID", "filter")
+    es2 <- es %>% map_multiple(org.Hs.eg.db, "SYMBOL", "ENSEMBL", "filter")
 
     expect_s4_class(es2, "BiocSet")
-    expect_identical(dim(es_element(es2)), c(5L, 1L))
-    expect_identical(dim(es_set(es2)), c(2L, 1L))
-    expect_identical(dim(es_elementset(es2)), c(5L, 2L))
+    expect_identical(dim(es_element(es2)), c(1L, 1L))
+    expect_identical(dim(es_set(es2)), c(1L, 1L))
+    expect_identical(dim(es_elementset(es2)), c(1L, 2L))
     expect_true(.is_tbl_elementset(es_elementset(es2)))
     
-    es3 <- es %>% map_multiple(EnsDb.Hsapiens.v86, "GENENAME", "TXID", "asNA")
+    es3 <- es %>% map_multiple(org.Hs.eg.db, "SYMBOL", "ENSEMBL", "asNA")
 
     expect_s4_class(es3, "BiocSet")
-    expect_identical(dim(es_element(es3)), c(1L, 1L))
+    expect_identical(dim(es_element(es3)), c(2L, 1L))
     expect_identical(dim(es_set(es3)), c(2L, 1L))
-    expect_identical(dim(es_elementset(es3)), c(2L, 2L))
+    expect_identical(dim(es_elementset(es3)), c(3L, 2L))
     expect_true(.is_tbl_elementset(es_elementset(es3)))
-    expect_true(all(is.na(es_element(es3)$element)))
-    expect_true(all(is.na(es_elementset(es3)$element)))
+    expect_false(all(is.na(es_element(es3)$element)))
+    expect_false(all(is.na(es_elementset(es3)$element)))
 
-    es4 <- es %>% map_multiple(EnsDb.Hsapiens.v86, "GENENAME", "TXID", "CharacterList")
+    es4 <- es %>% map_multiple(org.Hs.eg.db, "SYMBOL", "ENSEMBL", "CharacterList")
 
     expect_s4_class(es4, "BiocSet")
-    expect_identical(dim(es_element(es4)), c(75L, 1L))
+    expect_identical(dim(es_element(es4)), c(27L, 1L))
     expect_identical(dim(es_set(es4)), c(2L, 1L))
-    expect_identical(dim(es_elementset(es4)), c(75L, 2L))
+    expect_identical(dim(es_elementset(es4)), c(27L, 2L))
     expect_true(.is_tbl_elementset(es_elementset(es4)))
     expect_true(is.character(es_element(es4)$element))
     expect_true(is.character(es_elementset(es4)$element))
 
-    expect_error(map_multiple(es, EnsDb.Hsapiens.v86, "GENENAME", "TXID", "first"))
-    expect_error(map_multiple(es, EnsDb.Hsapiens.v86, "TXID", "GENENAME", "list"))
-    expect_error(map_multiple(es, EnsDb.Hsapiens.v86, "GENENAME", "TXID", filter))
-    expect_error(map_multiple(es, EnsDb.Hsapiens.v86))
+    expect_error(map_multiple(es, org.Hs.eg.db, "SYMBOL", "ENSEMBL", "first"))
+    expect_error(map_multiple(es, org.Hs.eg.db, "ENSEMBL", "SYMBOL", "list"))
+    expect_error(map_multiple(es, org.Hs.eg.db, "SYMBOL", "ENSEMBL", filter))
+    expect_error(map_multiple(es, org.Hs.eg.db))
 })
 
 test_that("'map_add_element()' works",
