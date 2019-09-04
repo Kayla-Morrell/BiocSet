@@ -2,13 +2,13 @@
 % Please edit documentation in R/tblelementset-class.R
 \name{tblelementset}
 \alias{tblelementset}
-\alias{tbl_elementset}
-\alias{is_tbl_elementset}
+\alias{.tbl_elementset}
+\alias{.is_tbl_elementset}
 \title{Element set representation as an S3 class tibble}
 \usage{
-tbl_elementset(...)
+.tbl_elementset(...)
 
-is_tbl_elementset(x)
+.is_tbl_elementset(x)
 }
 \arguments{
 \item{...}{For \code{tbl_elementset}, named character vectors of gene sets. 
@@ -21,14 +21,15 @@ is the name of the element set.}
 For \code{tbl_elementset}, an S3 \code{elementset} object in a tibble
     representation.
 
-For \code{is_tbl_elementset}, a logical indicating if the tibble is 
-    an elementset.
+For \code{.is_tbl_elementset} (internal), a logical
+    indicating if the tibble is an elementset.
 }
 \description{
 Element set representation as an S3 class tibble
 }
 \examples{
-es <- tbl_elementset(set1 = letters, set2 = LETTERS)
+es <- BiocSet:::.tbl_elementset(set1 = letters, set2 = LETTERS)
 
-is_tbl_elementset(es)
+BiocSet:::.is_tbl_elementset(es)
 }
+\keyword{internal}

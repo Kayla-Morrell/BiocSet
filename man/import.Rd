@@ -3,11 +3,8 @@
 \docType{methods}
 \name{import}
 \alias{import}
-\alias{GMTFile,}
-\alias{ANY,}
-\alias{ANY-method}
+\alias{import,GMTFile,ANY,ANY-method}
 \alias{export,BiocSet,GMTFile,ANY-method}
-\alias{BiocSet,}
 \title{Importing/exporting}
 \usage{
 \S4method{import}{GMTFile,ANY,ANY}(con, format, text, ...)

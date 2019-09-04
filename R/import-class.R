@@ -35,6 +35,7 @@ import.gmt <- function(path) {
 #'     the element set that should be imported.
 #' @param ... Parameters to pass to the format-specific method
 #' @return For `import()`, a BiocSet object
+#' @aliases import,GMTFile,ANY,ANY-method
 #' @export
 #' @examples
 #' gmtFile <- system.file(package = "BiocSet", "extdata",
@@ -49,7 +50,7 @@ setMethod(
 
 #' @importFrom rlang .data
 export.BiocSet <- function(tbl, path = tempfile(fileext = ".gmt")) {
-    stopifnot(is_tbl_elementset(es_elementset(tbl)))
+    stopifnot(.is_tbl_elementset(es_elementset(tbl)))
     
     if(!"source" %in% names(es_set(tbl)))
         tbl <- mutate_set(tbl, source = rep(NA_character_, nrow(es_set(tbl))))
@@ -71,8 +72,6 @@ export.BiocSet <- function(tbl, path = tempfile(fileext = ".gmt")) {
 
 #' @rdname import
 #'
-#' @aliases BiocSet, GMTFile, ANY, ANY-method
-#' 
 #' @param object For `export()`, the object to be exported.
 #'
 #' @return For `export()`, a GMTFile object representing the location

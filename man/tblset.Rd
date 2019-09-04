@@ -2,10 +2,10 @@
 % Please edit documentation in R/tblset-class.R
 \name{tblset}
 \alias{tblset}
-\alias{tbl_set}
+\alias{.tbl_set}
 \title{Set representation as an S3 class tibble}
 \usage{
-tbl_set(tbl_elementset)
+.tbl_set(tbl_elementset)
 }
 \arguments{
 \item{tbl_elementset}{An S3 \code{elementset} tibble.}
@@ -17,6 +17,7 @@ An S3 \code{set} object in a tibble representation.
 Set representation as an S3 class tibble
 }
 \examples{
-tbl <- tbl_elementset(set1 = letters, set2 = LETTERS)
-tbl_set(tbl)
+tbl <- BiocSet:::.tbl_elementset(set1 = letters, set2 = LETTERS)
+BiocSet:::.tbl_set(tbl)
 }
+\keyword{internal}

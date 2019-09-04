@@ -189,14 +189,14 @@ drop <- es_activate(go, elementset) %>% group_by(set) %>%
 go %>% filter_set(!(set %in% drop))
 ```
 
-To simplify mapping we created a function called `es_map`. This takes four 
+To simplify mapping we created a function called `map`. This takes four 
 arguements, a `BiocSet` object, an `AnnotationDbi` object, the id to map from, 
 and the id to map to. The function utilizes `mapIds` from `AnnotationDbi` and 
 returns a `BiocSet` object. In the example below we show how to use this 
 function to map the Ensembl ids from `go` to gene symbols.
 
-```{r es_map}
-go %>% es_map_unique(org.Hs.eg.db, "ENSEMBL", "SYMBOL")
+```{r map_unique}
+go %>% map_unique(org.Hs.eg.db, "ENSEMBL", "SYMBOL")
 ```
 
 Another functionality of `BiocSet` is the ability to add information to the 
@@ -216,11 +216,6 @@ networks for various biological processes and diseases. `BiocSet` has a
 function that utilizes `KEGGREST` to develop a `BiocSet` object  that contains 
 the elements for every pathway map in KEGG.
 
-```{r kegg_sets, message = FALSE}
-kegg <- kegg_sets("hsa")
-kegg
-```
-
 Due to limiations of the KEGGREST package, `kegg_sets` can take some time to 
 run depending on the amount of pathways for the species of interest. Therefore 
 we demonstrate using `BiocFileCache` to make the data available to the user.
@@ -231,6 +226,7 @@ rname <- "kegg_hsa"
 exists <- NROW(bfcquery(query=rname, field="rname")) != 0L
 if (!exists)
 {
+    kegg <- kegg_sets("hsa")
     fl <- bfcnew(rname = rname, ext = ".gmt")
     export(kegg_sets("hsa"), fl)
 }
@@ -359,9 +355,9 @@ functions that allow for the BiocSet object to be created into a tibble or
 data.frame.
 
 ```{r tibble_or_data.frame}
-tibble_by_element(es)
+tibble_from_element(es)
 
-data.frame_by_elementset(es)
+data.frame_from_elementset(es)
 ```
 
 # Information look up

@@ -35,6 +35,10 @@ Default is BP, CC, and MF.}
 \item{species}{Which species the pathways are from.}
 
 \item{.data}{The BiocSet object that contains the set tibble being mapped.}
+
+\item{to}{A character to indicate which identifier to map to.}
+
+\item{add}{The id to add to the \code{BiocSet} object.}
 }
 \value{
 For \code{go_sets}, a \code{BiocSet} object with GO ids as the set 

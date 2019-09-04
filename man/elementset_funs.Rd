@@ -8,8 +8,8 @@
 \alias{summarise_elementset}
 \alias{arrange_elementset}
 \alias{left_join_elementset}
-\alias{tibble_by_elementset}
-\alias{data.frame_by_elementset}
+\alias{tibble_from_elementset}
+\alias{data.frame_from_elementset}
 \title{Functions applied to elementsets in a \code{BiocSet} object}
 \usage{
 filter_elementset(.data, ...)
@@ -24,9 +24,9 @@ arrange_elementset(.data, ...)
 
 left_join_elementset(.data, ...)
 
-tibble_by_elementset(.data)
+tibble_from_elementset(.data)
 
-data.frame_by_elementset(.data)
+data.frame_from_elementset(.data)
 }
 \arguments{
 \item{.data}{A \code{BiocSet} object.}
@@ -36,9 +36,9 @@ data.frame_by_elementset(.data)
 \value{
 A \code{BiocSet} object.
 
-For \code{tibble_by_elementset}, a tibble.
+For \code{tibble_from_elementset}, a tibble.
 
-For \code{data.frame_by_elementset}, a data.frame.
+For \code{data.frame_from_elementset}, a data.frame.
 }
 \description{
 All of the major methods applied to a \code{BiocSet} object can
@@ -61,7 +61,7 @@ es \%>\% arrange_elementset(desc(element))
 tbl <- tibble(x = 5:6, y = c("set1", "set2"))
 es \%>\% left_join_elementset(tbl, by = c(set = "y"))
 
-tibble_by_elementset(es)
+tibble_from_elementset(es)
 
-data.frame_by_elementset(es)
+data.frame_from_elementset(es)
 }

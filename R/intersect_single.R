@@ -14,6 +14,7 @@
 #' }
 intersect_single <- function(x, ...)
 {
+    element <- NULL
     elements <- es_elementset(x)$element
     dup_list <- elements[duplicated(elements)]
     dup_elements <- x %>%

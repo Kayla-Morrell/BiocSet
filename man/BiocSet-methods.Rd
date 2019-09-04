@@ -8,7 +8,7 @@
 \alias{mutate.BiocSet}
 \alias{summarise.BiocSet}
 \alias{arrange.BiocSet}
-\alias{tbl_nongroup_vars.BiocSet}
+\alias{.tbl_nongroup_vars.BiocSet}
 \alias{group_by.BiocSet}
 \alias{left_join.BiocSet}
 \alias{as.list.BiocSet}
@@ -28,7 +28,7 @@ es_activate(.data, what)
 
 \method{arrange}{BiocSet}(.data, ...)
 
-tbl_nongroup_vars.BiocSet(x)
+.tbl_nongroup_vars.BiocSet(x)
 
 \method{group_by}{BiocSet}(.data, ..., add = FALSE)
 
@@ -47,9 +47,9 @@ tbl_nongroup_vars.BiocSet(x)
 
 \item{...}{Additional arguments passed to function.}
 
-\item{x}{For \code{tbl_nongroup_vars}, a \code{BiocSet} object. For 
-\code{union} and \code{intersect} the first \code{BiocSet} object to 
-perform the operations on.}
+\item{x}{For \code{.tbl_nongroup_vars} (internal), a \code{BiocSet}
+object. For \code{union} and \code{intersect} the first
+\code{BiocSet} object to perform the operations on.}
 
 \item{add}{logical, whether to add to the existing groups.}
 
@@ -84,7 +84,7 @@ A \code{BiocSet} object.
 \code{arrange}: order rows by an expression involving its 
     variables.
 
-\code{tbl_nongroup_vars}: returns only non-grouping variables.
+\code{.tbl_nongroup_vars}: returns only non-grouping variables.
 
 \code{group_by}: converts an existing tbl into a grouped tbl.
 
@@ -102,7 +102,7 @@ A \code{BiocSet} object.
     objects and returns rows that appear in both \code{BiocSet} objects.
 }
 \examples{
-es <- BiocSet(set1 = letters, set1 = LETTERS)
+es <- BiocSet(set1 = letters, set2 = LETTERS)
 es_activate(es, element)
 
 es \%>\% es_activate(element) \%>\% filter(element == "a")
@@ -115,7 +115,8 @@ es \%>\% es_activate(set) \%>\% summarise(n = n())
 
 es \%>\% es_activate(element) \%>\% arrange(desc(element))
 
-es \%>\% mutate(pval = rnorm(1:52)) \%>\% es_elementset() \%>\% tbl_nongroup_vars()
+es \%>\% mutate(pval = rnorm(1:52)) \%>\% es_elementset() \%>\%
+    BiocSet:::.tbl_nongroup_vars()
 
 es \%>\% group_by(element, set)
 
@@ -130,7 +131,8 @@ head(as.list(es))
 es1 <- BiocSet(set1 = letters[c(1:4)], set2 = LETTERS[c(1:4)])
 es2 <- BiocSet(set1 = letters[c(3:8)], set2 = LETTERS[c(3:8)])
 
-union(es1, es2)
+dplyr::union(es1, es2)
 
-intersect(es1, es2)
+dplyr::intersect(es1, es2)
 }
+\keyword{internal}

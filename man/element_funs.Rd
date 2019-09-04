@@ -8,8 +8,8 @@
 \alias{summarise_element}
 \alias{arrange_element}
 \alias{left_join_element}
-\alias{tibble_by_element}
-\alias{data.frame_by_element}
+\alias{tibble_from_element}
+\alias{data.frame_from_element}
 \title{Functions applied to elements in a \code{BiocSet} object}
 \usage{
 filter_element(.data, ...)
@@ -24,9 +24,9 @@ arrange_element(.data, ...)
 
 left_join_element(.data, ...)
 
-tibble_by_element(.data, how = unlist)
+tibble_from_element(.data, how = unlist)
 
-data.frame_by_element(.data, how = unlist)
+data.frame_from_element(.data, how = unlist)
 }
 \arguments{
 \item{.data}{A \code{BiocSet} object.}
@@ -38,9 +38,9 @@ data.frame_by_element(.data, how = unlist)
 \value{
 A \code{BiocSet} object.
 
-For \code{tibble_by_element}, a tibble.
+For \code{tibble_from_element}, a tibble.
 
-For \code{data.frame_by_element}, a data.frame.
+For \code{data.frame_from_element}, a data.frame.
 }
 \description{
 All of the major methods applied to a \code{BiocSet} object can
@@ -64,7 +64,7 @@ tbl <- tibble(x = 1:5, y = letters[1:5])
 es <- BiocSet(set1 = letters[c(1,3,5)], set2 = letters[c(2,4)])
 left_join_element(es, tbl, by = c(element = "y"))
 
-tibble_by_element(es)
+tibble_from_element(es)
 
-data.frame_by_element(es)
+data.frame_from_element(es)
 }

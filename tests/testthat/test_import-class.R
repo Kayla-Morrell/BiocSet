@@ -4,7 +4,7 @@ test_that("'import.gmt()' works", {
     gmtFile <- system.file(package = "BiocSet", "extdata",
                            "hallmark.gene.symbol.gmt")
     es <- import.gmt(gmtFile)
-    expect_true(is_tbl_elementset(.elementset(es)))
+    expect_true(.is_tbl_elementset(.elementset(es)))
     expect_identical(dim(.set(es)), c(50L, 2L))
     expect_identical(dim(.elementset(es)), c(7324L, 2L))
     expect_type(.set(es)$source, "character")

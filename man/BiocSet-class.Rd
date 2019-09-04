@@ -3,9 +3,13 @@
 \docType{methods}
 \name{BiocSet}
 \alias{BiocSet}
+\alias{BiocSet-class}
 \alias{show,BiocSet-method}
+\alias{es_element}
 \alias{es_element,BiocSet-method}
+\alias{es_set}
 \alias{es_set,BiocSet-method}
+\alias{es_elementset}
 \alias{es_elementset,BiocSet-method}
 \alias{BiocSet_from_elementset}
 \title{BiocSet class}
@@ -14,9 +18,15 @@ BiocSet(..., active = c("elementset", "element", "set"))
 
 \S4method{show}{BiocSet}(object)
 
+es_element(x)
+
 \S4method{es_element}{BiocSet}(x)
 
+es_set(x)
+
 \S4method{es_set}{BiocSet}(x)
+
+es_elementset(x)
 
 \S4method{es_elementset}{BiocSet}(x)
 
@@ -32,6 +42,8 @@ sets.}
 
 \item{object}{A \code{BiocSet} object.}
 
+\item{x}{A \code{BiocSet} object.}
+
 \item{elementset}{A tibble with element set information.}
 
 \item{element}{A tibble with element information.}
@@ -41,14 +53,6 @@ sets.}
 \value{
 An S4 \code{BiocSet} object shown as a tripple tibble, where each 
     slot is a tibble.
-
-For \code{es_element}, the element tibble from the \code{BiocSet} 
-    object.
-
-For \code{es_set}, the set tibble from the \code{BiocSet} object.
-
-For \code{es_elementset}, the elementset tibble from the 
-    \code{BiocSet} object.
 }
 \description{
 The \code{BiocSet} constructor, the show method, the slot 

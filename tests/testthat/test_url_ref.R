@@ -10,7 +10,7 @@ test_that("'url_ref_element()' works",
     expect_identical(dim(es_element(es1)), c(8L, 2L))
     expect_identical(dim(es_set(es1)), c(3L, 1L))
     expect_identical(dim(es_elementset(es1)), c(8L, 2L))
-    expect_true(is_tbl_elementset(es_elementset(es1)))
+    expect_true(.is_tbl_elementset(es_elementset(es1)))
 
     expect_error(url_ref_element(1))
     expect_error(url_ref_element())
@@ -27,7 +27,7 @@ test_that("'url_ref_set()' works",
     expect_identical(dim(es_element(es1)), c(12L, 1L))
     expect_identical(dim(es_set(es1)), c(4L, 2L))
     expect_identical(dim(es_elementset(es1)), c(12L, 2L))
-    expect_true(is_tbl_elementset(es_elementset(es1)))
+    expect_true(.is_tbl_elementset(es_elementset(es1)))
 
     expect_error(url_ref_set(3))
     expect_error(url_ref_set())
@@ -44,7 +44,7 @@ test_that("'url_ref()' works",
     expect_identical(dim(es_element(es1)), c(12L, 2L))
     expect_identical(dim(es_set(es1)), c(4L, 2L))
     expect_identical(dim(es_elementset(es1)), c(12L, 2L))
-    expect_true(is_tbl_elementset(es_elementset(es1)))
+    expect_true(.is_tbl_elementset(es_elementset(es1)))
 
     expect_error(url_ref(3))
     expect_error(url_ref())

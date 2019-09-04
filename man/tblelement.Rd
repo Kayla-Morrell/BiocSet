@@ -2,10 +2,10 @@
 % Please edit documentation in R/tblelement-class.R
 \name{tblelement}
 \alias{tblelement}
-\alias{tbl_element}
+\alias{.tbl_element}
 \title{Element representation as an S3 class tibble}
 \usage{
-tbl_element(tbl_elementset)
+.tbl_element(tbl_elementset)
 }
 \arguments{
 \item{tbl_elementset}{An S3 \code{elementset} tibble.}
@@ -17,6 +17,7 @@ An S3 \code{element} object in a tibble representation.
 Element representation as an S3 class tibble
 }
 \examples{
-tbl <- tbl_elementset(set1 = letters, set2 = LETTERS)
-tbl_element(tbl)
+tbl <- BiocSet:::.tbl_elementset(set1 = letters, set2 = LETTERS)
+BiocSet:::.tbl_element(tbl)
 }
+\keyword{internal}
