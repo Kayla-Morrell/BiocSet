@@ -87,14 +87,14 @@ map_element.BiocSet <-
 #' @param org The AnnotationDbi object to identify keys/mappings from.
 #' @param from A character to indicate which identifier to map from.
 #' @param to A character to indicate which identifier to map to.
-#' @return For \code{es_map_unique}, a \code{BiocSet} object with unique 
+#' @return For \code{map_unique}, a \code{BiocSet} object with unique 
 #'    elements.
 #' @export
 #' @examples
 #' library(org.Hs.eg.db)
 #' es <- BiocSet(set1 = c("C5", "GANC"), set2 = c("AFM", "CGB1", "ADAM32"))
-#' es_map_unique(es, org.Hs.eg.db, "SYMBOL", "ENTREZID")
-es_map_unique <- function(es, org, from, to)
+#' map_unique(es, org.Hs.eg.db, "SYMBOL", "ENTREZID")
+map_unique <- function(es, org, from, to)
     .es_map(es, org, from, to, multi = "first")
 
 
@@ -114,12 +114,12 @@ es_map_unique <- function(es, org, from, to)
 #'     for custom behaviors.}
 #'     }
 #' @export
-#' @return For \code{es_map_multiple}, a \code{BiocSet} object with multiple 
+#' @return For \code{map_multiple}, a \code{BiocSet} object with multiple 
 #'     mappings for certain elements.
 #' @examples
 #' 
-#' es_map_multiple(es, org.Hs.eg.db, "SYMBOL", "ENSEMBLTRANS", "asNA")
-es_map_multiple <- function(es, org, from, to, multi =
+#' map_multiple(es, org.Hs.eg.db, "SYMBOL", "ENSEMBLTRANS", "asNA")
+map_multiple <- function(es, org, from, to, multi =
     c('list', 'filter', 'asNA', 'CharacterList'))
 {
     if(!is.function(multi))

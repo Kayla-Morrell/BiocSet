@@ -2,14 +2,14 @@
 % Please edit documentation in R/mapping_element.R
 \name{mapping_element}
 \alias{mapping_element}
-\alias{es_map_unique}
-\alias{es_map_multiple}
+\alias{map_unique}
+\alias{map_multiple}
 \alias{map_add_element}
 \title{Functions for mapping elements in the element tibble to different id types}
 \usage{
-es_map_unique(es, org, from, to)
+map_unique(es, org, from, to)
 
-es_map_multiple(es, org, from, to, multi = c("list", "filter", "asNA",
+map_multiple(es, org, from, to, multi = c("list", "filter", "asNA",
   "CharacterList"))
 
 map_add_element(es, org, from, add)
@@ -40,10 +40,10 @@ for custom behaviors.}
 \item{add}{The id to add to the \code{BiocSet} object.}
 }
 \value{
-For \code{es_map_unique}, a \code{BiocSet} object with unique 
+For \code{map_unique}, a \code{BiocSet} object with unique 
    elements.
 
-For \code{es_map_multiple}, a \code{BiocSet} object with multiple 
+For \code{map_multiple}, a \code{BiocSet} object with multiple 
     mappings for certain elements.
 
 For \code{map_add_element}, a \code{BiocSet} object with a new column
@@ -57,9 +57,9 @@ Functions for dealing with unique mapping and multiple mapping.
 \examples{
 library(org.Hs.eg.db)
 es <- BiocSet(set1 = c("C5", "GANC"), set2 = c("AFM", "CGB1", "ADAM32"))
-es_map_unique(es, org.Hs.eg.db, "SYMBOL", "ENTREZID")
+map_unique(es, org.Hs.eg.db, "SYMBOL", "ENTREZID")
 
-es_map_multiple(es, org.Hs.eg.db, "SYMBOL", "ENSEMBLTRANS", "asNA")
+map_multiple(es, org.Hs.eg.db, "SYMBOL", "ENSEMBLTRANS", "asNA")
 
 map <- map_add_element(es, org.Hs.eg.db, "SYMBOL", "ENTREZID")
 es \%>\% mutate_element(entrez = map)

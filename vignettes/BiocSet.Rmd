@@ -189,14 +189,14 @@ drop <- es_activate(go, elementset) %>% group_by(set) %>%
 go %>% filter_set(!(set %in% drop))
 ```
 
-To simplify mapping we created a function called `es_map`. This takes four 
+To simplify mapping we created a function called `map`. This takes four 
 arguements, a `BiocSet` object, an `AnnotationDbi` object, the id to map from, 
 and the id to map to. The function utilizes `mapIds` from `AnnotationDbi` and 
 returns a `BiocSet` object. In the example below we show how to use this 
 function to map the Ensembl ids from `go` to gene symbols.
 
-```{r es_map}
-go %>% es_map_unique(org.Hs.eg.db, "ENSEMBL", "SYMBOL")
+```{r map_unique}
+go %>% map_unique(org.Hs.eg.db, "ENSEMBL", "SYMBOL")
 ```
 
 Another functionality of `BiocSet` is the ability to add information to the 
