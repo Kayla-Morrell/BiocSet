@@ -129,6 +129,7 @@ kegg_sets <- function(species)
 map_set <- function(.data, from, to) UseMethod("map_set")
 
 #' @importFrom plyr mapvalues
+#' @export
 map_set.BiocSet <- function(.data, from, to)
 {
     stopifnot(is.character(from), is.character(to), length(from) == length(to))
