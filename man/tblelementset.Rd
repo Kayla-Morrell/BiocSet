@@ -2,11 +2,11 @@
 % Please edit documentation in R/tblelementset-class.R
 \name{tblelementset}
 \alias{tblelementset}
-\alias{tbl_elementset}
+\alias{.tbl_elementset}
 \alias{.is_tbl_elementset}
 \title{Element set representation as an S3 class tibble}
 \usage{
-tbl_elementset(...)
+.tbl_elementset(...)
 
 .is_tbl_elementset(x)
 }
