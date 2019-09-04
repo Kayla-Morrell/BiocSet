@@ -74,12 +74,12 @@ left_join_elementset <- function(.data, ...)
 }
 
 #' @rdname elementset_funs
-#' @return For \code{tibble_by_elementset}, a tibble.
+#' @return For \code{tibble_from_elementset}, a tibble.
 #' @export
 #' @examples
 #' 
-#' tibble_by_elementset(es)
-tibble_by_elementset <-
+#' tibble_from_elementset(es)
+tibble_from_elementset <-
     function(.data)
 {
     stopifnot(is(.data, "BiocSet"))
@@ -89,14 +89,14 @@ tibble_by_elementset <-
 }
 
 #' @rdname elementset_funs
-#' @return For \code{data.frame_by_elementset}, a data.frame.
+#' @return For \code{data.frame_from_elementset}, a data.frame.
 #' @export
 #' @examples
 #' 
-#' data.frame_by_elementset(es)
-data.frame_by_elementset <-
+#' data.frame_from_elementset(es)
+data.frame_from_elementset <-
     function(.data)
 {
-    tbl <- tibble_by_elementset(.data)
+    tbl <- tibble_from_elementset(.data)
     data.frame(tbl)
 }

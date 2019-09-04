@@ -355,9 +355,9 @@ functions that allow for the BiocSet object to be created into a tibble or
 data.frame.
 
 ```{r tibble_or_data.frame}
-tibble_by_element(es)
+tibble_from_element(es)
 
-data.frame_by_elementset(es)
+data.frame_from_elementset(es)
 ```
 
 # Information look up

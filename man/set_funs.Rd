@@ -8,8 +8,8 @@
 \alias{summarise_set}
 \alias{arrange_set}
 \alias{left_join_set}
-\alias{tibble_by_set}
-\alias{data.frame_by_set}
+\alias{tibble_from_set}
+\alias{data.frame_from_set}
 \title{Functions applied to sets in a \code{BiocSet} object}
 \usage{
 filter_set(.data, ...)
@@ -24,9 +24,9 @@ arrange_set(.data, ...)
 
 left_join_set(.data, ...)
 
-tibble_by_set(.data, how = unlist)
+tibble_from_set(.data, how = unlist)
 
-data.frame_by_set(.data, how = unlist)
+data.frame_from_set(.data, how = unlist)
 }
 \arguments{
 \item{.data}{A \code{BiocSet} object.}
@@ -38,9 +38,9 @@ data.frame_by_set(.data, how = unlist)
 \value{
 A \code{BiocSet} object.
 
-For \code{tibble_by_set}, a tibble.
+For \code{tibble_from_set}, a tibble.
 
-For \code{data.frame_by_set}, a data.frame.
+For \code{data.frame_from_set}, a data.frame.
 }
 \description{
 All of the major methods applied to a \code{BiocSet} object can
@@ -64,7 +64,7 @@ tbl <- tibble(x = 10:11, y = c("set1", "set2"))
 es <- BiocSet(set1 = letters[c(1,3,5)], set2 = letters[c(2,4)])
 left_join_set(es, tbl, by = c(set = "y"))
 
-tibble_by_set(es)
+tibble_from_set(es)
 
-data.frame_by_set(es)
+data.frame_from_set(es)
 }

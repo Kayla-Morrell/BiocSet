@@ -88,29 +88,29 @@ left_join_element <- function(.data, ...)
 
 #' @rdname element_funs
 #' @param how Multiple entries will become a list.
-#' @return For \code{tibble_by_element}, a tibble.
+#' @return For \code{tibble_from_element}, a tibble.
 #' @export
 #' @examples
 #' 
-#' tibble_by_element(es)
-tibble_by_element <-
+#' tibble_from_element(es)
+tibble_from_element <-
     function(.data, how = unlist)
 {
-    tibble_by_elementset(.data) %>%
+    tibble_from_elementset(.data) %>%
         group_by(element) %>%
         summarise_all(list) %>%
         mutate_if(.test, how)
 }
 
 #' @rdname element_funs
-#' @return For \code{data.frame_by_element}, a data.frame.
+#' @return For \code{data.frame_from_element}, a data.frame.
 #' @export
 #' @examples
 #' 
-#' data.frame_by_element(es)
-data.frame_by_element <-
+#' data.frame_from_element(es)
+data.frame_from_element <-
     function(.data, how = unlist)
 {
-    tbl <- tibble_by_element(.data, how)
+    tbl <- tibble_from_element(.data, how)
     data.frame(tbl, row.names = "element")
 }

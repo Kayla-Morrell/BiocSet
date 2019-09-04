@@ -82,15 +82,15 @@ left_join_set <- function(.data, ...)
 #' @rdname set_funs
 #' @name set_funs
 #' @param how Multiple entries will become a list.
-#' @return For \code{tibble_by_set}, a tibble.
+#' @return For \code{tibble_from_set}, a tibble.
 #' @export
 #' @examples
 #' 
-#' tibble_by_set(es)
-tibble_by_set <-
+#' tibble_from_set(es)
+tibble_from_set <-
     function(.data, how = unlist)
 {
-    tibble_by_elementset(.data) %>%
+    tibble_from_elementset(.data) %>%
         group_by(set) %>%
         summarise_all(list) %>%
         mutate_if(.test, how)
@@ -98,14 +98,14 @@ tibble_by_set <-
 
 #' @rdname set_funs
 #' @name set_funs
-#' @return For \code{data.frame_by_set}, a data.frame.
+#' @return For \code{data.frame_from_set}, a data.frame.
 #' @export
 #' @examples
 #' 
-#' data.frame_by_set(es)
-data.frame_by_set <-
+#' data.frame_from_set(es)
+data.frame_from_set <-
     function(.data, how = unlist)
 {
-    tbl <- tibble_by_set(.data, how)
+    tbl <- tibble_from_set(.data, how)
     data.frame(tbl, row.names = "set")
 }
