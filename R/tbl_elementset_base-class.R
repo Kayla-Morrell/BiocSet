@@ -37,13 +37,12 @@ mutate.tbl_elementset_base <-
     tbl
 }
 
-#' @importFrom dplyr tbl_nongroup_vars
-tbl_nongroup_vars.tbl_elementset_base <-
+.tbl_nongroup_vars.tbl_elementset_base <-
     function(x)
 {
     class = class(x)
     class(x) = setdiff(class, .subclasses)
-    tbl_nongroup_vars(x)
+    .tbl_nongroup_vars(x)
 }
 
 #' @importFrom dplyr summarise

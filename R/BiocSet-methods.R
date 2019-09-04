@@ -97,21 +97,24 @@ arrange.BiocSet <- function(.data, ...)
     .update(.data, tbl)
 }
 
-#' @rdname BiocSet-methods
-#' @description \code{tbl_nongroup_vars}: returns only non-grouping variables.
 #' @importFrom dplyr tbl_nongroup_vars
-#' @param x For \code{tbl_nongroup_vars}, a \code{BiocSet} object. For 
-#'     \code{union} and \code{intersect} the first \code{BiocSet} object to 
-#'     perform the operations on.
-#' @export
+.tbl_nongroup_vars <- tbl_nongroup_vars
+
+#' @rdname BiocSet-methods
+#' @description \code{.tbl_nongroup_vars}: returns only non-grouping variables.
+#' @param x For \code{.tbl_nongroup_vars} (internal), a \code{BiocSet}
+#'     object. For \code{union} and \code{intersect} the first
+#'     \code{BiocSet} object to perform the operations on.
+#' @keywords internal
 #' @examples
 #' 
-#' es %>% mutate(pval = rnorm(1:52)) %>% es_elementset() %>% tbl_nongroup_vars()
-tbl_nongroup_vars.BiocSet <- function(x)
+#' es %>% mutate(pval = rnorm(1:52)) %>% es_elementset() %>%
+#'     BiocSet:::.tbl_nongroup_vars()
+.tbl_nongroup_vars.BiocSet <- function(x)
 {
     active <- .active(x)
     sub <- slot(x, active)
-    tbl_nongroup_vars(sub)
+    .tbl_nongroup_vars(sub)
 }
 
 #' @rdname BiocSet-methods

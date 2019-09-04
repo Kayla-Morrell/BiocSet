@@ -9,7 +9,7 @@ test_that("'go_sets()' works",
     expect_identical(dim(es_element(es)), c(22206L, 1L))
     expect_identical(dim(es_set(es)), c(17495L, 1L))
     expect_identical(dim(es_elementset(es)), c(282353L, 2L))
-    expect_true(is_tbl_elementset(es_elementset(es)))
+    expect_true(.is_tbl_elementset(es_elementset(es)))
 
     es1 <- go_sets(org.Hs.eg.db, "SYMBOL", evidence = c("IDA", "IMP", "HDA"))
 
@@ -17,7 +17,7 @@ test_that("'go_sets()' works",
     expect_identical(dim(es_element(es1)), c(13138L, 1L))
     expect_identical(dim(es_set(es1)), c(11077L, 2L))
     expect_identical(dim(es_elementset(es1)), c(87444L, 2L))
-    expect_true(is_tbl_elementset(es_elementset(es1)))
+    expect_true(.is_tbl_elementset(es_elementset(es1)))
     
     es2 <- go_sets(org.Hs.eg.db, "SYMBOL", ontology = "MF")
 
@@ -25,7 +25,7 @@ test_that("'go_sets()' works",
     expect_identical(dim(es_element(es2)), c(16969L, 1L))
     expect_identical(dim(es_set(es2)), c(3903L, 2L))
     expect_identical(dim(es_elementset(es2)), c(56051L, 2L))
-    expect_true(is_tbl_elementset(es_elementset(es2)))
+    expect_true(.is_tbl_elementset(es_elementset(es2)))
 
     es3 <- go_sets(org.Hs.eg.db, "ENSEMBL", evidence = c("IEP", "HEP"),
         ontology = c("CC", "MF"))
@@ -34,7 +34,7 @@ test_that("'go_sets()' works",
     expect_identical(dim(es_element(es3)), c(0L, 1L))
     expect_identical(dim(es_set(es3)), c(0L, 3L))
     expect_identical(dim(es_elementset(es3)), c(0L, 2L))
-    expect_true(is_tbl_elementset(es_elementset(es3)))
+    expect_true(.is_tbl_elementset(es_elementset(es3)))
 
     expect_error(go_sets(org.Hs.eg.db))
     expect_error(go_sets(org.Hs.eg.db, ENSEMBL))
@@ -59,7 +59,7 @@ test_that("'kegg_sets()' works",
     expect_identical(dim(es_set(es)), c(326L, 1L))
     expect_identical(dim(es_elementset(es))[2], c(2L))
     expect_gt(dim(es_elementset(es))[1], c(29296L))
-    expect_true(is_tbl_elementset(es_elementset(es)))
+    expect_true(.is_tbl_elementset(es_elementset(es)))
 
     expect_error(kegg_sets(hsa))
     expect_error(kegg_sets())
@@ -70,7 +70,7 @@ test_that("'map_set.BiocSet()' works", {
     es <- BiocSet(a = letters, B = LETTERS)
 
     es1 <- es %>% map_set("a", "A")
-    expect_true(is_tbl_elementset(es_elementset(es1)))
+    expect_true(.is_tbl_elementset(es_elementset(es1)))
     expect_identical(dim(es_elementset(es1)), c(52L,2L))
     expect_identical(levels(es_elementset(es1)$set), levels(es_set(es1)$set))
 

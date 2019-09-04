@@ -17,6 +17,7 @@ An S3 \code{set} object in a tibble representation.
 Set representation as an S3 class tibble
 }
 \examples{
-tbl <- tbl_elementset(set1 = letters, set2 = LETTERS)
-tbl_set(tbl)
+tbl <- BiocSet:::.tbl_elementset(set1 = letters, set2 = LETTERS)
+BiocSet:::.tbl_set(tbl)
 }
+\keyword{internal}

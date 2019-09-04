@@ -37,9 +37,9 @@ setOldClass(c("tbl_element", "tbl_set", "tbl_elementset"))
 BiocSet <- function(..., active = c("elementset", "element", "set"))
 {
     active <- match.arg(active)
-    elementset <- tbl_elementset(...)
-    element <- tbl_element(elementset)
-    set <- tbl_set(elementset)
+    elementset <- .tbl_elementset(...)
+    element <- .tbl_element(elementset)
+    set <- .tbl_set(elementset)
 
     .BiocSet(element = element,
                 set = set,

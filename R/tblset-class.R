@@ -5,16 +5,16 @@
 #' @return An S3 \code{set} object in a tibble representation.
 #' @importFrom tibble tibble
 #' @importFrom dplyr distinct '%>%'
-#' @export
+#' @keywords internal
 #' @examples
-#' tbl <- tbl_elementset(set1 = letters, set2 = LETTERS)
-#' tbl_set(tbl)
+#' tbl <- BiocSet:::.tbl_elementset(set1 = letters, set2 = LETTERS)
+#' BiocSet:::.tbl_set(tbl)
 
 tbl_set <-
     function(tbl_elementset)
 {
     stopifnot(
-        is_tbl_elementset(tbl_elementset)
+        .is_tbl_elementset(tbl_elementset)
     )
 
     tbl <- tibble(set = tbl_elementset$set) %>% distinct()

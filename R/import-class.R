@@ -49,7 +49,7 @@ setMethod(
 
 #' @importFrom rlang .data
 export.BiocSet <- function(tbl, path = tempfile(fileext = ".gmt")) {
-    stopifnot(is_tbl_elementset(es_elementset(tbl)))
+    stopifnot(.is_tbl_elementset(es_elementset(tbl)))
     
     if(!"source" %in% names(es_set(tbl)))
         tbl <- mutate_set(tbl, source = rep(NA_character_, nrow(es_set(tbl))))

@@ -10,9 +10,9 @@
 #' @importFrom tibble tibble
 #' @importFrom dplyr distinct '%>%' select mutate group_by ungroup
 #'     summarise arrange
-#' @export
+#' @keywords internal
 #' @examples
-#' es <- tbl_elementset(set1 = letters, set2 = LETTERS)
+#' es <- BiocSet:::.tbl_elementset(set1 = letters, set2 = LETTERS)
 tbl_elementset <- function(...) {
     args <- list(...)
 
@@ -35,13 +35,13 @@ tbl_elementset <- function(...) {
 #' @rdname tblelementset
 #' @name tblelementset
 #' @param x A tibble that may or may not be an elementset
-#' @return For \code{is_tbl_elementset}, a logical indicating if the tibble is 
-#'     an elementset.
-#' @export
+#' @return For \code{.is_tbl_elementset} (internal), a logical
+#'     indicating if the tibble is an elementset.
+#' @keywords internal
 #' @examples
 #' 
-#' is_tbl_elementset(es)
-is_tbl_elementset <- function(x) {
+#' BiocSet:::.is_tbl_elementset(es)
+.is_tbl_elementset <- function(x) {
     all(c("element", "set") %in% names(x)) &&
         is.character(x$element) && is.character(x$set)
 }

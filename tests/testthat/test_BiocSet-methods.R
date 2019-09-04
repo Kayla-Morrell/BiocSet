@@ -18,14 +18,14 @@ test_that("'filter.BiocSet()' works", {
     expect_equivalent(filter(es), es)
 
     es1 <- es %>% filter(set == "set1")
-    expect_true(is_tbl_elementset(es_elementset(es1)))
+    expect_true(.is_tbl_elementset(es_elementset(es1)))
     expect_identical(dim(es_set(es1)), c(1L,1L))
     expect_identical(dim(es_elementset(es1)), c(26L,2L))
     expect_identical(es_elementset(es1)$element, letters)
 
     foo <- "k"
     es2 <- es %>% filter(element == foo)
-    expect_true(is_tbl_elementset(es_elementset(es2)))
+    expect_true(.is_tbl_elementset(es_elementset(es2)))
     expect_identical(dim(es_element(es2)), c(1L,1L))
     expect_identical(es_elementset(es2)$element, foo)
 
@@ -36,17 +36,17 @@ test_that("'select.BiocSet()' works", {
     es <- BiocSet(set1 = letters, set2 = LETTERS)
 
     es1 <- es %>% select(c(element, set))
-    expect_true(is_tbl_elementset(es_elementset(es1)))
+    expect_true(.is_tbl_elementset(es_elementset(es1)))
     expect_identical(dim(es_elementset(es1)), c(52L,2L))
     expect_identical(es1, es)
 
     es2 <- es %>% select(element)
-    expect_true(is_tbl_elementset(es_elementset(es2)))
+    expect_true(.is_tbl_elementset(es_elementset(es2)))
     expect_identical(dim(es_elementset(es2)), c(52L,2L))
     expect_identical(es_element(es2), es_element(es))
 
     es3 <- es %>% select(set)
-    expect_true(is_tbl_elementset(es_elementset(es3)))
+    expect_true(.is_tbl_elementset(es_elementset(es3)))
     expect_identical(dim(es_elementset(es3)), c(52L, 2L))
     expect_identical(es_set(es3), es_set(es))
 
@@ -57,7 +57,7 @@ test_that("'mutate.BiocSet()' works", {
     es <- BiocSet(set1 = letters, set2 = LETTERS)
 
     es1 <- es %>% mutate(pval = rnorm(1:52))
-    expect_true(is_tbl_elementset(es_elementset(es1)))
+    expect_true(.is_tbl_elementset(es_elementset(es1)))
     expect_identical(dim(es_elementset(es1)), c(52L,3L))
 
     expect_error(es %>% mutate(z = 1:2))
@@ -69,22 +69,22 @@ test_that("'summarise.BiocSet()' works", {
     es <- BiocSet(set1 = letters, set2 = LETTERS)
 
     es1 <- es %>% summarise(n = n())
-    expect_false(is_tbl_elementset(es1))
+    expect_false(.is_tbl_elementset(es1))
     expect_identical(dim(es1), c(1L,1L))
     expect_equal(es1$n, 52L)
 
     es2 <- es %>% group_by(element) %>% summarise(n = n())
-    expect_false(is_tbl_elementset(es2))
+    expect_false(.is_tbl_elementset(es2))
     expect_identical(dim(es2), c(52L,2L))
     expect_equal(es2$n, c(rep(1L, 52)))
 
     es3 <- es %>% group_by(set) %>% summarise(n = n())
-    expect_false(is_tbl_elementset(es3))
+    expect_false(.is_tbl_elementset(es3))
     expect_identical(dim(es3), c(2L,2L))
     expect_equal(es3$n, c(26L, 26L))
 
     es4 <- es %>% group_by(set) %>% summarize(n = n())
-    expect_false(is_tbl_elementset(es4))
+    expect_false(.is_tbl_elementset(es4))
     expect_identical(dim(es4), c(2L, 2L))
     expect_equal(es4$n, c(26L, 26L))
 
@@ -95,37 +95,37 @@ test_that("'arrange.BiocSet()' works", {
     es <- BiocSet(set1 = letters, set2 = LETTERS)
 
     es1 <- es %>% arrange()
-    expect_true(is_tbl_elementset(es_elementset(es1)))
+    expect_true(.is_tbl_elementset(es_elementset(es1)))
     expect_equal(es1, es)
 
     es2 <- es %>% arrange(element)
-    expect_true(is_tbl_elementset(es_elementset(es2)))
+    expect_true(.is_tbl_elementset(es_elementset(es2)))
     expect_equal(es2, es)
     expect_equal(es_elementset(es2)$element, sort(es_elementset(es)$element))
 
     es3 <- es %>% arrange(set)
-    expect_true(is_tbl_elementset(es_elementset(es3)))
+    expect_true(.is_tbl_elementset(es_elementset(es3)))
     expect_equal(es3, es)
     expect_equal(es_elementset(es3)$set, sort(es_elementset(es)$set))
 
     es4 <- es %>% arrange(element == "k")
-    expect_true(is_tbl_elementset(es_elementset(es4)))
+    expect_true(.is_tbl_elementset(es_elementset(es4)))
     expect_identical(dim(es_elementset(es4)), c(52L,2L))
 
     es5 <- es %>% arrange(set == "set1")
-    expect_true(is_tbl_elementset(es_elementset(es5)))
+    expect_true(.is_tbl_elementset(es_elementset(es5)))
     expect_identical(dim(es_elementset(es5)), c(52L,2L))
 })
 
-test_that("'tbl_nongroup_vars.BiocSet()' works", {
+test_that("'.tbl_nongroup_vars.BiocSet()' works", {
     es <- BiocSet(set1 = letters, set2 = LETTERS)
 
-    es1 <- es_elementset(es) %>% tbl_nongroup_vars()
+    es1 <- es_elementset(es) %>% .tbl_nongroup_vars()
     expect_identical(es1, c("element", "set"))
     expect_identical(length(es1), 2L)
     expect_identical(class(es1), "character")
 
-    es2 <- es_element(es) %>% tbl_nongroup_vars()
+    es2 <- es_element(es) %>% .tbl_nongroup_vars()
     expect_identical(es2, "element")
     expect_identical(length(es2), 1L)
     expect_identical(class(es2), "character")
@@ -136,7 +136,7 @@ test_that("'left_join.BiocSet()' works", {
     tbl <- tibble(x = rnorm(1:52), y = c(letters, LETTERS))
 
     es1 <- es %>% left_join(tbl, by = c(element = "y"))
-    expect_true(is_tbl_elementset(es_elementset(es1)))
+    expect_true(.is_tbl_elementset(es_elementset(es1)))
     expect_identical(dim(es_elementset(es1)), c(52L, 3L))
 
     expect_error(es %>% left_join())
