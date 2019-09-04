@@ -96,6 +96,7 @@ left_join_element <- function(.data, ...)
 tibble_from_element <-
     function(.data, how = unlist)
 {
+    element <- NULL
     tibble_from_elementset(.data) %>%
         group_by(element) %>%
         summarise_all(list) %>%

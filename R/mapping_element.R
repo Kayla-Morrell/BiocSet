@@ -34,6 +34,8 @@
 
 map_element <- function(.data, from, to, keep_unmapped) UseMethod("map_element")
 
+#' @importFrom tibble as_tibble
+#' @importFrom dplyr bind_rows summarise_all mutate_if
 map_element.BiocSet <-
     function(.data, from, to, keep_unmapped = TRUE)
 {
@@ -41,6 +43,7 @@ map_element.BiocSet <-
         is.character(to) || is.list(to) || is(to, "CharacterList"),
         length(from) == length(to)
     )
+    element <- set <- NULL
 
     es <- es_elementset(.data)
 

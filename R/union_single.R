@@ -14,6 +14,7 @@
 #' union_single(es3)
 union_single <- function(x, ...)
 {
+    element <- NULL
     unique_elements <- x %>% es_element() %>% pull(element)
 
     BiocSet(union = unique_elements)
