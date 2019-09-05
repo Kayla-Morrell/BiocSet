@@ -224,9 +224,9 @@ test_that("'map_multiple()' works",
     es2 <- es %>% map_multiple(org.Hs.eg.db, "SYMBOL", "ENSEMBL", "filter")
 
     expect_s4_class(es2, "BiocSet")
-    expect_identical(dim(es_element(es2)), c(1L, 1L))
-    expect_identical(dim(es_set(es2)), c(1L, 1L))
-    expect_identical(dim(es_elementset(es2)), c(1L, 2L))
+    expect_identical(dim(es_element(es2)), c(5L, 1L))
+    expect_identical(dim(es_set(es2)), c(2L, 1L))
+    expect_identical(dim(es_elementset(es2)), c(5L, 2L))
     expect_true(.is_tbl_elementset(es_elementset(es2)))
     
     es3 <- es %>% map_multiple(org.Hs.eg.db, "SYMBOL", "ENSEMBL", "asNA")
