@@ -91,3 +91,19 @@ setMethod(
     export.BiocSet(object, resource(con))
     con
 })
+
+setClass("GeneSetCollection")
+
+#' as("BiocSet", "GeneSetCollection")
+#'
+#' @name coerce
+#' @aliases coerce,BiocSet,GeneSetCollection-method
+#' @importFrom methods as
+#' @exportMethod coerce
+setAs("BiocSet", "GeneSetCollection", function(from) {
+    if(!requireNamespace("GSEABase")) {
+        stop("Please install GSEABase")
+    }
+    else
+        GSEABase::GeneSetCollection(from)
+})

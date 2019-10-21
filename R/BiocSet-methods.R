@@ -173,6 +173,12 @@ left_join.BiocSet <- function(x, y, by, copy, suffix, ...)
 as.list.BiocSet <- function(x, ...)
     .as.list.BiocSet(x)
 
+#' as("BiocSet", "list")
+#'
+#' @name coerce
+#' @aliases coerce,BiocSet,list-method
+#' @importFrom methods as
+#' @exportMethod coerce
 setAs("BiocSet", "list", .as.list.BiocSet)
 
 #' @rdname BiocSet-methods
@@ -185,7 +191,7 @@ setAs("BiocSet", "list", .as.list.BiocSet)
 #' es1 <- BiocSet(set1 = letters[c(1:4)], set2 = LETTERS[c(1:4)])
 #' es2 <- BiocSet(set1 = letters[c(3:8)], set2 = LETTERS[c(3:8)])
 #'
-#' dplyr::union(es1, es2)
+#' union.BiocSet(es1, es2)
 union.BiocSet <- function(x, y, ...)
 {
     element <- union(es_element(x), es_element(y), ...)
@@ -201,7 +207,7 @@ union.BiocSet <- function(x, y, ...)
 #' @export
 #' @examples
 #'
-#' dplyr::intersect(es1, es2)
+#' intersect.BiocSet(es1, es2)
 intersect.BiocSet <- function(x, y, ...)
 {
     element <- intersect(es_element(x), es_element(y), ...)
