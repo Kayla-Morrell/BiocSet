@@ -20,8 +20,6 @@ This function performs an intersection within a single
     \code{BiocSet} object.
 }
 \examples{
-\dontrun{
 es1 <- BiocSet(set1 = letters[c(1:10)], set2 = letters[c(4:20)])
 intersect_single(es1)
-}
 }
