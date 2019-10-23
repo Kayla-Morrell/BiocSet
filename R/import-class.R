@@ -98,12 +98,15 @@ setClass("GeneSetCollection")
 #'
 #' @name coerce
 #' @aliases coerce,BiocSet,GeneSetCollection-method
-#' @importFrom methods as
+#' @importFrom methods setAs coerce
 #' @exportMethod coerce
 setAs("BiocSet", "GeneSetCollection", function(from) {
     if(!requireNamespace("GSEABase")) {
         stop("Please install GSEABase")
-    }
-    else
-        GSEABase::GeneSetCollection(from)
+    }   
+    lst <- as.list(from) 
+    gsl <- Map(function(ids, name) {
+        GSEABase::GeneSet(ids, setName = name)
+        }, lst, names(lst))  
+    GSEABase::GeneSetCollection(gsl)
 })

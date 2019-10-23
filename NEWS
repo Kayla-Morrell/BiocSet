@@ -1,2 +1,13 @@
-Changes in version 0.99.0:
+Changes in version 0.99.0 (2019-09-05)
 + Submitted to Bioconductor
+
+Changes in version 0.99.1 (2019-09-21)
++ Fixed failing tests. Made kegg_sets tests more general.
+
+Changes in version 0.99.2 (2019-10-22)
++ Exported intersect_single. Examples can now be run.
+
+Changes in version 0.99.4 (2019-10-23)
++ Coersion method setAs exported
++ Coersion method for GeneSetCollection exported
++ Fixed examples for union and intersect

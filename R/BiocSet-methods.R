@@ -177,7 +177,7 @@ as.list.BiocSet <- function(x, ...)
 #'
 #' @name coerce
 #' @aliases coerce,BiocSet,list-method
-#' @importFrom methods as
+#' @importFrom methods setAs coerce
 #' @exportMethod coerce
 setAs("BiocSet", "list", .as.list.BiocSet)
 
@@ -191,7 +191,7 @@ setAs("BiocSet", "list", .as.list.BiocSet)
 #' es1 <- BiocSet(set1 = letters[c(1:4)], set2 = LETTERS[c(1:4)])
 #' es2 <- BiocSet(set1 = letters[c(3:8)], set2 = LETTERS[c(3:8)])
 #'
-#' union.BiocSet(es1, es2)
+#' dplyr::union(es1, es2)
 union.BiocSet <- function(x, y, ...)
 {
     element <- union(es_element(x), es_element(y), ...)
@@ -207,7 +207,7 @@ union.BiocSet <- function(x, y, ...)
 #' @export
 #' @examples
 #'
-#' intersect.BiocSet(es1, es2)
+#' dplyr::intersect(es1, es2)
 intersect.BiocSet <- function(x, y, ...)
 {
     element <- intersect(es_element(x), es_element(y), ...)
