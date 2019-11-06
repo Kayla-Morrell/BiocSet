@@ -152,7 +152,7 @@ test_that("'as.list.BiocSet()' works", {
 
     es1 <- as.list(es)
     expect_identical(class(es1), "list")
-    expect_identical(length(es1), 17495L)
+    expect_gte(length(es1), 18175L)
     expect_identical(names(es1), es_set(es)$set)
 })
 

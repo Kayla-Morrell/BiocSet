@@ -1,6 +1,6 @@
 Package: BiocSet
 Title: Representing Different Biological Sets
-Version: 1.0.0
+Version: 1.0.1
 Authors@R: c(
     person("Kayla", "Morrell", email = "kayla.morrell@roswellpark.org",
         role = c("aut", "cre")),
