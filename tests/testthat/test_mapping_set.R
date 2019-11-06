@@ -6,25 +6,34 @@ test_that("'go_sets()' works",
     es <- go_sets(org.Hs.eg.db, "ENSEMBL")
 
     expect_s4_class(es, "BiocSet")
-    expect_identical(dim(es_element(es)), c(22206L, 1L))
-    expect_identical(dim(es_set(es)), c(17495L, 1L))
-    expect_identical(dim(es_elementset(es)), c(282353L, 2L))
+    expect_gte(dim(es_element(es))[1], 22512L)
+    expect_identical(dim(es_element(es))[2], 1L)
+    expect_gte(dim(es_set(es))[1], 18175L)
+    expect_identical(dim(es_set(es))[2], 1L)
+    expect_gte(dim(es_elementset(es))[1], 318556L)
+    expect_identical(dim(es_elementset(es))[2], 2L)
     expect_true(.is_tbl_elementset(es_elementset(es)))
 
     es1 <- go_sets(org.Hs.eg.db, "SYMBOL", evidence = c("IDA", "IMP", "HDA"))
 
     expect_s4_class(es1, "BiocSet")
-    expect_identical(dim(es_element(es1)), c(13138L, 1L))
-    expect_identical(dim(es_set(es1)), c(11077L, 2L))
-    expect_identical(dim(es_elementset(es1)), c(87444L, 2L))
+    expect_gte(dim(es_element(es1))[1], 13167L)
+    expect_identical(dim(es_element(es1))[2], 1L)
+    expect_gte(dim(es_set(es1))[1], 11117L)
+    expect_identical(dim(es_set(es1))[2], 2L)
+    expect_gte(dim(es_elementset(es1))[1], 87788L)
+    expect_identical(dim(es_elementset(es1))[2], 2L)
     expect_true(.is_tbl_elementset(es_elementset(es1)))
     
     es2 <- go_sets(org.Hs.eg.db, "SYMBOL", ontology = "MF")
 
     expect_s4_class(es2, "BiocSet")
-    expect_identical(dim(es_element(es2)), c(16969L, 1L))
-    expect_identical(dim(es_set(es2)), c(3903L, 2L))
-    expect_identical(dim(es_elementset(es2)), c(56051L, 2L))
+    expect_gte(dim(es_element(es2))[1], 17697L)
+    expect_identical(dim(es_element(es2))[2], 1L)
+    expect_gte(dim(es_set(es2))[1], 4165L)
+    expect_identical(dim(es_set(es2))[2], 2L)
+    expect_gte(dim(es_elementset(es2))[1], 65158L)
+    expect_identical(dim(es_elementset(es2))[2], 2L)
     expect_true(.is_tbl_elementset(es_elementset(es2)))
 
     es3 <- go_sets(org.Hs.eg.db, "ENSEMBL", evidence = c("IEP", "HEP"),
@@ -75,6 +84,7 @@ test_that("'map_set.BiocSet()' works", {
     expect_identical(levels(es_elementset(es1)$set), levels(es_set(es1)$set))
 
     expect_error(es %>% map_set())
+    expect_error(es %>% map_set("a"))
 })
 
 test_that("'map_add_set()' works",
@@ -83,7 +93,7 @@ test_that("'map_add_set()' works",
     go <- go_sets(org.Hs.eg.db, "ENSEMBL")
     map <- map_add_set(go, GO.db, "GOID", "DEFINITION")
 
-    expect_identical(length(map), 17495L)
+    expect_gte(length(map), 18175L)
     expect_identical(class(map), "character")
 
     expect_error(map_add_set(GO.db, "GOID", "DEFINITION"))
