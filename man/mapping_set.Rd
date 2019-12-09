@@ -8,8 +8,7 @@
 \alias{map_add_set}
 \title{Functions for mapping sets in the set tibble to different id types}
 \usage{
-go_sets(org, from, go = c("GO", "GOID"), evidence = NULL,
-  ontology = NULL)
+go_sets(org, from, go = c("GO", "GOID"), evidence = NULL, ontology = NULL)
 
 kegg_sets(species)
 

@@ -5,7 +5,7 @@ setOldClass(c("tbl_element", "tbl_set", "tbl_elementset"))
 #' @name BiocSet
 #' @rdname BiocSet-class
 #' @aliases BiocSet-class
-#' @description NULL
+#' @description character()
 #' @slot element The element tibble from `tbl_elementset`
 #' @slot set The set tibble from `tbl_elementset`
 #' @slot elementset The elementset tibble created from user input

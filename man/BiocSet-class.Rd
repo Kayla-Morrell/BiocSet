@@ -55,6 +55,8 @@ An S4 \code{BiocSet} object shown as a tripple tibble, where each
     slot is a tibble.
 }
 \description{
+character()
+
 The \code{BiocSet} constructor, the show method, the slot 
     accessors, and creating a \code{BiocSet} object from an element set 
     tibble rather than character vector(s).

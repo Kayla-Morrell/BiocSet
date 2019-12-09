@@ -9,8 +9,13 @@
 \usage{
 map_unique(es, org, from, to)
 
-map_multiple(es, org, from, to, multi = c("list", "filter", "asNA",
-  "CharacterList"))
+map_multiple(
+  es,
+  org,
+  from,
+  to,
+  multi = c("list", "filter", "asNA", "CharacterList")
+)
 
 map_add_element(es, org, from, add)
 }
